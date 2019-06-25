@@ -1,0 +1,673 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>YxUtile</name>
+    </assembly>
+    <members>
+        <member name="T:YxFramwork._7zip.Compress.LzmaAlone.LzmaBench">
+            <summary>
+            LZMA Benchmark
+            </summary>
+        </member>
+        <member name="T:YxFramwork._7zip.Compress.LzmaAlone.Properties.Resources">
+            <summary>
+               A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:YxFramwork._7zip.Compress.LzmaAlone.Properties.Resources.ResourceManager">
+            <summary>
+               Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:YxFramwork._7zip.Compress.LzmaAlone.Properties.Resources.Culture">
+            <summary>
+               Overrides the current thread's CurrentUICulture property for all
+               resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="F:YxFramwork._7zip.Compress.LZMA.Decoder._enable">
+            <summary>
+            是否可用
+            </summary>
+        </member>
+        <member name="M:YxFramwork._7zip.Compress.LZMA.Decoder.Stop">
+            <summary>
+            停止
+            </summary>
+        </member>
+        <member name="T:YxFramwork._7zip.DataErrorException">
+            <summary>
+            7Zip压缩解压
+            </summary>
+            <summary>
+            The exception that is thrown when an error in input stream occurs during decoding.
+            </summary>
+        </member>
+        <member name="T:YxFramwork._7zip.InvalidParamException">
+            <summary>
+            The exception that is thrown when the value of an argument is outside the allowable range.
+            </summary>
+        </member>
+        <member name="M:YxFramwork._7zip.ICodeProgress.SetProgress(System.Int64,System.Int64)">
+            <summary>
+            Callback progress.
+            </summary>
+            <param name="inSize">
+            input size. -1 if unknown.
+            </param>
+            <param name="outSize">
+            output size. -1 if unknown.
+            </param>
+        </member>
+        <member name="M:YxFramwork._7zip.ICoder.Code(System.IO.Stream,System.IO.Stream,System.Int64,System.Int64,YxFramwork._7zip.ICodeProgress)">
+            <summary>
+            Codes streams.
+            </summary>
+            <param name="inStream">
+            input Stream.
+            </param>
+            <param name="outStream">
+            output Stream.
+            </param>
+            <param name="inSize">
+            input Size. -1 if unknown.
+            </param>
+            <param name="outSize">
+            output Size. -1 if unknown.
+            </param>
+            <param name="progress">
+            callback progress reference.
+            </param>
+            <exception cref="T:YxFramwork._7zip.DataErrorException">
+            if input stream is not valid
+            </exception>
+        </member>
+        <member name="T:YxFramwork._7zip.CoderPropID">
+            <summary>
+            Provides the fields that represent properties idenitifiers for compressing.
+            </summary>
+        </member>
+        <member name="F:YxFramwork._7zip.CoderPropID.DefaultProp">
+            <summary>
+            Specifies default property.
+            </summary>
+        </member>
+        <member name="F:YxFramwork._7zip.CoderPropID.DictionarySize">
+            <summary>
+            Specifies size of dictionary.
+            </summary>
+        </member>
+        <member name="F:YxFramwork._7zip.CoderPropID.UsedMemorySize">
+            <summary>
+            Specifies size of memory for PPM*.
+            </summary>
+        </member>
+        <member name="F:YxFramwork._7zip.CoderPropID.Order">
+            <summary>
+            Specifies order for PPM methods.
+            </summary>
+        </member>
+        <member name="F:YxFramwork._7zip.CoderPropID.BlockSize">
+            <summary>
+            Specifies Block Size.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "F:YxFramwork._7zip.CoderPropID.PosStateBits" -->
+        <!-- Badly formed XML comment ignored for member "F:YxFramwork._7zip.CoderPropID.LitContextBits" -->
+        <!-- Badly formed XML comment ignored for member "F:YxFramwork._7zip.CoderPropID.LitPosBits" -->
+        <member name="F:YxFramwork._7zip.CoderPropID.NumFastBytes">
+            <summary>
+            Specifies number of fast bytes for LZ*.
+            </summary>
+        </member>
+        <member name="F:YxFramwork._7zip.CoderPropID.MatchFinder">
+            <summary>
+            Specifies match finder. LZMA: "BT2", "BT4" or "BT4B".
+            </summary>
+        </member>
+        <member name="F:YxFramwork._7zip.CoderPropID.MatchFinderCycles">
+            <summary>
+            Specifies the number of match finder cyckes.
+            </summary>
+        </member>
+        <member name="F:YxFramwork._7zip.CoderPropID.NumPasses">
+            <summary>
+            Specifies number of passes.
+            </summary>
+        </member>
+        <member name="F:YxFramwork._7zip.CoderPropID.Algorithm">
+            <summary>
+            Specifies number of algorithm.
+            </summary>
+        </member>
+        <member name="F:YxFramwork._7zip.CoderPropID.NumThreads">
+            <summary>
+            Specifies the number of threads.
+            </summary>
+        </member>
+        <member name="F:YxFramwork._7zip.CoderPropID.EndMarker">
+            <summary>
+            Specifies mode with end marker.
+            </summary>
+        </member>
+        <member name="T:com.yxixia.utile.FileTools.FileHelper">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.FileHelper.CopyFolder(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="sourcePath"></param>
+            <param name="copyPath"></param>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.FileHelper.DeleteFolder(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="T:com.yxixia.utile.FileTools.PropertyUtile">
+            <summary>
+            配置文件解析器
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.PropertyUtile.ReadFile(System.String)">
+            <summary>
+            读取内容
+            </summary>
+            <param name="path"></param>
+            <returns>返回信息</returns>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.PropertyUtile.ReadFromString(System.String,System.Collections.IDictionary)">
+            <summary>
+            
+            </summary>
+            <param name="info"></param>
+            <param name="dict"></param>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.PropertyUtile.WriteFile(System.Collections.Generic.Dictionary{System.String,System.String},System.String)">
+            <summary>
+            
+            </summary>
+            <param name="dict"></param>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="T:com.yxixia.utile.FileTools.ZipHelper">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.ZipHelper.StopDecompress">
+            <summary>
+            停止解压
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.ZipHelper.CompressDirectory(System.String,System.String,System.Int32,System.String,System.Int32)">
+            <summary>
+            压缩文件夹
+            </summary>
+            <param name="dirPath">压缩文件夹的路径</param>
+            <param name="fileName">生成的zip文件路径</param>
+            <param name="level">压缩级别 0 - 9 0是存储级别 9是最大压缩</param>
+            <param name="filter"></param>
+            <param name="bufferSize">读取文件的缓冲区大小</param>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.ZipHelper.CompressDirectory(System.String,System.String,ICSharpCode.SharpZipLib.Zip.ZipOutputStream,System.Byte[],System.String)">
+            <summary>
+            压缩文件夹
+            </summary>
+            <param name="root">压缩文件夹路径</param>
+            <param name="path">压缩文件夹内当前要压缩的文件夹路径</param>
+            <param name="s"></param>
+            <param name="buffer">读取文件的缓冲区大小</param>
+            <param name="filter">过滤</param>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.ZipHelper.ExtractDirectory(System.String,System.String,System.Int32)">
+            <summary>
+            解压缩zip文件
+            </summary>
+            <param name="zipFilePath">解压的zip文件路径</param>
+            <param name="extractPath">解压到的文件夹路径</param>
+            <param name="bufferSize">读取文件的缓冲区大小</param>
+        </member>
+        <member name="T:com.yxixia.utile.Utiles.GlobalUtile">
+            <summary>
+            工具类
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GlobalUtile.SetBitOnOff(System.Int32@,System.Int32,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="onOff"></param>
+            <param name="number"></param>
+            <param name="state"></param>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GlobalUtile.GetBitOnOffState(System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="onOff"></param>
+            <param name="number"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GlobalUtile.HasBitOnOffState(System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="onOff"></param>
+            <param name="curState"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GlobalUtile.GetParentWidget``1(UnityEngine.Transform)">
+            <summary>
+            获取target从上级中找出第一个T类型的父类
+            </summary>
+            <typeparam name="T">指定类型，必须是继承MonoBehaviour</typeparam>
+            <param name="target">指定物体</param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GlobalUtile.SetTargetFrameRate(System.Int32)">
+            <summary>
+            设置帧率
+            </summary>
+            <param name="frameRate">帧率</param>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GlobalUtile.IsSameSign(System.Single,System.Single)">
+            <summary>
+            是否为同符号
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GlobalUtile.GetPlatformId(com.yxixia.utile.Utiles.YxEDevePlatForm)">
+            <summary>
+            获取平台
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GlobalUtile.ResizeGUIMatrix(System.Single,System.Single)">
+            <summary>
+            Gui缩放
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GlobalUtile.GetColorFromString(System.String)">
+            <summary>
+            字符串获取颜色
+            </summary>
+            <param name="argbhex">格式（#rrggbbaa）</param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GlobalUtile.GetUrlWithNoCache(System.String)">
+            <summary>
+            给url带上时间戳
+            </summary>
+            <param name="url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GlobalUtile.IsUrl(System.String)">
+            <summary>
+            是否url
+            </summary>
+            <param name="url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GlobalUtile.ReduceNumber(System.Double,System.Boolean)">
+            <summary>
+            数字缩写
+            </summary>
+            <param name="gold"></param>
+            <param name="isPic"></param>
+            <returns></returns>
+        </member>
+        <member name="T:com.yxixia.utile.Utiles.YxEDevePlatForm">
+            <summary>
+            游戏开发模拟平台
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.Utiles.YxEDevePlatForm.a">
+            <summary>
+            android平台
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.Utiles.YxEDevePlatForm.i">
+            <summary>
+            ios平台
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.Utiles.YxEDevePlatForm.pc">
+            <summary>
+            win平台
+            </summary>
+        </member>
+        <member name="T:com.yxixia.utile.Utiles.YxWindowUtils">
+            <summary>
+            窗口辅助类
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.YxWindowUtils.CreateItem``1(``0,UnityEngine.Transform,UnityEngine.Vector3)">
+            <summary>
+            创建Grid Item
+            </summary>
+            <typeparam name="T">要克隆的预制体的脚本类型</typeparam>
+            <param name="itemPrefab">要克隆的预制体</param>
+            <param name="pts">父容器</param>
+            <param name="localPos">相对父容器的位置</param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.YxWindowUtils.CreateGameObject(UnityEngine.GameObject,UnityEngine.Transform,UnityEngine.Vector3)">
+            <summary>
+            创建GameObject
+            </summary>
+            <param name="gobj">要克隆的预制体</param>
+            <param name="pts">父容器</param>
+            <param name="localPos">相对父容器的位置</param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.YxWindowUtils.CreateItemParent(UnityEngine.Transform,UnityEngine.Transform@,UnityEngine.Transform,System.String)">
+            <summary>
+            创建item容器实例
+            </summary>
+            <param name="itemPerfab"></param>
+            <param name="itemAttribute"></param>
+            <param name="tsParent"></param>
+            <param name="conName"></param>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.YxWindowUtils.DisplayUI(UnityEngine.GameObject[],System.Boolean)">
+            <summary>
+            隐藏指定ui
+            </summary>
+        </member>
+        <member name="T:com.yxixia.utile.YxDebug.YxDebug">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebug.IsDebug">
+            <summary>
+            是否调试
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebug.Author">
+            <summary>
+            作者
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebug.LogWarning(System.Object,UnityEngine.Object)">
+            <summary>
+            警告
+            A variant of Debug.Log that logs a warning message to the console.
+            </summary>
+            <param name="msg">内容</param>
+            <param name="context">发生错误的对象</param> 
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebug.LogWarning(System.String,UnityEngine.Object,System.Object[])">
+            <summary>
+            警告
+            A variant of Debug.Log that logs a warning message to the console.
+            </summary>
+            <param name="format">内容</param>
+            <param name="conetext">发生错误的对象</param>
+            <param name="args">对应{}的值</param> 
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebug.LogError(System.Object,System.String,UnityEngine.Object,System.Object[])">
+            <summary>
+            错误
+            A variant of Debug.Log that logs an error message to the console.
+            </summary>
+            <param name="msg">内容</param> 
+            <param name="context">发生错误的对象</param>
+            <param name="type"></param>
+            <param name="args"></param> 
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebug.LogEvent(System.Object,System.String,UnityEngine.Object,System.Object[])">
+            <summary>
+            错误
+            A variant of Debug.Log that logs an error message to the console.
+            </summary>
+            <param name="msg">内容</param> 
+            <param name="context">发生错误的对象</param>
+            <param name="type"></param>
+            <param name="args"></param> 
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebug.Log(System.Object,System.String,UnityEngine.Object,System.Object[])">
+            <summary>
+            提示
+             Logs message to the Unity Console.
+            </summary>
+            <param name="msg"></param>
+            <param name="type"></param>
+            <param name="context">发生错误的对象</param>
+            <param name="args"></param>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebug.TypeLog(System.String,System.Object,System.String,UnityEngine.Object)">
+            <summary>
+            标签log
+            </summary>
+            <param name="type"></param>
+            <param name="msg"></param>
+            <param name="color"></param>
+            <param name="context"></param>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebug.TypeLogError(System.String,System.Object,System.String,UnityEngine.Object)">
+            <summary>
+            标签log
+            </summary>
+            <param name="type"></param>
+            <param name="msg"></param>
+            <param name="color"></param>
+            <param name="context"></param>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebug.LogArray(System.Collections.ICollection,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="array"></param>
+            <param name="type"></param>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebug.LogDictionary``2(System.Collections.Generic.Dictionary{``0,``1},System.String)">
+            <summary>
+            
+            </summary>
+            <param name="dict"></param>
+            <param name="type"></param>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebug.LogException(System.Exception,UnityEngine.Object)">
+            <summary>
+            显示异常信息
+            A variant of Debug.Log that logs an error message to the console.
+            </summary>
+            <param name="exception">异常</param>
+            <param name="context"></param>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebug.DrawLine(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Color,System.Single,System.Boolean)">
+            <summary>
+            从start起点到end末点绘制一条color颜色的线。 
+            </summary>
+            <param name="start"></param>
+            <param name="end"></param>
+            <param name="color"></param>
+            <param name="duration"></param>
+            <param name="depthTest"></param>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebug.DrawRay(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Color,System.Single,System.Boolean)">
+            <summary>
+            从start起始位置到dir位置和方向，绘制一条color颜色的线。
+            </summary>
+            <param name="start"></param>
+            <param name="dir"></param>
+            <param name="color"></param>
+            <param name="duration"></param>
+            <param name="depthTest"></param>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebug.Break">
+            <summary>
+            暂停编辑器。 
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebug.TraceBaseEvent(Sfs2X.Core.BaseEvent)">
+            <summary>
+            
+            </summary>
+            <param name="eEvent"></param>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebug.TraceSfsObject(Sfs2X.Entities.Data.ISFSObject,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="sfsObj"></param>
+            <param name="format"></param>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebug.Clear">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebug.LogWrite(System.String,System.Object[])">
+            <summary>
+            
+            </summary>
+            <param name="format"></param>
+            <param name="args"></param>
+        </member>
+        <member name="T:com.yxixia.utile.YxDebug.YxDebugManager">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:com.yxixia.utile.YxDebug.YxDebugManager.YxDebugState">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugManager.YxDebugState.Fps">
+            <summary>
+            打印fps
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugManager.YxDebugState.Log">
+            <summary>
+            后台log
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugManager.YxDebugState.LogWithScreen">
+            <summary>
+            窗口log
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugManager.YxDebugState.LogWithEven">
+            <summary>
+            log事件，发送到服务器
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugManager.YxDebugState.LogWithWrite">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugManager.State">
+            <summary>
+            状态
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugManager.MaxLogStrMaxCount">
+            <summary>
+            最大数量
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugManager.FpsFontStyle">
+            <summary>
+            fps颜色
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugManager.LogFontStyle">
+            <summary>
+            log颜色
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugManager.SendInterval">
+            <summary>
+            发送间隔
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugManager.LogServerUrl">
+            <summary>
+            log 服务器
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugManager.ResourceInfo">
+            <summary>
+            资源状态
+            </summary>
+        </member>
+        <member name="P:com.yxixia.utile.YxDebug.YxDebugManager.Instance">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebugManager.Init(com.yxixia.utile.YxDebug.YxDebugManager.YxDebugState)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebugManager.Clear">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugManager._logData">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:com.yxixia.utile.YxDebug.YxFontStyle">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxFontStyle.FontSize">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxFontStyle.FontColor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxFontStyle.FontRate">
+            <summary>
+            字体的缩放
+            </summary>
+        </member>
+        <member name="T:com.yxixia.utile.YxDebug.YxDebugInfo">
+            <summary>
+            log信息
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugInfo.Condition">
+            <summary>
+            内容
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugInfo.Stacktrace">
+            <summary>
+            log的位置
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugInfo.LType">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugInfo.Time">
+            <summary>
+            时间
+            </summary>
+        </member>
+    </members>
+</doc>
