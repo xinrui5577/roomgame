@@ -12,7 +12,11 @@
  
 #### 使用说明
 1. 直接运行可执行游戏 
-![创建游戏房间](https://oscimg.oschina.net/oscnet/72ec02234d65d6208234f5dca02343b6535.jpg "在这里输入图片标题")
+![创建游戏房间](https://images.gitee.com/uploads/images/2019/0626/110245_b5e379e6_2525.jpeg "创建游戏房间")
+![娱乐场](https://images.gitee.com/uploads/images/2019/0626/110508_31d2e3c3_2525.png "娱乐场")
+![定缺中](https://images.gitee.com/uploads/images/2019/0626/110542_4d8b109a_2525.png "定缺中")
+![胡牌](https://images.gitee.com/uploads/images/2019/0626/110608_067b7b98_2525.png "胡牌")
+![结算](https://images.gitee.com/uploads/images/2019/0626/110636_c43c30db_2525.png "结算")
 #### 技术交流群
 QQ群 726099812
 
