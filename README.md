@@ -18,6 +18,4 @@
 ![胡牌](https://images.gitee.com/uploads/images/2019/0626/110608_067b7b98_2525.png "胡牌")
 ![结算](https://images.gitee.com/uploads/images/2019/0626/110636_c43c30db_2525.png "结算")
 
-#### 技术交流群
-QQ群 726099812
 
