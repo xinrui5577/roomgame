@@ -65,8 +65,8 @@ Unity3D棋牌游戏集成多种电玩,麻将,扑克游戏;
  
 ### 使用说明
 1. 直接运行可执行游戏 
-![创建游戏房间](https://images.gitee.com/uploads/images/2019/0626/110245_b5e379e6_2525.jpeg "创建游戏房间")
-![娱乐场](https://images.gitee.com/uploads/images/2019/0626/110508_31d2e3c3_2525.png "娱乐场")
-![定缺中](https://images.gitee.com/uploads/images/2019/0626/110542_4d8b109a_2525.png "定缺中")
-![胡牌](https://images.gitee.com/uploads/images/2019/0626/110608_067b7b98_2525.png "胡牌")
-![结算](https://images.gitee.com/uploads/images/2019/0626/110636_c43c30db_2525.png "结算")
+![创建游戏房间](imgs/1.webp "创建游戏房间")
+![娱乐场](imgs/2.webp "娱乐场")
+![定缺中](imgs/3.webp "定缺中")
+![胡牌](imgs/4.webp "胡牌")
+![结算](imgs/5.webp "结算")
