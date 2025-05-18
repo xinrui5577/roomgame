@@ -54,7 +54,7 @@ namespace Assets.Scripts.Hall.View.RecordWindows
                 var dic = new Dictionary<string, object>();
                 dic["game_key_c"] = gk;
                 dic["p"] = ++_curPageNum;
-                Facade.Instance<TwManger>().SendAction("gameHistoryReplay", dic, OnGetRecordInfo);
+                Facade.Instance<TwManager>().SendAction("gameHistoryReplay", dic, OnGetRecordInfo);
             }
         }
 
@@ -99,9 +99,8 @@ namespace Assets.Scripts.Hall.View.RecordWindows
             var tdata = tableView.GetData<TabData>();
             if (tdata == null) return;
             gk = tdata.Data.ToString();
-            YxWindowManager.ShowWaitFor();
             var apiInfo = new Dictionary<string, object>() { { "game_key_c", gk }, { "p", 1 } };
-            Facade.Instance<TwManger>().SendAction("gameHistoryReplay", apiInfo, OnGetRecordInfo); 
+            Facade.Instance<TwManager>().SendAction("gameHistoryReplay", apiInfo, OnGetRecordInfo); 
                       
 #if DBSMJ
             //暂时修改
@@ -118,7 +117,6 @@ namespace Assets.Scripts.Hall.View.RecordWindows
             }
 
             var dataDic = (List<object>)data;
-            YxWindowManager.HideWaitFor();
             List<DbsmjRecordData> records = new List<DbsmjRecordData>();
            
             foreach (var item in dataDic)
@@ -147,10 +145,9 @@ namespace Assets.Scripts.Hall.View.RecordWindows
 
         public void InitForDbsmj(List<DbsmjRecordData> datas)
         {
-            DbsmjRecordItem item;
             foreach (var data in datas)
             {
-                item = NGUITools.AddChild(_infoGrid.gameObject, Item).GetComponent<DbsmjRecordItem>();
+                var item = _infoGrid.gameObject.AddChild(Item).GetComponent<DbsmjRecordItem>();
                 item.gameObject.SetActive(true);
                 item.Init(data);
             }

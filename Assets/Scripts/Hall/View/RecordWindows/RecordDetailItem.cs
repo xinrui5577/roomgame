@@ -14,6 +14,7 @@ using Assets.Scripts.Common.Utils;
 using Assets.Scripts.Hall.View.PageListWindow;
 using UnityEngine;
 using YxFramwork.Common;
+using YxFramwork.Controller;
 using YxFramwork.Framework;
 
 namespace Assets.Scripts.Hall.View.RecordWindows
@@ -33,6 +34,8 @@ namespace Assets.Scripts.Hall.View.RecordWindows
         public UILabel RoundNum;
         [Tooltip("回放开关按钮")]
         public GameObject ReplayBtnParent;
+        [Tooltip("行区分标志")]
+        public GameObject InterlacedBgSprite;
         #endregion
         #region Data Param
         /// <summary>
@@ -53,9 +56,15 @@ namespace Assets.Scripts.Hall.View.RecordWindows
         /// 本条数据
         /// </summary>
         private RecordDetialItemData _curData;
-        #endregion 
+
+        public RecordDetialItemData CurData
+        {
+            get { return _curData; }
+        }
+        #endregion
         #region Life Cycle
 
+        public bool SelfSpecialColorl;
         protected override void OnFreshView()
         {
             CheckItemData();
@@ -80,6 +89,10 @@ namespace Assets.Scripts.Hall.View.RecordWindows
             {
                 item.gameObject.SetActive(false);
             }
+            if (BgSprite)
+            {
+                BgSprite.height = BaseHeight;
+            }
         }
 
         public override void Hide()
@@ -93,37 +106,95 @@ namespace Assets.Scripts.Hall.View.RecordWindows
 
         public string ReplayUrl
         {
-            get { return string.Format("{0}{1}", Host, _curData.Url);}
+            get { return string.Format("{0}{1}", Host, _curData.Url); }
         }
 
-        public void ShowItem(string roundNum, string selfId)
+        public virtual void ShowItem(string roundNum, string selfId)
         {
             _curData.ShowRoundNum = roundNum;
             SetItemInfo(_curData);
-            float moveY = HeadGrid.cellHeight * ((HeadGrid.GetChildList().Count - 1) / HeadGrid.maxPerLine);
             if (BgSprite)
             {
+                float moveY = HeadGrid.cellHeight * ((HeadGrid.GetChildList().Count - 1) / HeadGrid.maxPerLine);
                 BgSprite.height = (int)moveY + BaseHeight;
             }
         }
+
+        public void OnReplay()
+        {
+            if (_curData == null) return;
+            var ctr = CombatGainsController.Instance;
+            ctr.CurGameKey = "hzemj";
+            //            if (ctr.CurType < 1) return;
+            var replayData = new ReplayData
+            {
+                ReplayId = _curData.ReplayId,
+                GameKey = ctr.CurGameKey,
+                Type = ctr.CurType
+            };
+            CombatGainsController.Instance.JoinReplay(replayData, "GameIndex_Replay");
+        }
+
         /// <summary>
         /// 设置时间，局数相关信息
         /// </summary>
         /// <param name="data"></param>
         private void SetItemInfo(RecordDetialItemData data)
         {
-            YxTools.TrySetComponentValue(Time, data.Time);
-            YxTools.TrySetComponentValue(RoundNum, string.Format(RoundFormat, data.ShowRoundNum));
-            YxTools.TrySetComponentValue(ReplayBtnParent, PlayBack);
+            Time.TrySetComponentValue(data.Time);
+            var roundNumString = data.ShowRoundNum;
+            RoundNum.TrySetComponentValue(string.Format(RoundFormat, roundNumString));
+            ReplayBtnParent.TrySetComponentValue(PlayBack);
+            ReplayBtnParent.TrySetComponentValue(PlayBack);
             var heads = data.HeadDatas;
-            int index = 0;
+            var index = 0; 
             foreach (var item in heads)
             {
-                var view = YxTools.GetChildView(index++, HeadItemPrefab, HeadGrid.transform);
+                var view = HeadGrid.transform.GetChildView(index++, HeadItemPrefab);
                 view.UpdateView(item.Value);
             }
             HeadGrid.repositionNow = true;
+            //交错背景的显示
+            SetInterlacedBg(roundNumString);
+            //判断输赢
+            if (SelfSpecialColorl)
+            {
+                if (data.HeadDatas.ContainsKey(App.UserId))
+                {
+                    Dictionary<string, object> _data = new Dictionary<string, object>();
+                    _data = data.HeadDatas[App.UserId] as Dictionary<string, object>;
+                    if (_data != null)
+                    {
+                        if (int.Parse(_data["gold"].ToString()) > 0)
+                        {
+                            Time.text += "贏";
+                            Time.color = new Color32(180, 16, 16, 255);
+                        }
+                        else if (int.Parse(_data["gold"].ToString()) == 0)
+                        {
+                            Time.text += "平";
+                        }
+                        else if (int.Parse(_data["gold"].ToString()) < 0)
+                        {
+                            Time.text += "输";
+                        }
+                    }
+                }
+            }
         }
+
+        /// <summary>
+        /// 设置交错背景的显示
+        /// </summary>
+        /// <param name="roundNumStr"></param>
+        public void SetInterlacedBg(string roundNumStr)
+        {
+            if (InterlacedBgSprite == null) return;
+            int roundNum;
+            if (!int.TryParse(roundNumStr, out roundNum)) return;
+            InterlacedBgSprite.SetActive(roundNum % 2 != 0);
+        }
+
         #endregion
 
     }
@@ -160,7 +231,7 @@ namespace Assets.Scripts.Hall.View.RecordWindows
         /// <summary>
         ///  玩家信息
         /// </summary>
-        private Dictionary<string,object> _userInfoHeads;
+        private Dictionary<string, object> _userInfoHeads;
         /// <summary>
         /// key 时间
         /// </summary>
@@ -202,7 +273,7 @@ namespace Assets.Scripts.Hall.View.RecordWindows
             }
         }
 
-        public Dictionary<string,object> HeadDatas
+        public Dictionary<string, object> HeadDatas
         {
             get
             {
@@ -220,10 +291,10 @@ namespace Assets.Scripts.Hall.View.RecordWindows
 
         protected override void ParseData(Dictionary<string, object> dic)
         {
-            YxTools.TryGetValueWitheKey(dic,out _replayId, KeyReplayId);
-            YxTools.TryGetValueWitheKey(dic, out _userInfoHeads, KeyHeads);
-            YxTools.TryGetValueWitheKey(dic, out _createTime, KeyTime);
-            YxTools.TryGetValueWitheKey(dic, out _url, KeyUrl);
+            dic.TryGetValueWitheKey(out _replayId, KeyReplayId);
+            dic.TryGetValueWitheKey(out _userInfoHeads, KeyHeads);
+            dic.TryGetValueWitheKey(out _createTime, KeyTime);
+            dic.TryGetValueWitheKey(out _url, KeyUrl);
         }
     }
 }

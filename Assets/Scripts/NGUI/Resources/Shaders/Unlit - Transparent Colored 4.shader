@@ -57,9 +57,20 @@ Shader "Unlit/Transparent Colored"
 				return o;
 			}
 				
-			fixed4 frag (v2f i) : COLOR
+			fixed4 frag (v2f IN) : COLOR
 			{
-				fixed4 col = tex2D(_MainTex, i.texcoord) * i.color;
+				fixed4 col;
+				col = tex2D(_MainTex, IN.texcoord);
+				fixed ctype = IN.color;
+				if (ctype == -1)//÷√ª“
+				{
+					float grey = dot(col.rgb, float3(0.299, 0.587, 0.114));
+					col.rgb = float3(grey, grey, grey);
+				}
+				else
+				{
+					col = col * IN.color;
+				}
 				return col;
 			}
 			ENDCG

@@ -88,7 +88,7 @@ public class UIScrollView : MonoBehaviour
 	/// Effect the scroll wheel will have on the momentum.
 	/// </summary>
 
-	public float scrollWheelFactor = 0.25f;
+	public float scrollWheelFactor = 5f;
 
 	/// <summary>
 	/// How much momentum gets applied when the press is released after dragging.

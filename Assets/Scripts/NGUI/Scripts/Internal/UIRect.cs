@@ -183,11 +183,41 @@ public abstract class UIRect : MonoBehaviour
 	// Marking it as NonSerialized will cause widgets to disappear when code recompiles in edit mode
 	protected bool mStarted = false;
 
-	/// <summary>
-	/// Final calculated alpha.
-	/// </summary>
 
-	[System.NonSerialized] public float finalAlpha = 1f;
+
+    public enum EColorType
+    {
+        /// <summary>
+        /// 正常
+        /// </summary>
+        Normal,
+        /// <summary>
+        /// 置灰
+        /// </summary>
+        Gray
+    }
+
+    [HideInInspector]
+    [SerializeField]
+    private EColorType _colorType;
+
+    public EColorType ColorType
+    {
+        get { return _colorType; }
+        set
+        {
+            var needChild = _colorType != value;
+            _colorType = value;
+            Invalidate(needChild);
+        }
+    }
+
+    /// <summary>
+    /// Final calculated alpha.
+    /// </summary>
+
+    [System.NonSerialized] public float finalAlpha = 1f;
+    [System.NonSerialized] public EColorType FinalColorType;
 
 	/// <summary>
 	/// Game object gets cached for speed. Can't simply return 'mGo' set in Awake because this function may be called on a prefab.
@@ -291,11 +321,25 @@ public abstract class UIRect : MonoBehaviour
 
 	public abstract float CalculateFinalAlpha (int frameID);
 
-	/// <summary>
-	/// Local-space corners of the UI rectangle. The order is bottom-left, top-left, top-right, bottom-right.
-	/// </summary>
+    public EColorType CalculateFinalColorType()
+    {
+        var pt = parent;
+        if (pt != null)
+        {
+            var ctype = pt.CalculateFinalColorType();
+            if (ctype != EColorType.Normal)
+            {
+                return ctype;
+            }
+        }
+        return _colorType;
+    }
 
-	public abstract Vector3[] localCorners { get; }
+    /// <summary>
+    /// Local-space corners of the UI rectangle. The order is bottom-left, top-left, top-right, bottom-right.
+    /// </summary>
+
+    public abstract Vector3[] localCorners { get; }
 
 	/// <summary>
 	/// World-space corners of the UI rectangle. The order is bottom-left, top-left, top-right, bottom-right.

@@ -2,6 +2,7 @@
 using System.Linq;
 using Assets.Scripts.Common.Utils;
 using Assets.Scripts.Common.Windows;
+using com.yxixia.utile.Utiles;
 using UnityEngine;
 using YxFramwork.Common;
 using YxFramwork.Controller;
@@ -18,11 +19,13 @@ namespace Assets.Scripts.Hall.View.AboutRoomWindows
         public UIGrid RoomInfoGrid;
         public CreateRoomListItem CreateRoomListItem;
 
+        private int _index;
+
         void Start()
         {
             var dic = new Dictionary<string, object>();
             dic["gameKey"] = App.GameKey;
-            Facade.Instance<TwManger>().SendAction("room.getMyRooms", dic, OnInitPanelCtrl);
+            Facade.Instance<TwManager>().SendAction("room.getMyRooms", dic, OnInitPanelCtrl);
         }
 
         private void OnInitPanelCtrl(object data)
@@ -48,9 +51,10 @@ namespace Assets.Scripts.Hall.View.AboutRoomWindows
         public void OnRoomRankBtn(UIToggle toggle)
         {
             if (!toggle.value) return;
+            _index = int.Parse(toggle.name);
             var dic = new Dictionary<string, object>();
             dic["gameKey"] = App.GameKey;
-            Facade.Instance<TwManger>().SendAction("room.getMyRooms", dic, OnFreshRoomInfo);
+            Facade.Instance<TwManager>().SendAction("room.getMyRooms", dic, OnFreshRoomInfo);
         }
 
         private void OnFreshRoomInfo(object data)
@@ -67,6 +71,19 @@ namespace Assets.Scripts.Hall.View.AboutRoomWindows
             {
                 if (!(dataInfo is Dictionary<string, object>)) continue;
                 var rInfo = dataInfo as Dictionary<string, object>;
+                var gid = rInfo.ContainsKey("gid") ? rInfo["gid"].ToString() : "";
+                if (!gid.Equals(""))
+                {
+                    var roomId = 0;
+                    if (_index == 1)
+                    {
+                        if (int.TryParse(gid, out roomId)) continue;
+                    }
+                    else
+                    {
+                        if (!int.TryParse(gid, out roomId))continue;
+                    }
+                }
                 var userNum = 0;
                 var id = rInfo.ContainsKey("id") ? rInfo["id"].ToString() : "";
                 var rndId = rInfo.ContainsKey("rndId") ? rInfo["rndId"].ToString() : "";
@@ -88,7 +105,7 @@ namespace Assets.Scripts.Hall.View.AboutRoomWindows
                 var currentUserCount = string.Format("{0}/{1}", userNum, capacity);
                 var obj = YxWindowUtils.CreateGameObject(CreateRoomListItem.gameObject, RoomInfoGrid.transform);
                 obj.name = id;
-                obj.GetComponent<CreateRoomListItem>().InitData(rndId, info, ante, currentRound, currentUserCount, gamekey);
+                obj.GetComponent<CreateRoomListItem>().InitData(rndId, gameName, ante, currentRound, currentUserCount, gamekey);
                 var joinRoom = UIEventListener.Get(obj);
                 joinRoom.onClick = OnJoinRoom;
                 joinRoom.parameter = obj;
@@ -109,13 +126,16 @@ namespace Assets.Scripts.Hall.View.AboutRoomWindows
         private void OnClickWeiChatInviteBtn(GameObject obj)
         {
             Facade.Instance<WeChatApi>().InitWechat(App.Config.WxAppId);
-
-            UserController.Instance.GetShareInfo(info =>
+            var parent = obj.GetComponentInParent<CreateRoomListItem>();
+            var dic = new Dictionary<string, object>();
+            dic["type"] = 0;
+//            dic["roomRule"] = parent.PlayRule.text;
+            dic["roomid"] = parent.RoomId.text;
+            dic["sharePlat"] = 0;
+            UserController.Instance.GetShareInfo(dic, info =>
             {
-                var parent = obj.GetComponentInParent<CreateRoomListItem>();
-                var playRule = parent.PlayRule.text;
-                var roomId = parent.RoomId.text;
-                info.ShareData["content"] += string.Format("[麻将];房间号:[{0}];{1}", roomId, playRule);
+                info.Title += string.Format("[{0}]", parent.RoomId.text);
+                info.Content += "[扑克]:" + parent.PlayRule.text + "速来玩吧!";
                 Facade.Instance<WeChatApi>().ShareContent(info);
             });
         }

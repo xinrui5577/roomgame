@@ -16,7 +16,7 @@ namespace Assets.Scripts.Hall.View
 
         protected override void OnAwake()
         {
-            Facade.Instance<TwManger>().SendAction("saleInfo",new Dictionary<string,object>(),UpdateView);
+            Facade.Instance<TwManager>().SendAction("saleInfo",new Dictionary<string,object>(),UpdateView);
         }
 
         protected override void OnFreshView()

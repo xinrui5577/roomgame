@@ -64,10 +64,10 @@ namespace Assets.Scripts.Hall.View.TaskWindows
         private const string KeyGetProps = "getProps";
         private System.Collections.Generic.List<string> _finishList;
 
-        protected override void OnEnableEx()
+        protected override void OnEnable()
         {
-            base.OnEnableEx();
-            Facade.Instance<TwManger>().SendAction
+            base.OnEnable();
+            Facade.Instance<TwManager>().SendAction
                 (
                 "taskList",
                 new Dictionary<string, object>(),
@@ -128,7 +128,7 @@ namespace Assets.Scripts.Hall.View.TaskWindows
             Dictionary<string, object> param = new Dictionary<string, object>();
             var actions = new[] {KeyTaskReward,KeyUserData,KeyGetProps };
             param["task"] = tasks;
-            Facade.Instance<TwManger>().SendActions
+            Facade.Instance<TwManager>().SendActions
             (
            actions,
            param,
@@ -139,11 +139,11 @@ namespace Assets.Scripts.Hall.View.TaskWindows
         private static void OnGetReward(object data)
         {
             Dictionary<string, object> getData = (Dictionary<string, object>)data;
-            YxWindow getWindow = YxWindowManager.OpenWindow("DefGetRewardsWindow", true);
+            YxWindow getWindow = YxWindowManager.OpenWindow("GetRewardsWindow", true);
             getWindow.UpdateView(getData[KeyTaskReward]);
             UserInfoModel.Instance.Convert(getData[KeyUserData]);
             UserInfoModel.Instance.ConvertBackPack(getData[KeyGetProps]);
-            YxMsgCenterHandler.GetIntance().FireEvent("HallWindow_hallMenuChange");
+            Facade.EventCenter.DispatchEvent<string,object>("HallWindow_hallMenuChange");
         }
     }
 }

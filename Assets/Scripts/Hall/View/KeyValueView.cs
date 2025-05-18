@@ -8,13 +8,17 @@
  *历史记录: 
 */
 
+using System;
 using YxFramwork.Framework;
+using YxFramwork.Framework.Core;
+using YxFramwork.Tool;
 
 namespace Assets.Scripts.Hall.View
 {
     /// <summary>
     /// 
     /// </summary>
+    [Obsolete("Use Assets.Scripts.Common.components.YxKeyValueView")]
     public class KeyValueView : YxView
     {
         /// <summary>
@@ -33,10 +37,9 @@ namespace Assets.Scripts.Hall.View
 
         protected override void OnFreshView()
         {
-            if (Data == null) return;
             var kvData = Data as KeyValueData;
             if (kvData == null) return;
-            KeyLabel.text = kvData.KeyString;
+            KeyLabel.text = string.Format("{0}{1}", kvData.KeyString, SpliteFlag);
             var value = kvData.ValueString;
             ValueLabel.text = value;
         }
@@ -45,8 +48,15 @@ namespace Assets.Scripts.Hall.View
         {
             get { return ValueLabel.height; }
         }
-    }
 
+        public void SaveValue()
+        {
+            var kvData = Data as KeyValueData;
+            if (kvData == null) return;
+            Facade.Instance<YxGameTools>().PasteBoard = kvData.ValueString;
+        }
+    }
+    [Obsolete("Use Assets.Scripts.Common.components.YxKeyValueData")]
     public class KeyValueData
     {
         /// <summary>

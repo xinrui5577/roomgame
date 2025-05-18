@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Common;
-using Assets.Scripts.Hall.View.AboutRoomWindows; 
+using Assets.Scripts.Common.components;
+using Assets.Scripts.Hall.View.AboutRoomWindows;
 using UnityEngine;
 using YxFramwork.Common;
 using YxFramwork.Common.Model;
@@ -10,16 +11,35 @@ using YxFramwork.Framework.Core;
 using YxFramwork.Manager;
 using YxFramwork.Tool;
 using com.yxixia.utile.Utiles;
+using YxFramwork.Enums;
+using YxFramwork.View;
 
 namespace Assets.Scripts.Hall.View
 {
     class HallWindow : YxBaseMoreWindow
     {
+        /// <summary>
+        /// 标题logo
+        /// </summary>
+        [Tooltip("标题logo")]
         public UITexture TitleLogo;
+        /// <summary>
+        /// 大Logo
+        /// </summary>
+        [Tooltip("标题logo")]
         public UITexture MiddleLogo;
+        private bool _needFreshUserInfo;
+         
         protected override void OnStart()
         {
             UpAnchor();
+            InitBackPart();
+            Facade.EventCenter.AddEventListeners<YxESysEventType, object>(YxESysEventType.SysFreshUserInfo, obj => { _needFreshUserInfo = true; });
+        }
+
+        private void InitBackPart()
+        {
+            gameObject.AddComponent<QuitPart>();
         }
 
         [ContextMenu("UpAnchor")]
@@ -33,9 +53,9 @@ namespace Assets.Scripts.Hall.View
             widget.updateAnchors = UIRect.AnchorUpdate.OnUpdate;
         }
 
-        public override WindowName WindowName
+        public override YxEWindowName WindowName
         {
-            get { return WindowName.GameHall; }
+            get { return YxEWindowName.GameHall; }
         }
 
         protected override IBaseModel YxBaseModel
@@ -47,14 +67,14 @@ namespace Assets.Scripts.Hall.View
         {
             base.OnCreate();
             var actions = new[] { "gameLogo", "optionSwitch" };
-            TwManger.SendActions(actions, new Dictionary<string, object>(), OnUpdateLogo, false);//,null,true,"gameLogo&optionsw");
+            CurTwManager.SendActions(actions, new Dictionary<string, object>(), OnUpdateLogo, false);//,null,true,"gameLogo&optionsw");
         }
 
         private static void OnUpdateLogo(object msg)
         {
             HallModel.Instance.Convert(msg);
             HallModel.Instance.Save();
-            YxMsgCenterHandler.GetIntance().FireEvent("HallWindow_hallMenuChange");
+            Facade.EventCenter.DispatchEvent<string, object>("HallWindow_hallMenuChange");
         }
 
         protected override void OnBindDate(bool isChange = false)
@@ -65,13 +85,19 @@ namespace Assets.Scripts.Hall.View
             AsyncImage.Instance.GetAsyncImage(model.HallLogoMiddle, MiddleLogoCallBack);
         }
 
-        private void TitleLogoCallBack(Texture2D texture)
+        private void TitleLogoCallBack(Texture2D texture, int hashCode)
         {
             if (texture == null) return;
             if (TitleLogo == null) return;
             TitleLogo.mainTexture = texture;
         }
-        private void MiddleLogoCallBack(Texture2D texture)
+
+        /// <summary>
+        /// 中间logo 
+        /// </summary>
+        /// <param name="texture"></param>
+        /// <param name="hashCode"></param>
+        private void MiddleLogoCallBack(Texture2D texture, int hashCode)
         {
             if (texture == null) return;
             if (MiddleLogo == null) return;
@@ -89,29 +115,34 @@ namespace Assets.Scripts.Hall.View
             Application.OpenURL(cfg.GetRecharge(info.user_id, info.token));
         }
 
-        public void OnOpenPayWindow()
-        {
-            var win = YxWindowManager.OpenWindow("DefShopWindow");
-        }
-
+        /// <summary>
+        /// 打开所有创建房间界面
+        /// </summary>
         public void OnOpenCreateAllRoomWindow()
         {
-            var win = YxWindowManager.OpenWindow("DefCreateRoomWindow", true);
+            var win = YxWindowManager.OpenWindow("CreateRoomWindow");
             var createWin = (CreateRoomWindow)win;
             if (createWin == null) return;
             createWin.GameKey = "";
         }
 
-        
+        /// <summary>
+        /// 快速游戏
+        /// </summary>
+        /// <param name="gameKey"></param>
+        public void OnOpenGameClick(string gameKey)
+        {
+            if (string.IsNullOrEmpty(gameKey)) { return; }
+            GameListController.Instance.QuickGame(gameKey);
+        }
 
         /// <summary>
-        /// 
+        /// todo //待优化   点击logo事件
         /// </summary>
         public void OnLogoClick()
         {
-            Facade.Instance<TwManger>().SendAction("logoAdvise", new Dictionary<string, object>(), msg =>
+            Facade.Instance<TwManager>().SendAction("logoAdvise", new Dictionary<string, object>(), msg =>
                 {
-                    if (msg == null) return;
                     var dict = msg as Dictionary<string, object>;
                     if (dict == null) return;
                     if (dict.ContainsKey("url"))
@@ -124,69 +155,66 @@ namespace Assets.Scripts.Hall.View
                             return;
                         }
                     }
-                    var win = YxWindowManager.OpenWindow("DefSupportWindow");
+                    var win = YxWindowManager.OpenWindow("SupportWindow");
                     if (win != null) win.UpdateView(dict);
                 });
         }
 
-  
 
-#if UNITY_EDITOR || YX_DEVE
         /// <summary>
-        /// 点击游戏列表，打开游戏
+        /// 
         /// </summary>
-        public void OnOpenGame(string gameKey)
+        /// <param name="isPause"></param>
+        protected void OnApplicationFocus(bool isPause)
         {
-            CurGameKey = gameKey;
+            if (!isPause) return;
+            CheckFreshUserInfo();
+            CheckPasteBoard();
         }
-        public static string CurGameKey;
-        private string _editor_roomId;
-        protected void OnGUI()
+
+        private void CheckFreshUserInfo()
         {
-            if (string.IsNullOrEmpty(CurGameKey)) return;
-            GlobalUtile.ResizeGUIMatrix();
-            var sh = Screen.height;
-            var fontStyle = new GUIStyle
+            if (!_needFreshUserInfo) return;
+            _needFreshUserInfo = false;
+            UserController.Instance.SendSimpleUserData();
+        }
+
+        private static string _lastPasteOrder;
+        /// <summary>
+        /// 检查剪切板
+        /// </summary>
+        private void CheckPasteBoard()
+        {
+            var pasteBoard = Facade.Instance<YxGameTools>().PasteBoard;
+            if (string.IsNullOrEmpty(pasteBoard)) { return; }
+            const string sign = "※";
+            var order = StringHelper.FindBetweenSign(pasteBoard, sign, sign);
+            if (order.Equals(_lastPasteOrder)) { return; }
+            _lastPasteOrder = order;
+            var infos = order.Split(':');
+            if (infos.Length < 1) { return; }
+            switch (infos[0])
             {
-                normal =
-                {
-                    //                            background = null,
-                    textColor = Color.white
-                }
-                //                    fontSize = rowH
-            };
-            const int gx = 30;
-            GUILayout.BeginHorizontal();
-            GUI.Label(new Rect(gx, 10, 120, 20), "请输入房间id", fontStyle);
-            _editor_roomId = GUI.TextField(new Rect(gx + 130, 10, 100, 20), _editor_roomId);
-            GUILayout.EndHorizontal();
-            GUILayout.BeginHorizontal();
-            if (GUI.Button(new Rect(gx, 95, 40, 20), "确 定"))
-            {
-                int rId;
-                int.TryParse(_editor_roomId, out rId);
-                if (rId > 0)
-                {
-                    var roomUm = RoomListModel.Instance.RoomUnitModel;
-                    for (var i = 0; i <= rId; i++)
+                case "find":
+                    int roomType;
+                    if (int.TryParse(infos[1], out roomType))
                     {
-                        var rm = new RoomUnitModel(null)
-                            {
-                                TypeId = _editor_roomId,
-                                GameKey = CurGameKey
-                            };
-                        roomUm.Add(rm);
+                        RoomListController.Instance.FindRoomAndOpenWindow(roomType);
                     }
-                }
-                RoomListController.Instance.QuickGame(CurGameKey);
-                CurGameKey = "";
+                    break;
             }
-            if (GUI.Button(new Rect(gx + 90, 95, 40, 20), "取 消"))
-            {
-                CurGameKey = "";
-            }
-            GUILayout.EndHorizontal();
+            _lastPasteOrder = string.Empty;
         }
-#endif
+        public void OnManagenCtrl()
+        {
+            Facade.Instance<TwManager>().SendAction("mahjongwm.manageCtrl", new Dictionary<string, object>(), FreshCtrl);
+        }
+
+        private void FreshCtrl(object data)
+        {
+            OnOpenWindow("WebViewWindow");
+        }
+
+
     }
 }

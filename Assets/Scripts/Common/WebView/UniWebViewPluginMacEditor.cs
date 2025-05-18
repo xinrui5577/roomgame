@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Assets.Scripts.Common.WebView
 {
-#if UNITY_EDITOR
-    
+#if UNITY_EDITOR || UNITY_STANDALONE
+
     public class UniWebViewPlugin
     {
         private static bool _connected;
@@ -120,7 +120,7 @@ namespace Assets.Scripts.Common.WebView
                     break;
             }
         }
-
+         
         public static void Load(string name, string url)
         {
             if (Application.platform == RuntimePlatform.OSXEditor)

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/relaLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:layout_gravity="center_vertical|center_horizontal" >
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:inputType="textNoSuggestions|textMultiLine"
+        android:ems="10"
+        android:imeOptions="actionDone"
+        android:id="@+id/textArea" 
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" 
+		android:layout_alignParentBottom="true"
+        android:textSize="20dp"
+        android:gravity="top" />
+
+</RelativeLayout>

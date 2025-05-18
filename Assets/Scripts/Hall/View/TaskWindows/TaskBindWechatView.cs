@@ -18,9 +18,8 @@ namespace Assets.Scripts.Hall.View.TaskWindows
         /// 微信显示
         /// </summary>
         public UILabel WechatLabel;
-        protected override void OnShow()
-        {
-            base.OnShow();
+        protected override void OnStart()
+        { 
             var weChatS = UserInfoModel.Instance.UserInfo.WeChatS;
             ChangeState(!string.IsNullOrEmpty(weChatS));
             WechatLabel.text = weChatS;
@@ -38,9 +37,8 @@ namespace Assets.Scripts.Hall.View.TaskWindows
                 YxMessageBox.Show("两次输入的微信号不相同，请重新输入", 5);
                 return;
             }
-            var parm = new Dictionary<string, object>();
-            parm["weixin"] = weixin;
-            Facade.Instance<TwManger>().SendAction("getBindWeiXinAward", parm, BoundWechatSuccess);
+            var parm = new Dictionary<string, object> { { "weixin" ,weixin }};
+            Facade.Instance<TwManager>().SendAction("getBindWeiXinAward", parm, BoundWechatSuccess);
         }
 
         /// <summary>
@@ -71,10 +69,9 @@ namespace Assets.Scripts.Hall.View.TaskWindows
         /// </summary>
         public void OnSendUnBindWechat()
         {
-            var weixin = WechatLabel.text; 
-            var parm = new Dictionary<string, object>();
-            parm["weixin"] = weixin;
-            Facade.Instance<TwManger>().SendAction("getUnBindWeiXin", parm, UnBoundWechatSuccess);
+            var weixin = WechatLabel.text;
+            var parm = new Dictionary<string, object> {{ "weixin",weixin}};
+            Facade.Instance<TwManager>().SendAction("getUnBindWeiXin", parm, UnBoundWechatSuccess);
         }
 
         /// <summary>
@@ -84,7 +81,7 @@ namespace Assets.Scripts.Hall.View.TaskWindows
         private void UnBoundWechatSuccess(object msg)
         {
             ShowInfos(msg, "该账号已经解除微信绑定！！！");
-            UserInfoModel.Instance.UserInfo.MobileN = "";
+            UserInfoModel.Instance.UserInfo.PhoneNumber = "";
             WechatLabel.text = "";
             ChangeState(false);
         }

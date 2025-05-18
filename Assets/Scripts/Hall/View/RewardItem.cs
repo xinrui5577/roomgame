@@ -24,6 +24,7 @@ namespace Assets.Scripts.Hall.View
         /// </summary>
         public RewardItemType LayoutType=RewardItemType.Right;
 
+
         public void Init(string iconName, int showNum)
         {
             if (ShowIcon)
@@ -31,8 +32,8 @@ namespace Assets.Scripts.Hall.View
                 ShowIcon.spriteName = iconName;
                 ShowIcon.MakePixelPerfect();
             }
-            YxTools.TrySetComponentValue(ShowNum, string.Format("x{0}", showNum));
-            YxTools.TrySetComponentValue(ShowNumAdapter,showNum, iconName, "x{0}");
+            ShowNum.TrySetComponentValue(string.Format("x{0}", showNum));
+            ShowNumAdapter.TrySetComponentValue(showNum, iconName, "x{0}");
         }
     }
     /// <summary>

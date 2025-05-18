@@ -254,8 +254,8 @@ public class UIAtlasInspector : Editor
 					GUILayout.BeginHorizontal();
 
 					if (GUILayout.Button("Duplicate"))
-					{
-						UIAtlasMaker.SpriteEntry se = UIAtlasMaker.DuplicateSprite(mAtlas, sprite.name);
+					{ 
+                        UIAtlasMaker.SpriteEntry se = UIAtlasMaker.DuplicateSprite(mAtlas, sprite.name);
 						if (se != null) NGUISettings.selectedSprite = se.name;
 					}
 
@@ -266,10 +266,12 @@ public class UIAtlasInspector : Editor
 
 						if (!string.IsNullOrEmpty(path))
 						{
-							NGUISettings.currentPath = System.IO.Path.GetDirectoryName(path);
-							UIAtlasMaker.SpriteEntry se = UIAtlasMaker.ExtractSprite(mAtlas, sprite.name);
-
-							if (se != null)
+                            NGUISettings.currentPath = System.IO.Path.GetDirectoryName(path);
+						    var old = NGUISettings.atlas;
+						    NGUISettings.atlas = mAtlas;
+                            UIAtlasMaker.SpriteEntry se = UIAtlasMaker.ExtractSprite(mAtlas, sprite.name);
+						    NGUISettings.atlas = old;
+                            if (se != null)
 							{
 								byte[] bytes = se.tex.EncodeToPNG();
 								File.WriteAllBytes(path, bytes);
@@ -289,7 +291,10 @@ public class UIAtlasInspector : Editor
                             {
                                 var spName = uiSpriteData.name;
                                 NGUISettings.currentPath = path;
+                                var old = NGUISettings.atlas;
+                                NGUISettings.atlas = mAtlas;
                                 UIAtlasMaker.SpriteEntry se = UIAtlasMaker.ExtractSprite(mAtlas, spName);
+                                NGUISettings.atlas = old;
                                 if (se != null)
                                 {
                                     var filePath = string.Format("{0}/{1}.png", path, spName);

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Common.WebView
 {
-#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_EDITOR
+#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_EDITOR||UNITY_STANDALONE
     /// <summary>
     /// 网页内嵌组件 
     /// </summary>
@@ -66,11 +66,13 @@ namespace Assets.Scripts.Common.WebView
         /// 加载完毕自动显示
         /// </summary>
         public bool AutoShowWhenLoadComplete;
+ 
         /// <summary>
         /// View关闭时是否清除缓存
         /// </summary>
         [HideInInspector]
         public bool CleanCacheOnFinished = false;
+
         #endregion
         /// <summary>
         /// 显示范围
@@ -182,7 +184,7 @@ namespace Assets.Scripts.Common.WebView
                 if (_bouncesEnable != value)
                 {
                     _bouncesEnable = value;
-#if !UNITY_EDITOR
+#if !UNITY_EDITOR&&(UNITY_ANDROID||UNITY_IOS)
                 UniWebViewPlugin.SetBounces(gameObject.name, _bouncesEnable);
 #endif
                 }
@@ -202,7 +204,7 @@ namespace Assets.Scripts.Common.WebView
                 if (_zoomEnable != value)
                 {
                     _zoomEnable = value;
-#if !UNITY_EDITOR
+#if  !UNITY_EDITOR&&(UNITY_ANDROID||UNITY_IOS)
                 UniWebViewPlugin.SetZoomEnable(gameObject.name, _zoomEnable);
 #endif
                 }
@@ -289,8 +291,8 @@ namespace Assets.Scripts.Common.WebView
                      Insets.top,
                      Insets.left,
                      Insets.bottom,
-                     Insets.right);
-            _lastScreenHeight = UniWebViewHelper.screenHeight;
+                     Insets.right); 
+            _lastScreenHeight = UniWebViewHelper.screenHeight;  
         }
 
         void Start()
@@ -301,6 +303,11 @@ namespace Assets.Scripts.Common.WebView
             }
         }
 
+        private void OnApplicationQuit()
+        {
+            OnDestroy();
+        }
+
         private void OnDestroy()
         {
 #if UNITY_EDITOR
@@ -308,6 +315,7 @@ namespace Assets.Scripts.Common.WebView
 #endif
             if(CleanCacheOnFinished)
             {
+                Debug.LogError("清理缓存");
                 CleanCache();
             }
             RemoveAllListeners();
@@ -360,6 +368,11 @@ namespace Assets.Scripts.Common.WebView
         /// </summary>
         public void Load()
         {
+            if (CleanCacheOnFinished)
+            {
+                Debug.LogError("清理缓存");
+                CleanCache();
+            }
             string loadUrl = String.IsNullOrEmpty(Url) ? "about:blank" : Url.Trim();
             if (ZoomEnable)
             {

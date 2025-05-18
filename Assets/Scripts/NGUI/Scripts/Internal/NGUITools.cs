@@ -820,10 +820,16 @@ static public class NGUITools
 
 				if (go.hideFlags == HideFlags.None && go.layer == layer)
 				{
-					trans.parent = p.transform;
-					trans.localScale = Vector3.one;
-					return p;
-				}
+				    if (trans)
+				    {
+                        trans.parent = p.transform;
+                        trans.localScale = Vector3.one;
+                    }
+                    if (p.GetComponent<UIRoot>())
+                    {
+                        return p;
+                    }
+                }
 			}
 		}
 

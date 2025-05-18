@@ -1,6 +1,6 @@
 namespace Assets.Scripts.Common.WebView
 {
-#if UNITY_ANDROID&&!UNITY_EDITOR
+#if UNITY_ANDROID && !UNITY_EDITOR
     using UnityEngine;
     using System.Collections;
     using System;
@@ -12,13 +12,19 @@ namespace Assets.Scripts.Common.WebView
 
         public static void Init(string name, int top, int left, int bottom, int right)
         {
-            Debug.Log("Unity Init");
+            //Debug.Log("Unity Init");
             if (Application.platform == RuntimePlatform.Android)
             {
                 webView = new AndroidJavaClass("com.youxia.webview.WebViewTools");
 
                 webView.CallStatic("UniWebViewInit", name, top, left, bottom, right);
             }
+            SetJsInterFaceName(UniWebViewHelper.JsInterFaceName);
+        }
+
+        public static void SetJsInterFaceName(string jsInterfaceName)
+        {
+            webView.CallStatic("SetInterFaceName", jsInterfaceName);
         }
 
         public static void ChangeInsets(string name, int top, int left, int bottom, int right)

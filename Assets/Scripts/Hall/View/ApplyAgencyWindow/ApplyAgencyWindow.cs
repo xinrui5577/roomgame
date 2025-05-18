@@ -33,7 +33,7 @@ public class ApplyAgencyWindow : YxNguiWindow
         dic.Add("phone", PhoneInput.value);
         dic.Add("self", SelfInput.value);
         //给服务器发送数据,接受服务器返回的数据并做处理
-        Facade.Instance<TwManger>().SendAction("creatAgency", dic, (data) =>
+        Facade.Instance<TwManager>().SendAction("creatAgency", dic, (data) =>
         {
             if (data == null) return;
             if (data is Dictionary<string, object>)

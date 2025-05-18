@@ -9,67 +9,90 @@
 */
 
 using System.Collections.Generic;
-using Assets.Scripts.Common.components;
+using System.Globalization;
 using Assets.Scripts.Common.Utils;
 using UnityEngine;
 using YxFramwork.Common;
+using YxFramwork.Common.Adapters;
+using YxFramwork.Common.DataBundles;
 using YxFramwork.Framework;
+using YxFramwork.Tool;
 
 namespace Assets.Scripts.Hall.View.RecordWindows
 {
     public class HeadItem : YxView
     {
-        public UITexture ShowHead;
+        public YxBaseTextureAdapter ShowHead;
         public UILabel ShowUserName;
         public UILabel ShowId;
         public UILabel ShowTotalScore;
         public Color SelfColor = Color.yellow;
         public bool SelfSpecialColorl;
-        private HeadData _data;
-        private void RefreshItem(Dictionary<string, object> dic)
+
+        protected virtual void RefreshItem(Dictionary<string, object> dic)
         {
-            _data=new HeadData(dic);
-            YxTools.TrySetComponentValue(ShowUserName, _data.UserName);
-            YxTools.TrySetComponentValue(ShowId, _data.UserId);
-            YxTools.TrySetComponentValue(ShowTotalScore, _data.UserScore);
+            var data = new HeadData(dic);
+            RefreshItem(data);
+        }
+
+        protected virtual void RefreshItem(HeadData data)
+        {
+            ShowUserName.TrySetComponentValue(data.UserName);
+            ShowId.TrySetComponentValue(data.UserId);
+            ShowTotalScore.TrySetComponentValue(YxUtiles.GetShowNumber(data.UserScore).ToString(CultureInfo.InvariantCulture));
             if (SelfSpecialColorl)
             {
-                if (_data.UserId.Equals(App.UserId))
+                if (data.UserId.Equals(App.UserId))
                 {
                     if (ShowUserName)
                     {
                         ShowUserName.color = SelfColor;
+                        ShowTotalScore.color = new Color32(180, 16, 16, 255);
                     }
                 }
-            } 
-            PortraitRes.SetPortrait(_data.HeadUrl, ShowHead,_data.UserSex);
+            }
+            if (ShowHead)
+            {
+                PortraitDb.SetPortrait(data.HeadUrl, ShowHead, data.UserSex);
+            }
         }
 
         protected override void OnFreshView()
         {
             base.OnFreshView();
-            if(Data==null)
+            if (Data == null)
             {
                 return;
             }
-            RefreshItem((Dictionary<string, object>) Data);
+            if (Data is HeadData)
+            {
+                RefreshItem(Data as HeadData);
+            }
+            else if (Data is Dictionary<string, object>)
+            {
+                RefreshItem((Dictionary<string, object>)Data);
+            }
+
         }
     }
 
     public class HeadData
     {
         #region Keys
-        private string _keyName= "name";
-        private string _keyId= "id";
-        private string _keyScore= "gold";
-        private string _keyAvatar= "avatar_x";
-        private string _keySex= "sex_i";
+        public const string KeyName = "name";
+        public const string KeyId = "id";
+        public const string KeyScore = "gold";
+        public const string KeyAvatar = "avatar";
+        public const string KeyAvatarX = "avatar_x";
+        public const string KeySex = "sex_i";
+        public const string KeySeat = "seat";
         #endregion
-        private string _headUrl;
-        private string _userName;
-        private string _userId;
-        private string _userScore;
-        private int _userSex;
+        protected string _headUrl;
+        protected string _userName;
+        protected string _userId;
+        protected long _userScore;
+        protected int _userSex;
+        protected int _seat;
 
         public string UserName
         {
@@ -89,7 +112,7 @@ namespace Assets.Scripts.Hall.View.RecordWindows
             }
         }
 
-        public string UserScore
+        public long UserScore
         {
             get { return _userScore; }
         }
@@ -99,13 +122,44 @@ namespace Assets.Scripts.Hall.View.RecordWindows
             get { return _headUrl; }
         }
 
-        public HeadData(Dictionary<string,object>dic)
+        public int Seat
         {
-            _userId = dic[_keyId].ToString();
-            _userName = dic[_keyName].ToString();
-            _userScore = dic[_keyScore].ToString();
-            _userSex = dic.ContainsKey(_keySex) ? int.Parse(dic[_keySex].ToString()) : 1;
-            _headUrl = dic.ContainsKey(_keyAvatar) ? dic[_keyAvatar].ToString() :"";
+            get { return _seat; }
+        }
+
+        public HeadData(Dictionary<string, object> dic)
+        {
+            DealInfo(dic);
+        }
+        /// <summary>
+        /// 茶馆头像信息兼容处理
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="data"></param>
+        public HeadData(string id, object data)
+        {
+            DealInfo(data as Dictionary<string, object>);
+            _userId = id;
+        }
+
+        protected virtual void DealInfo(Dictionary<string, object> dic)
+        {
+            dic.TryGetValueWitheKey(out _userId, KeyId);
+            dic.TryGetValueWitheKey(out _userName, KeyName);
+            dic.TryGetValueWitheKey(out _userScore, KeyScore);
+            dic.TryGetValueWitheKey(out _userSex, KeySex, 1);
+            if (dic.ContainsKey(KeyAvatar))
+            {
+                _headUrl = dic[KeyAvatar].ToString();
+            }
+            if (dic.ContainsKey(KeyAvatarX))
+            {
+                _headUrl = dic[KeyAvatarX].ToString();
+            }
+            if (dic.ContainsKey(KeySeat))
+            {
+                dic.TryGetValueWitheKey(out _seat, KeySeat);
+            }
         }
     }
 }

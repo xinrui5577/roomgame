@@ -1,0 +1,272 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1000013267693062}
+  m_IsPrefabParent: 1
+--- !u!1 &1000011937244278
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000010879850466}
+  - 114: {fileID: 114000011750339362}
+  - 114: {fileID: 114000013111850394}
+  m_Layer: 18
+  m_Name: Label
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1000013267693062
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000010363940718}
+  - 114: {fileID: 114000011187862672}
+  m_Layer: 18
+  m_Name: ChatDb
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1000013764173246
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000013351797676}
+  - 114: {fileID: 114000012852476704}
+  m_Layer: 18
+  m_Name: ChatLabelItem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4000010363940718
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013267693062}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children:
+  - {fileID: 4000013351797676}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!4 &4000010879850466
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011937244278}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 6, y: -10, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 4000013351797676}
+  m_RootOrder: 0
+--- !u!4 &4000013351797676
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013764173246}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -6, y: 10, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children:
+  - {fileID: 4000010879850466}
+  m_Father: {fileID: 4000010363940718}
+  m_RootOrder: 0
+--- !u!114 &114000011187862672
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013267693062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1102696590, guid: 554f3f04111daca4b964905b4a8c0d2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ZipDatas:
+  - Name: ChatManSound
+    Datas:
+    - {fileID: 8300000, guid: 5d85745046fba704bbf3fda2dfe13168, type: 3}
+    - {fileID: 8300000, guid: f85e6b90267dc7f448724e7dfd6de999, type: 3}
+    - {fileID: 8300000, guid: 58f354b50512ebd4eb7da6d373044679, type: 3}
+    - {fileID: 8300000, guid: e84a35b7c1f747949830d78e4347d41f, type: 3}
+    - {fileID: 8300000, guid: b319959daf3e0cb46aeaed6a70e8a957, type: 3}
+    - {fileID: 8300000, guid: e98e00fe8eeeb794f9edc1809432e5fa, type: 3}
+    DataNames: []
+  - Name: ChatWomanSound
+    Datas:
+    - {fileID: 8300000, guid: 31458fa16a61d3f46aac3973039d6017, type: 3}
+    - {fileID: 8300000, guid: b4cdecc792003434296ad286e4484d04, type: 3}
+    - {fileID: 8300000, guid: e4846f788da478f41b325572fdea4b30, type: 3}
+    - {fileID: 8300000, guid: 9bfb85abf18fdd84182abd19d3acccd1, type: 3}
+    - {fileID: 8300000, guid: d1061f8c45fb81343ae77ce3383484e7, type: 3}
+    DataNames: []
+  ChatLabelItem: {fileID: 114000012852476704}
+  ChatType:
+  - ClipSource:
+    - ChatWomanSound
+    Chats:
+    - Content: "\u641E\u5FEB\u70B9\uFF0C\u4F60\u592A\u58A8\u8FF9\u4E86\u3002"
+      ClipName: share_qtalk_0_1
+    - Content: "\u4ECA\u5929\u624B\u6C14\u4E0D\u597D\uFF0C\u6539\u5929\u5728\u6218\u3002"
+      ClipName: share_qtalk_0_2
+    - Content: "\u4F60\u624B\u6C14\u4E0D\u9519\u554A,\u5F00\u4E2A\u623F\u95F4\u5207\u78CB\u4E00\u4E0B?"
+      ClipName: share_qtalk_0_3
+    - Content: "\u901F\u5EA6\uFF0C\u901F\u5EA6\u3002"
+      ClipName: share_qtalk_0_5
+    - Content: "\u5E05\u54E5\u6709\u6CA1\u6709\u8054\u7CFB\u65B9\u5F0F\u554A\uFF1F"
+      ClipName: share_qtalk_0_6
+  - ClipSource:
+    - ChatManSound
+    Chats:
+    - Content: "\u7B2C\u4E00\u6B21\u6765\u73A9\u4E0D\u592A\u4F1A\uFF0C\u5927\u5BB6\u8BA9\u7740\u70B9\u54E6\uFF01"
+      ClipName: share_qtalk_1_1
+    - Content: "\u5FEB\u70B9\uFF0C\u522B\u58A8\u8FF9\u4E86\u3002"
+      ClipName: share_qtalk_1_2
+    - Content: "\u4ECA\u5929\u624B\u6C14\u4E0D\u597D\uFF0C\u6539\u5929\u518D\u6218\u3002"
+      ClipName: share_qtalk_1_3
+    - Content: "\u901F\u5EA6\uFF0C\u901F\u5EA6\u3002"
+      ClipName: share_qtalk_1_4
+    - Content: "\u54A6\uFF0C\u4F60\u4ECA\u5929\u7684\u624B\u6C14\u4E0D\u9519\u5440\u3002"
+      ClipName: share_qtalk_1_5
+    - Content: "\u6709\u6CA1\u6709\u8054\u7CFB\u65B9\u5F0F\uFF0C\u7ED9\u4E00\u4E2A\u5427\u3002"
+      ClipName: share_qtalk_1_6
+--- !u!114 &114000011750339362
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011937244278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftAnchor:
+    target: {fileID: 0}
+    relative: 0
+    absolute: 0
+  rightAnchor:
+    target: {fileID: 0}
+    relative: 1
+    absolute: 0
+  bottomAnchor:
+    target: {fileID: 0}
+    relative: 0
+    absolute: 0
+  topAnchor:
+    target: {fileID: 0}
+    relative: 1
+    absolute: 0
+  updateAnchors: 1
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mWidth: 260
+  mHeight: 30
+  mDepth: 0
+  autoResizeBoxCollider: 0
+  hideIfOffScreen: 0
+  keepAspectRatio: 0
+  aspectRatio: 65
+  keepCrispWhenShrunk: 1
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 114000013249020798, guid: 9f5a4fe6c678f4d4393d0d68499a6091, type: 2}
+  mText: New Label
+  mFontSize: 30
+  mFontStyle: 0
+  mAlignment: 1
+  mEncoding: 1
+  mMaxLineCount: 0
+  mEffectStyle: 0
+  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mOverflow: 3
+  mMaterial: {fileID: 0}
+  mApplyGradient: 1
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: 0.7, g: 0.7, b: 0.7, a: 1}
+  mSpacingX: 0
+  mSpacingY: 0
+  mUseFloatSpacing: 0
+  mFloatSpacingX: 0
+  mFloatSpacingY: 0
+  mOverflowEllipsis: 0
+  mOverflowWidth: 0
+  mModifier: 0
+  mShrinkToFit: 0
+  mMaxLineWidth: 0
+  mMaxLineHeight: 0
+  mLineWidth: 0
+  mMultiline: 1
+--- !u!114 &114000012852476704
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013764173246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1710119611, guid: 554f3f04111daca4b964905b4a8c0d2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MainYxView: {fileID: 0}
+  Id: 
+  IdCode: 0
+  Order: 0
+  InitStateTotal: 0
+  CheckIsStart: 0
+  NeedFreshWithShow: 0
+  Content: {fileID: 114000013111850394}
+  TalkCycle: 1500
+  ShowTimes: 0
+  Clip: {fileID: 0}
+  ClipDelayedPlayTime: 0
+  MinWaitTime: 3
+--- !u!114 &114000013111850394
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011937244278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7b769135c2f3a64ba479f97266f7a62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LabelType: 0
+  Mfont: {fileID: 0}
+  MinDistance: {x: -1, y: -1}
+  ContentFormat: 
+  ReduceNumberFormat: 
+  MaxMin: {x: 0, y: 0, z: 0, w: 0}
+  EffectLabel: {fileID: 0}

@@ -62,8 +62,8 @@ public class UIInputEditor : UIWidgetContainerEditor
 			//NGUIEditorTools.DrawProperty(serializedObject, "selectOnTab");
 
 			SerializedProperty sp = serializedObject.FindProperty("characterLimit");
-
-			GUILayout.BeginHorizontal();
+		    NGUIEditorTools.DrawPaddedProperty("Asterisk", serializedObject, "Asterisk");
+            GUILayout.BeginHorizontal();
 
 			if (sp.hasMultipleDifferentValues || input.characterLimit > 0)
 			{

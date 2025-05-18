@@ -1,12 +1,16 @@
-﻿using YxFramwork.Framework;
+﻿using System;
+using YxFramwork.Common.Adapters;
+using YxFramwork.Framework;
 
 namespace Assets.Scripts.Hall.View.ShopWindows
 {
+    [Obsolete("Use Assets.Scripts.Hall.View.ShopWindows.YxShopTableItemView")]
     public class ShopTableItemView : YxView
     {
         public YxBaseLabelAdapter LabelName;
         public YxBaseLabelAdapter LabelUpName;
         private string _tableName;
+
         protected override void OnStart()
         {
             InitStateTotal = 2;

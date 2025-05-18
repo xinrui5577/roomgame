@@ -4,6 +4,7 @@ using Assets.Scripts.Common.Adapters;
 using Assets.Scripts.Common.Utils;
 using Assets.Scripts.Common.Windows;
 using UnityEngine;
+using YxFramwork.Common.Adapters;
 using YxFramwork.Framework.Core;
 using YxFramwork.Manager;
 using YxFramwork.View;
@@ -57,6 +58,8 @@ namespace Assets.Scripts.Hall.View.SpinningWindows
         public string CostSpriteFormat = "icon_{0}";
         [Tooltip("奖励请求")]
         public string AwardAction = "awardList_yr";
+        [Tooltip("获得的奖励请求")]
+        public string GetAwardAction = "getAward_yr";
         [Tooltip("消耗类型的key")]
         public string KeyConsumeType = "consumeType";
         [Tooltip("消耗数量的key")]
@@ -66,6 +69,7 @@ namespace Assets.Scripts.Hall.View.SpinningWindows
         private const string InitAnglesName = "SpinningEulerAngles";
         private float _itemAngle = 360;
         private int _residueDegree;
+        private string _msgShow;
         protected override void OnStart()
         {
             if (HeightMark != null) HeightMark.SetActive(false);
@@ -73,7 +77,7 @@ namespace Assets.Scripts.Hall.View.SpinningWindows
             angles.z = PlayerPrefs.GetFloat(InitAnglesName, Random.Range(0, 360));
             Rolling.localEulerAngles = angles;
             if (Items.Length > 0) _itemAngle = 360f / Items.Length;
-            Facade.Instance<TwManger>().SendAction(AwardAction, new Dictionary<string, object>(), UpdateView);
+            Facade.Instance<TwManager>().SendAction(AwardAction, new Dictionary<string, object>(), UpdateView);
         }
 
         private readonly Dictionary<int, int> _spinningDatas = new Dictionary<int, int>();
@@ -135,9 +139,9 @@ namespace Assets.Scripts.Hall.View.SpinningWindows
                 ResidueDegreeLabel.gameObject.SetActive(false);
                 if (CostContainer)
                 {
-                    YxTools.TrySetComponentValue(CostLabel, string.Format(CostLabelFormat, costNum));
-                    YxTools.TrySetComponentValue(CostLabelAdapter, costNum, costType.ToString(), CostLabelFormat);
-                    YxTools.TrySetComponentValue(CostTypeSprite, string.Format(CostSpriteFormat, costType));
+                    CostTypeSprite.TrySetComponentValue(string.Format(CostLabelFormat, costNum));
+                    CostLabelAdapter.TrySetComponentValue(costNum, costType.ToString(), CostLabelFormat, YxBaseLabelAdapter.YxELabelType.NumberWithUnit);
+                    CostTypeSprite.TrySetComponentValue(string.Format(CostSpriteFormat, costType));
                         
                 }
                 return;
@@ -208,7 +212,7 @@ namespace Assets.Scripts.Hall.View.SpinningWindows
         {
             ReSet();
             _state = SpinningState.SpeedUp;
-            Facade.Instance<TwManger>().SendAction("getAward_yr", new Dictionary<string, object>(),   SetReward,true,
+            Facade.Instance<TwManager>().SendAction(GetAwardAction, new Dictionary<string, object>(),   SetReward,true,
                                                    msg =>
                                                        {
                                                            var msgDict = msg as Dictionary<string, object>;
@@ -285,6 +289,7 @@ namespace Assets.Scripts.Hall.View.SpinningWindows
             var spDict = dictObj as Dictionary<string, object>;
             if (spDict == null) return;
             var sdata = new SpinningItemData(spDict);
+            _msgShow = sdata.Msg;
             if (_spinningDatas.ContainsKey(sdata.Id))
             {
                 _rewardIndex = _spinningDatas[sdata.Id];
@@ -333,6 +338,10 @@ namespace Assets.Scripts.Hall.View.SpinningWindows
             }
             var rz = Rolling.localEulerAngles.z;
             Debug.Log("停止：" + rz);
+            if (!_msgShow.Equals(""))
+            {
+                YxMessageBox.Show(_msgShow);
+            }
             if (HeightMark == null) return;
             if (_rewardIndex == -1) return;
             var item = Items[_rewardIndex];

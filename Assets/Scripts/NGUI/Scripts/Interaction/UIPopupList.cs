@@ -182,6 +182,7 @@ public class UIPopupList : UIWidgetContainer
 
 	public bool separatePanel = true;
 
+
 	/// <summary>
 	/// Amount by which the popup's border will overlap with the content that opened it.
 	/// </summary>
@@ -905,13 +906,15 @@ public class UIPopupList : UIWidgetContainer
 					Rigidbody2D rb = mChild.AddComponent<Rigidbody2D>();
 					rb.isKinematic = true;
 				}
-				mChild.AddComponent<UIPanel>().depth = 1000000;
+                UIPanel panel=mChild.AddComponent<UIPanel>();
+			    panel.depth = 1000000;
+			    panel.sortingOrder = mPanel.sortingOrder;
 			}
 			current = this;
 
 			Transform t = mChild.transform;
 			t.parent = mPanel.cachedTransform;
-
+            
 			// Manually triggered popup list on some other game object
 			if (openOn == OpenOn.Manual && mSelection != gameObject)
 			{

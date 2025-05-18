@@ -1,5 +1,7 @@
 ﻿using System;
 using Assets.Scripts.Common.Adapters;
+using Assets.Scripts.Hall.Controller;
+using com.yxixia.utile.Utiles;
 using UnityEngine;
 using YxFramwork.Framework;
 using YxFramwork.View;
@@ -8,11 +10,20 @@ namespace Assets.Scripts.Hall.View
 {
     public class GameListItemView : YxView, IItemView
     {
+        public int RoomListStyleIndex;
+        public int DeskListStyleIndex;
         public UIWidget Widget;
         public GameObject Tween;
         public StateSprites BtnKindSprites;
         public NguiParticleAdapter[] ParticleAdapters;
-        
+        /// <summary>
+        /// label样式
+        /// </summary>
+        public NguiLabelAdapter NameLabel;
+        /// <summary>
+        /// 移动的时候要隐藏的物体
+        /// </summary>
+        public GameObject[] HideObjectInMove;
         protected override void OnAwake()
         {
             base.OnAwake();
@@ -38,7 +49,7 @@ namespace Assets.Scripts.Hall.View
         public void SetColor(Color color)
         {
             BtnKindSprites.DefaultColor = color;
-            Widget.color = color;
+            if(Widget!=null) { Widget.color = color;}
             var arr = GetComponentsInChildren<UISprite>();
             foreach (var sp in arr)
             {
@@ -51,9 +62,19 @@ namespace Assets.Scripts.Hall.View
             gameObject.SetActive(isShow);
         }
 
-        public void FreshBtnClickBound(UIButton btn,bool isDeve = false)
+        public void MoveAction(bool isMove)
         {
+            if (HideObjectInMove != null)
+            {
+                GameObjectUtile.DisplayComponent(HideObjectInMove,!isMove);
+            }
+        }
+
+        public void FreshBtnClickBound(UIButton btn, UIWidget defWidget, bool isDeve = false)
+        {
+            if (btn == null) { return;}
             var boxCollider = btn.GetComponent<BoxCollider>();
+            if (Widget == null) { Widget = defWidget;}
             Vector3 size = Widget.localSize;
             size.z = 1;
             boxCollider.size = size;
@@ -82,7 +103,18 @@ namespace Assets.Scripts.Hall.View
                 btn.defaultColor = BtnKindSprites.DefaultColor;
             }
         }
+
+        public void OnGameClick()
+        {
+            var listItem = MainYxView as ListViews.GameListItem;
+            if (listItem == null) return;
+            var hallController = HallController.Instance;
+            hallController.DeskListStyleIndex = DeskListStyleIndex;
+            hallController.RoomListStyleIndex = RoomListStyleIndex;
+            listItem.OnGameClick(); 
+        }
     }
+     
 
     [Serializable]
     public class StateSprites

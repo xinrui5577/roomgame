@@ -4,7 +4,7 @@ using UnityEditor;
 
 namespace MMT
 {
-	[CustomPropertyDrawer(typeof(StreamingAssetsLinkAttribute))]
+//	[CustomPropertyDrawer(typeof(StreamingAssetsLinkAttribute))]// 临时隐藏，用不上
 	public class StreaminAssetsLinkDrawer : PropertyDrawer 
 	{
         public override void OnGUI (Rect pos, SerializedProperty prop, GUIContent label)

@@ -1,0 +1,87 @@
+/*
+http://www.cgsoso.com/forum-211-1.html
+
+CG搜搜 Unity3d 每日Unity3d插件免费更新 更有VIP资源！
+
+CGSOSO 主打游戏开发，影视设计等CG资源素材。
+
+插件如若商用，请务必官网购买！
+
+daily assets update for try.
+
+U should buy the asset from home store if u use it in your project!
+*/
+
+#if !BESTHTTP_DISABLE_ALTERNATE_SSL && (!UNITY_WEBGL || UNITY_EDITOR)
+
+using System;
+
+namespace Org.BouncyCastle.Crypto
+{
+    /**
+     * The base interface for implementations of message authentication codes (MACs).
+     */
+    public interface IMac
+    {
+        /**
+         * Initialise the MAC.
+         *
+         * @param param the key and other data required by the MAC.
+         * @exception ArgumentException if the parameters argument is
+         * inappropriate.
+         */
+        void Init(ICipherParameters parameters);
+
+        /**
+         * Return the name of the algorithm the MAC implements.
+         *
+         * @return the name of the algorithm the MAC implements.
+         */
+        string AlgorithmName { get; }
+
+		/**
+		 * Return the block size for this MAC (in bytes).
+		 *
+		 * @return the block size for this MAC in bytes.
+		 */
+		int GetMacSize();
+
+        /**
+         * add a single byte to the mac for processing.
+         *
+         * @param in the byte to be processed.
+         * @exception InvalidOperationException if the MAC is not initialised.
+         */
+        void Update(byte input);
+
+		/**
+         * @param in the array containing the input.
+         * @param inOff the index in the array the data begins at.
+         * @param len the length of the input starting at inOff.
+         * @exception InvalidOperationException if the MAC is not initialised.
+         * @exception DataLengthException if there isn't enough data in in.
+         */
+        void BlockUpdate(byte[] input, int inOff, int len);
+
+		/**
+         * Compute the final stage of the MAC writing the output to the out
+         * parameter.
+         * <p>
+         * doFinal leaves the MAC in the same state it was after the last init.
+         * </p>
+         * @param out the array the MAC is to be output to.
+         * @param outOff the offset into the out buffer the output is to start at.
+         * @exception DataLengthException if there isn't enough space in out.
+         * @exception InvalidOperationException if the MAC is not initialised.
+         */
+        int DoFinal(byte[] output, int outOff);
+
+		/**
+         * Reset the MAC. At the end of resetting the MAC should be in the
+         * in the same state it was after the last init (if there was one).
+         */
+        void Reset();
+    }
+}
+
+#endif

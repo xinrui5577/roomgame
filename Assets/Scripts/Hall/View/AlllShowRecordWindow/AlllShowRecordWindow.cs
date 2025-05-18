@@ -26,7 +26,7 @@ namespace Assets.Scripts.Hall.View.AlllShowRecordWindow
             var dic = new Dictionary<string, object>();
             dic["game_key_c"] = GameKey;
             dic["p"] = 1;
-            Facade.Instance<TwManger>().SendAction("gameHistoryReplay", dic, OnFreshData);
+            Facade.Instance<TwManager>().SendAction("gameHistoryReplay", dic, OnFreshData);
         }
         private void OnFreshData(object data)
         {

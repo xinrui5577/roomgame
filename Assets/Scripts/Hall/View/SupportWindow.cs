@@ -36,7 +36,7 @@ namespace Assets.Scripts.Hall.View
             }
         }
 
-        private void FreshBackground(Texture2D texture)
+        private void FreshBackground(Texture2D texture,int hashCode)
         {
             if (texture == null) return;
             if (Background == null) return;

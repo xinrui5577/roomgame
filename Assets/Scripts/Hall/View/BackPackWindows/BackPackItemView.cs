@@ -1,4 +1,5 @@
-﻿using YxFramwork.Framework;
+﻿using YxFramwork.Enums;
+using YxFramwork.Framework;
 
 namespace Assets.Scripts.Hall.View.BackPackWindows
 {
@@ -18,9 +19,5 @@ namespace Assets.Scripts.Hall.View.BackPackWindows
         /// </summary>
         public UITexture GoodsIcon;
 
-        protected override void OnFreshView()
-        {
-            base.OnFreshView();
-        }
     }
 }

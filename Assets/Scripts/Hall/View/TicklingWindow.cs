@@ -30,7 +30,7 @@ namespace Assets.Scripts.Hall.View
             YxDebug.Log(msg);
             var parm = new Dictionary<string, object>();
             parm["msg"] = msg;
-            Facade.Instance<TwManger>().SendAction("recAdvice", parm, reMsg =>
+            Facade.Instance<TwManager>().SendAction("recAdvice", parm, reMsg =>
                 {
                 }, false);
         }

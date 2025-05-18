@@ -8,7 +8,6 @@ namespace Assets.Scripts.Hall.View.SysNoticeWindows
     public class ActionItemView : YxView
     { 
         public UITexture ActionTexture;
-         
         protected override void OnFreshView()
         {
             var adata = GetData<ActionData>();
@@ -16,7 +15,7 @@ namespace Assets.Scripts.Hall.View.SysNoticeWindows
             AsyncImage.Instance.GetAsyncImage(adata.IconUrl, SetIcon);
         }
 
-        private void SetIcon(Texture2D texture)
+        private void SetIcon(Texture2D texture,int hashCode)
         {
             ActionTexture.mainTexture = texture;
         }

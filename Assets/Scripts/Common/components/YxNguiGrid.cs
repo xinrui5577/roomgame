@@ -41,5 +41,11 @@ namespace Assets.Scripts.Common.components
                 return _parentWidget ?? transform.GetComponentInParent<UIPanel>();
             }
         }
+
+        private UIWidget _widget;
+        public UIWidget Widget
+        {
+            get { return _widget ?? (_widget = transform.GetComponent<UIWidget>()); }
+        }
     }
 }

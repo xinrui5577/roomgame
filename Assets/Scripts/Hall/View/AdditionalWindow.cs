@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using YxFramwork.Common.Model;
+using YxFramwork.Enums;
 using YxFramwork.Framework;
 using YxFramwork.Framework.Core;
 using YxFramwork.Manager;
@@ -27,7 +28,7 @@ namespace Assets.Scripts.Hall.View
 
         public void OnChangeEnter()
         {
-            var userName = UserNameLabel.text;
+            var userName = UserNameLabel.value;
             if (string.IsNullOrEmpty(userName))
             {
                 YxMessageBox.Show("用户名不能为空！！！");
@@ -48,18 +49,17 @@ namespace Assets.Scripts.Hall.View
             var parm = new Dictionary<string, object>();
             parm["login_m"] = userName;
             parm["password_x"] = PasswordLabel.value;
-            Facade.Instance<TwManger>().SendAction("setAddUserData", parm, UpdateView);
+            Facade.Instance<TwManager>().SendAction("setAddUserData", parm, UpdateView);
         }
 
         protected override void OnFreshView()
         {
-            if (Data == null) return;
             var dict = Data as Dictionary<string, object>;
             if (dict == null) return;
             if (!dict.ContainsKey("login_m")) return;
             var userModel = UserInfoModel.Instance;
             var userInfo = userModel.UserInfo;
-            userInfo.LoginM = dict["login_m"].ToString();
+            userInfo.LoginName = dict["login_m"].ToString();
             userModel.Save();
             YxMessageBox.Show("修改成功！！","", (box, btnName) =>
                 {
@@ -68,6 +68,11 @@ namespace Assets.Scripts.Hall.View
                         Close();
                     }
                 });
+        }
+
+        public override YxEUIType UIType
+        {
+            get { return YxEUIType.Nguid; }
         }
     }
 }

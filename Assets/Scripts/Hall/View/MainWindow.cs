@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using Assets.Scripts.Common.Adapters;
+using System.Linq;
+using Assets.Scripts.Common.Constants;
+using Assets.Scripts.Common.Managers;
 using Assets.Scripts.Common.Windows.TabPages;
-using Assets.Scripts.Common.components;
 using Assets.Scripts.Common.Utils;
 using Assets.Scripts.Tea;
 using UnityEngine;
@@ -12,41 +14,16 @@ using YxFramwork.Controller;
 using YxFramwork.Enums;
 using YxFramwork.Framework;
 using YxFramwork.Framework.Core;
-using YxFramwork.Manager; 
+using YxFramwork.Manager;
 using YxFramwork.View;
 using com.yxixia.utile.Utiles;
-using com.yxixia.utile.YxDebug;
+using UnityEngine.SceneManagement;
+using YxFramwork.Common.Utils;
 
 namespace Assets.Scripts.Hall.View
 {
     public class MainWindow:YxBaseWindow
-    {
-        /// <summary>
-        /// 玩家名称Label
-        /// </summary>
-        public UILabel UserName;
-        /// <summary>
-        /// 用户金币
-        /// </summary>
-        public UILabel UserGold;
-        [Tooltip("玩家金币")]
-        public NguiLabelAdapter UserGoldAdapter;
-        /// <summary>
-        /// id
-        /// </summary>
-        public UILabel IdLabel;
-        /// <summary>
-        /// 用户元宝
-        /// </summary>
-        public UILabel UserCash;
-        /// <summary>
-        /// 房卡
-        /// </summary>
-        public UILabel RoomCard;
-        /// <summary>
-        /// 头像
-        /// </summary>
-        public UITexture Portrait;
+    { 
         /// <summary>
         /// 客服面板  todo 后期修改
         /// </summary>
@@ -56,48 +33,57 @@ namespace Assets.Scripts.Hall.View
         /// </summary>
         public UILabel CustomLabel;
         /// <summary>
-        /// 上排菜单
+        /// 游戏列表初始位置
         /// </summary>
-        public UIGrid TopMenuGrid;
-        /// <summary>
-        /// 下排菜单
-        /// </summary>
-        public UIGrid BottomMenuGrid;
+        public int GameListStartIndex = 0;
         /// <summary>
         /// 自动打开的窗口
         /// </summary>
         public string[] AutoPopWindowNames;
-        /// <summary>
-        /// 菜单按钮（受开关管理）
-        /// </summary>
-        public GameObject[] MenuBtns;
-        [Tooltip("背景")]
-        public HallBackground HallBg;
-        [Tooltip("预览游戏列表")]
+        [Tooltip("预览游戏列表,已过时")]
         public YxListView PreviewListView;
+        [Tooltip("预览游戏列表")]
+        public YxFramwork.View.YxListViews.YxListView PreviewGameListView;
         /// <summary>
         /// 游戏分组
         /// </summary>
         public GameGroupData GameGroupInfo;
         [Tooltip("游戏列表需要隐藏的内容")]
+        // ReSharper disable once InconsistentNaming
         public GameObject[] GameListHideUI;
-        [Tooltip("版本信息")]
-        public UILabel VerLabel;
-        [Tooltip("存储对应玩家茶馆Id的Key")]
-        public string KeyTeaId="TeaId";
         [Tooltip("显示时需要进行的处理")]
         public List<EventDelegate> OnShowActions;
+        [Tooltip("查找茶馆房间窗口名称")]
+        public string FindTeaWindowName = "TeaFindRoom";
+        [Tooltip("禁止进入茶馆状态")]
+        public int[] ForbidJoinStatus = {4};
 
         protected override void OnAwake()
+        { 
+            AddListeners("HallWindow_hallMenuChange", OnFreshMenu); 
+        }
+
+        protected override void OnStart()
         {
-            var count = MenuBtns.Length;
-            for (var i = 0; i < count;i++ )
+            base.OnStart();
+            var hallCtrl = HallMainController.Instance;
+            hallCtrl.ExecuteCallBack();
+        }
+
+        /// <summary>
+        /// todo 自行扩展
+        /// 大厅启动时要执行的操作
+        /// 需要使用  HallMainController 中的  AddLaunchInStartEvent、RemoveLaunchInStartEvent
+        /// </summary>
+        /// <param name="key"></param>
+        private void LaunchEvent(string key)
+        {
+            switch (key)
             {
-                var btn = MenuBtns[i];
-                if (btn == null) continue;
-                btn.SetActive(false);
-            } 
-            YxMsgCenterHandler.GetIntance().AddListener("HallWindow_hallMenuChange", OnFreshMenu); 
+                case HallStartEventType.TeaWindow:
+                    OpenFindTeaWindow();
+                    break;
+            }
         }
 
         /// <summary>
@@ -105,12 +91,12 @@ namespace Assets.Scripts.Hall.View
         /// </summary>
         public void OnQuitBtn()
         {
-            YxMessageBox.Show(null, "DefQuitWindow", "您确定要退出吗？", "", (mesBox, btnName) =>
+            YxMessageBox.Show(null, "QuitWindow", "您确定要退出吗？", "", (mesBox, btnName) =>
             {
                 switch (btnName)
                 {
                     case YxMessageBox.BtnLeft:
-                        Application.Quit();
+                        App.QuitGame();
                         break;
                     case YxMessageBox.BtnMiddle:
                         HallMainController.Instance.ChangeAccount();
@@ -121,7 +107,6 @@ namespace Assets.Scripts.Hall.View
 
         protected virtual void OnFreshMenu(object msg)
         { 
-            FreshMenu();
             ShowAutoPopWindows();
         }
 
@@ -132,8 +117,8 @@ namespace Assets.Scripts.Hall.View
         private void ShowAutoPopWindows()
         {
             if (_hasPop) return;
-            _hasPop = true;
-            var autoState = App.AppStyle == EAppStyle.Concise ? 0 : HallModel.Instance.OptionSwitch.AutoPopWin;
+            _hasPop = true; 
+            var autoState = App.AppStyle == YxEAppStyle.Concise ? 0 : HallModel.Instance.OptionSwitch.AutoPopWin;
             var len = AutoPopWindowNames.Length;
             for (var i = 0; i < len; i++)
             {
@@ -141,42 +126,59 @@ namespace Assets.Scripts.Hall.View
                 if ((autoState & show) != show) continue;
                 
                 var winName = AutoPopWindowNames[i];
-                YxWindowManager.OpenWindow(winName);
+                if (CheckWindowNeedOpen(winName))
+                {
+                    YxWindowManager.OpenWindow(winName,true,null,null, "SpreadWindow".Equals(winName));
+                }
+            }
+        }
+        /// <summary>
+        /// 检查是否打开窗口, todo 临时处理
+        /// </summary>
+        /// <param name="winName"></param>
+        /// <returns></returns>
+        private bool CheckWindowNeedOpen(string winName)
+        {
+            if (string.IsNullOrEmpty(winName)) { return false;}
+            var key = string.Format("AutoWindow_{0}_{1}", winName, App.UserId);
+            switch (winName)
+            {
+                case "ActionNoticeQueueWindow":
+                    var curDate = DateTime.Now.ToString("MM/dd/yyyy");
+                    if (curDate == Util.GetString(key))
+                    {
+                        return false;
+                    }
+                    Util.SetString(key, curDate);
+                    return true;
+                case "SpreadWindow":
+                    var promoter = UserInfoModel.Instance.UserInfo.Promoter;
+                    if (promoter != false)
+                    {
+                        var times = Util.GetInt(key);
+                        if (times > 3)
+                        {
+                            return false;
+                        }
+                        Util.SetInt(key, ++times);
+                    }
+                    return true;
+                default:
+                    return true;
             }
         }
 
-        private void FreshMenu()
+        protected override void OnCreate()
         {
-            var menustate = App.AppStyle == EAppStyle.Concise ? 1 : HallModel.Instance.OptionSwitch.HallMenue;
-            var count = MenuBtns.Length;
-            for (var i = 0; i < count; i++)
-            {
-                var btn = MenuBtns[i];
-                if (btn == null) continue;
-                var show = 1 << i;
-                var isShow = (menustate & show) == show;
-                btn.SetActive(isShow);
-            }
-            if (TopMenuGrid != null)
-            {
-                TopMenuGrid.repositionNow = true;
-                TopMenuGrid.Reposition();
-            }
-            if (BottomMenuGrid != null)
-            {
-                BottomMenuGrid.repositionNow = true;
-                BottomMenuGrid.Reposition();
-            }
-        }
-
-        protected override void OnShow(object o)
-        {
-            base.OnShow(o);
+            base.OnCreate();
             CurtainManager.CloseCurtain();
             UserController.Instance.GetUserDateWithBackPack(OnBindBackDate);
-            if (HallBg != null) HallBg.Change(HallMainController.Instance.State);
             ShowPreviewListView();
-            StartCoroutine(YxTools.WaitExcuteCalls(OnShowActions));
+            if (gameObject.activeInHierarchy)
+            {
+                StartCoroutine(OnShowActions.WaitExcuteCalls());
+            }
+            HallMainController.Instance.LaunchInStartEvent(LaunchEvent);
         }
 
         private void InitGameGroup()
@@ -203,59 +205,84 @@ namespace Assets.Scripts.Hall.View
 
         private void ShowPreviewListView()
         {
-            if (PreviewListView == null) return;
+            YxView view = PreviewGameListView;
             var gm = GameListModel.Instance;
-            var gGroup = gm.GetGroup(gm.CurGroup);
-            if (gGroup == null) return;
-            PreviewListView.UpdateView(gGroup.GetGameList());
+            var gGroup = gm.GetGroup(0);
+
+            if (PreviewGameListView != null)
+            {
+                var arr = PreviewGameListView.SpecialDataFormat;
+                var arrCount = arr.Length;
+                var groups = gm.Groups;
+                var groupCount = groups.Count;
+                if (groupCount > 1)//多个组
+                {
+                    var gmSgroup = gm.GetSpecialGroup();
+                    var gmGroupCount = gmSgroup.Length;
+                    if (arrCount > 0)//是不是支持group
+                    {
+                        if (gmGroupCount < 1)
+                        {
+                            PreviewGameListView.SpecialDataFormat = new int[0];
+                            PreviewGameListView.StartDataIndex = 0;
+                        }
+                        else
+                        {
+                            if (GameListStartIndex > 0)
+                            {
+                                PreviewGameListView.StartDataIndex = GameListStartIndex - arrCount + gmGroupCount;
+                            }
+                            PreviewGameListView.SpecialDataFormat = gmSgroup;
+                        }
+                    }
+                    else//只显示一个组
+                    {
+                        PreviewGameListView.StartDataIndex = GameListStartIndex;
+                        PreviewGameListView.SpecialDataFormat = new int[0];
+                    }
+                }
+                else//一个组
+                {
+                    PreviewGameListView.StartDataIndex = GameListStartIndex;
+                    if (arrCount > 0)
+                    {
+                        PreviewGameListView.SpecialDataFormat = new int[0];
+                    }
+                }
+            }
+            else if (PreviewListView != null)
+            {
+                view = PreviewListView;
+            }
+            else
+            {
+                return;
+            }
+            IList list = null;
+            if (gGroup != null)
+            {
+                list = gGroup.GameListModels;
+            }
+            view.UpdateView(list);
         }
 
         private void OnBindBackDate(object msg)
-        {
-            if (RoomCard != null) RoomCard.text = UserInfoModel.Instance.BackPack.GetItem("item2_q").ToString();
+        { 
         }
 
-        private YxWindow _spreadWin;
         protected override void OnBindDate(bool isChange = false)
         {
             if (!isChange) return;
-            var userInfo = UserInfoModel.Instance.UserInfo;
-            if (UserName != null)
-            {
-                UserName.text = userInfo.NickM;
-            }
-            if (IdLabel != null)
-            {
-                IdLabel.text = App.UserId;
-            }
-            if (UserGold != null)
-            {
-                UserGold.text = userInfo.CoinA.ToString();
-            }
-            if (UserGoldAdapter)
-            {
-                UserGoldAdapter.Text(userInfo.CoinA);
-            }
-            if (UserCash != null)
-            {
-                UserCash.text = userInfo.CashA.ToString();
-            }
             if (CustomLabel != null)
             {
                 CustomLabel.text = LoginInfo.Instance.G_MobileHallServerText;
             }
-            if (Portrait != null)
-            {
-                PortraitRes.SetPortrait(userInfo.AvatarX, Portrait, userInfo.SexI);
-            }
             OnBindBackDate(null);
-            RefreshTopMenu();
-            ShowVersion(VerLabel);
         }
-         
-        public override WindowName WindowName
-        {
-            get { return WindowName.Main; }
+          
+        public override YxEWindowName WindowName
+        { 
+            get { return YxEWindowName.Main; }
         }
 
         protected override IBaseModel YxBaseModel
@@ -263,14 +290,6 @@ namespace Assets.Scripts.Hall.View
             get { return UserInfoModel.Instance; }
         }
          
-        /// <summary>
-        /// 打开设置窗口 todo 删除
-        /// </summary>
-        public void OnSettingInfo()
-        {
-            YxWindowManager.OpenWindow("SettingWindow");
-        }
-
         /// <summary>
         /// 打开客服
         /// </summary>
@@ -291,14 +310,6 @@ namespace Assets.Scripts.Hall.View
         }
 
         /// <summary>
-        /// 打开公告 todo 删除
-        /// </summary>
-        public void OnNotice()
-        {
-            YxWindowManager.OpenWindow("DefNoticeWindow");
-        }
-
-        /// <summary>
         /// 打开任务
         /// </summary>
         public void OnTaskInfo()
@@ -307,151 +318,111 @@ namespace Assets.Scripts.Hall.View
             if (win == null) return;
             win.UpdateView(HallModel.Instance.OptionSwitch.Task);
         }
-
-        /// <summary>
-        /// 打开银行 todo 删除
-        /// </summary>
-        public void OnBankInfo()
-        {
-            YxWindowManager.OpenWindow("BankWindow");
-        }
-
-        /// <summary>
-        /// 打开商店 todo 删除
-        /// </summary>
-        public void OnShopInfo()
-        {
-            YxWindowManager.OpenWindow("ShopWindow");
-        }
-
-        /// <summary>
-        /// 打开排行榜 todo 删除
-        /// </summary>
-        public void OnRankInfo()
-        {
-            YxWindowManager.OpenWindow("RankWindow");
-        }
-
-        /// <summary>
-        /// 打开玩家信息
-        /// </summary>
-        public void OnUserInfo()
-        {
-            if (App.AppStyle == EAppStyle.Concise) return;
-            YxWindowManager.OpenWindow("UserInfoWindow");
-        }
          
-        /// <summary>
-        /// 喇叭消息
-        /// </summary>
-        public void OnTrumpetWindow()
-        {
-            if (MenuBtns.Length < 7) return;
-            var btn = MenuBtns[6];
-            if (btn != null && !btn.gameObject.activeSelf) return;
-            YxWindowManager.OpenWindow("TrumpetWindow");
-        }
-
         public void OnGameGroupClick(string group)
         {
             int index;
             if (!int.TryParse(group, out index)) return;
-            GameListModel.Instance.CurGroup = index;
             GameListController.Instance.ShowGameList(index);
+        }
+
+        public void OnChangeGroup(UIToggle toggle)
+        {
+            if (!toggle.value) { return;}
+            OnGameGroupClick(toggle.name);
         }
 
         /// <summary>
         /// 打开茶馆密码盘
         /// </summary>
         private string TeaId;
-        /// <summary>
-        /// 用于存储茶馆ID的key
-        /// </summary>
-        private string SaveTeaId
-        {
-            get { return string.Format("{0}_{1}_{2}", Application.bundleIdentifier, App.UserId, KeyTeaId); }
-        }
 
         public void OpenFindTeaWindow()
         {
-            if(PlayerPrefs.HasKey(SaveTeaId))
+            if (Util.HasKey(TeaUtil.KeySaveTeaKey))
             {
-                TeaId = PlayerPrefs.GetString(SaveTeaId);
+                TeaId = Util.GetString(TeaUtil.KeySaveTeaKey);
+                // ReSharper disable once InvertIf
                 if (TeaId.Length == 6)
                 {
                     int roomType;
                     if (!int.TryParse(TeaId, out roomType)) return;
-                    Dictionary<string, object> dic = new Dictionary<string, object>();
-                    dic["id"] = TeaId;
-                    Facade.Instance<TwManger>().SendAction("group.teaGetIn", dic, GetInTea);
+                    var dic = new Dictionary<string, object>();
+                    dic["id"] = TeaId;  
+                    Facade.Instance<TwManager>().SendAction("group.teaGetIn", dic, GetInTea);
                 }
             }
             else
             {
-                YxWindowManager.OpenWindow("TeaFindRoom", true);
+                YxWindowManager.OpenWindow(FindTeaWindowName);
             }
-
         }
-
+         
+        /// <summary>
+        /// todo 优化
+        /// </summary>
+        /// <param name="msg"></param>
         private void GetInTea(object msg)
-        {
-            Dictionary<string, object> dic = (Dictionary<string, object>)msg;
-            long value = (long)dic["mstatus"];
-
-            if (value != 4)
+        { 
+            var dic = (Dictionary<string, object>)msg;
+            var value = int.Parse(dic["mstatus"].ToString());
+            if (JoinTeaCheck(value))
             {
-                string tea_name = (string)dic["name"];
-                YxWindow obj = YxWindowManager.OpenWindow("TeaPanel", true);
-                TeaPanel panel = obj.GetComponent<TeaPanel>();
-                panel.CasePower((int)value);
-                if (dic.ContainsKey("roomNum"))
+                if (SceneManager.GetActiveScene().name.ToLower() == App.Skin.Hall)
                 {
-                    panel.roomNum = Convert.ToInt32(dic["roomNum"]);
+                    var win = YxWindowManager.OpenWindow("TeaPanel");
+                    if (win != null)
+                    {
+                        var panel = win.GetComponent<TeaPanel>();
+                        panel.UpdateView(dic);
+                        panel.SetTeaCode(int.Parse(TeaId)); 
+                        Close();    
+                    }
                 }
-                panel.SetTeaName(tea_name);
-                panel.SetTeaCode(int.Parse(TeaId));
-                panel.TeaState = (int)value;
-                Close();
             }
             else
             {
-                YxWindowManager.OpenWindow("TeaFindRoom", true);
-            }
-
+                YxWindowManager.OpenWindow(FindTeaWindowName);
+            } 
         }
-        /// <summary>
-        /// 临时处理各个界面的各种信息
-        /// </summary>
-        private void RefreshTopMenu()
+
+        private bool JoinTeaCheck(int statusValue)
         {
-            TopMenu menu = FindObjectOfType<TopMenu>();
-            if (menu)
-            {
-                menu.SendMessage("OnUserDataChange");
-            }
+            return !ForbidJoinStatus.Contains(statusValue);
         }
 
         /// <summary>
-        /// 设置显示版本号信息
-        /// </summary>
-        /// <param name="label"></param>
-        public void ShowVersion(UILabel label)
-        {
-            YxTools.TrySetComponentValue(label,Application.version);
-        }
-		        /// <summary>
         /// 点击代理按钮，跳转到网页
         /// </summary>
         public void OnProxyClick()
+        {  
+            OnOpenUrlWithServer("index.php/mobile/download/proxy");
+        }
+
+        /// <summary>
+        /// 创建茶馆
+        /// </summary>
+        public void OnOpenCreatTea()
         {
-            string ctoken = LoginInfo.Instance.ctoken;
-            string userid = LoginInfo.Instance.user_id;
-            string url = App.Config.GetUrlWithServer("index.php/mobile/download/proxy", string.Format("&token={0}&userid={1}", ctoken, userid));
-            Application.OpenURL(url);
+            Facade.Instance<TwManager>().SendAction("group.inquireTeaHouse", new Dictionary<string, object>(), data =>
+            {
+                if (data == null)
+                {
+                    YxWindowManager.OpenWindow("TeaCreateWindow");
+                }
+            });
+        }
+
+        public void OnQuicklyGame(string gameKey)
+        {
+            GameListController.Instance.QuickGame(gameKey);
+        }
+
+        public void JoinMatch()
+        {
+            RoomListController.Instance.OnJoinMatch();
         }
     }
-
-
 
     [Serializable]  
     public class GameGroupData

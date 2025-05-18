@@ -1,8 +1,14 @@
-﻿using System.Collections.Generic; 
-using Assets.Scripts.Common.Utils;
+﻿using System;
+using System.Collections.Generic;
+using Assets.Scripts.Common.Utils; 
+using com.yxixia.utile.Utiles;
 using UnityEngine;
 using YxFramwork.Common;
-using YxFramwork.Common.Interface; 
+using YxFramwork.Common.Interfaces;
+using YxFramwork.Common.Model;
+using YxFramwork.Enums;
+using YxFramwork.Manager;
+using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.Common
 {
@@ -23,9 +29,33 @@ namespace Assets.Scripts.Common
             }
         }
 
-        public string VersionUrl
+        public string PixelCfgUrl { get; private set; }
+
+        private string _cacheVersionUrl;
+        public string CacheVersionUrl
         {
-            get { return null; }
+            get
+            {
+                if (string.IsNullOrEmpty(_cacheVersionUrl))
+                {
+                    var cacheVersion = AppInfo.CacheVersionUrl;
+                    _cacheVersionUrl = string.IsNullOrEmpty(cacheVersion) ? "index.php/Md/vs" : cacheVersion;
+                }
+                if (_cacheVersionUrl == "index.php/Md/vs")
+                {
+                    _cacheVersionUrl = AppInfo.ServerUrl.CombinePath(_cacheVersionUrl);
+                }
+                return _cacheVersionUrl;
+            }
+            set { _cacheVersionUrl = value; }
+        }
+
+        public string StartActionUrl {
+            get { return AppInfo.StartActionUrl; }
+        }
+
+        public string ServerExtendId {
+            get { return AppInfo.ServerExtendId; }
         }
 
         /// <summary>
@@ -43,6 +73,7 @@ namespace Assets.Scripts.Common
         /// </summary>
         public string WebUrl { get; private set; }
 
+         
         /// <summary>
         /// 是否开发模式
         /// </summary>
@@ -50,7 +81,7 @@ namespace Assets.Scripts.Common
 
         private string _hallResUrl;
         private string _gameResUrl;
-
+        private string _shareResUrl;
         /// <summary>
         /// 资源服务器
         /// </summary>
@@ -58,44 +89,66 @@ namespace Assets.Scripts.Common
         /// <returns></returns>
         public string ResUrl(string gameName)
         {
-            var skin = gameName == App.HallName || gameName == App.GameListPath || gameName == App.RoomListPath ||
-                       gameName == App.RuleListPath
-                           ? _hallResUrl
-                           : _gameResUrl;
-            return string.Format("{0}{1}/", skin, gameName);
+            var skin = App.Skin;
+            if (gameName == skin.Hall || gameName == skin.GameInfo)
+            {
+                //                return string.Format("{0}{1}/", _hallResUrl, gameName);
+                return _hallResUrl.CombinePath(gameName, "/");
+            }
+            //            return string.Format("{0}{1}/", gameName == skin.Share ? _shareResUrl : _gameResUrl, gameName);
+            return gameName == skin.Share || gameName == skin.Rule ? _shareResUrl.CombinePath(gameName, "/") : _gameResUrl.CombinePath(gameName, "/");
         }
 
-        private string _hallResCfgUrl;
+        public string ShareResUrl(string type)
+        {
+            return _shareResUrl.CombinePath(type);
+        }
+
+        private string _hallResCfgUrl; 
         private string _gameResCfgUrl;
+        private string _shareResCfgUrl;
 
         /// <summary>
         /// 资源配置服务器
         /// </summary>
         /// <param name="gameName"></param>
+        /// <param name="fromHall"></param>
         /// <returns></returns>
-        public string ResCfgUrl(string gameName)
+        public string ResCfgUrl(string gameName, bool fromHall = true)
         {
-            var skin = gameName == App.HallName || gameName == App.GameListPath || gameName == App.RoomListPath ||
-                       gameName == App.RuleListPath
-                           ? _hallResCfgUrl
-                           : _gameResCfgUrl;
-            return string.Format("{0}{1}.{2}", skin, gameName, "cfg");
+            var skin = App.Skin;
+            string urlRoot;
+            if (gameName == skin.Hall || gameName == skin.GameInfo)
+            {
+                urlRoot = _hallResCfgUrl;
+            }
+            else if (gameName == skin.Share || gameName == skin.Rule)
+            {
+                urlRoot = _shareResCfgUrl;
+            }
+            else if (fromHall) //如果是大厅指定的资源
+            {
+                var lastIndex = _gameResCfgUrl.TrimEnd('/').LastIndexOf('/');
+                urlRoot = HallCustomUrlPart.CombinePath("games").CombinePath(_gameResCfgUrl.Substring(lastIndex));
+            }
+            else
+            {
+                urlRoot = _gameResCfgUrl;
+            }
+            return urlRoot.CombinePath(gameName, ".cfg");
         }
 
         /// <summary>
-        /// 
+        /// php通用接口
         /// </summary>
         public string GateWay
         {
-            get { return GetUrlWithServer("index.php/Client/Api/gateway"); }
+            get { return ServerUrl.CombinePath("index.php/Client/Api/gateway"); }
         }
 
-        /// <summary>
-        /// 应用分享id
-        /// </summary>
-        public string WxAppId { get; private set; }
+        public string WxAppId { get; set; }
+        public string QqAppId { get; set; }
 
-        public string QqAppId { get; private set; }
 
         /// <summary>
         /// 是否微信登录
@@ -122,7 +175,7 @@ namespace Assets.Scripts.Common
         /// <summary>
         /// 是否加载本地资源
         /// </summary>
-        public bool IsLoadLocalRes { get; private set; }
+        public bool HasLoadLocalRes { get; private set; }
 
         /// <summary>
         /// 需要检测网络状态
@@ -133,6 +186,10 @@ namespace Assets.Scripts.Common
         /// 是否需要实时广播
         /// </summary>
         public bool NeedRollNotice { get; private set; }
+        /// <summary>
+        /// 是否需要下载提示框
+        /// </summary>
+        public bool NeedDownloadSizeBox { get; private set; }
 
         /// <summary>
         /// 帧率
@@ -143,6 +200,52 @@ namespace Assets.Scripts.Common
         /// 退出大厅时是否需要返回登录界面
         /// </summary>
         public bool QuitToLogin { get; private set; }
+        /// <summary>
+        /// 全屏
+        /// </summary>
+        public bool IsFullScreen { get { return AppInfo.IsFullScreen; } }
+
+        public Vector2 ScreenSize {
+            get
+            {
+                var screenSize = AppInfo.ScreenSize;
+                var size = Vector2.zero;
+                if (string.IsNullOrEmpty(screenSize)) return size;
+                var arr = screenSize.Split(',');
+                if (arr.Length < 2) return size;
+                float.TryParse(arr[0], out size.x);
+                float.TryParse(arr[1], out size.y);
+                return size;
+            }
+        }
+
+        public ScreenManager.ScreenRotateState ScreenRotate {
+            get
+            {
+                return (ScreenManager.ScreenRotateState)AppInfo.ScreenRotate;
+            }
+        }
+
+        /// <summary>
+        /// 多服务器
+        /// </summary>
+        public string NetSelectCfg { get { return AppInfo.NetSelectCfg; } }
+
+        public TwManager.TwMessageStyle TwMsgStyle {
+            get
+            {
+                const string style = AppInfo.TwMsgStyle;
+                if (string.IsNullOrEmpty(style)) return TwManager.TwMessageStyle.MessageBox;
+                return (TwManager.TwMessageStyle)Enum.Parse(typeof(TwManager.TwMessageStyle), style);
+            }
+        }
+
+        public bool NeedCurtainAfterLogin { get; private set; }
+        public int DownLoadWaitTime { get; private set; }
+        public bool DownLoadFull { get; set; }
+        public YxELoginType LoginType { get; set; }
+        public string HallCustomUrlPart { get; private set; }
+        public string GameMainUrlPart { get; private set; }
 
         /// <summary>
         /// 
@@ -152,40 +255,47 @@ namespace Assets.Scripts.Common
         /// <returns></returns>
         public string GetUrlWithServer(string subfield, string getParameter = "")
         {
-            return string.Format("{0}/{1}?mt={2}&ver={3}{4}", ServerUrl, subfield, App.YxPlatForm, Application.version,
-                                 getParameter);
-        }
-
-        public void SkinNames()
-        {
-            var skinNames = AppInfo.SkinNames.Split('|');
-            if (skinNames.Length < 4)
-            {
-                Debug.LogError(string.Format("skinNames内容少于4个！！！【{0}】", AppInfo.SkinNames));
-                return;
-            }
-            App.HallName = skinNames[0];
-            App.GameListPath = skinNames[1];
-            App.RoomListPath = skinNames[2];
-            App.RuleListPath = skinNames[3];
+            return ServerUrl.CombinePath(string.Format("{0}?mt={1}&ver={2}&token={3}&userid={4}{5}",
+                                 subfield,//
+                                 App.YxPlatForm,//平台
+                                 Application.version,//版本
+                                 LoginInfo.Instance.ctoken,
+                                 LoginInfo.Instance.user_id,
+                                 getParameter));//其他
         }
 
         /// <summary>
         /// 充值
         /// </summary>
         /// <param name="userid"></param>
-        /// <param name="tokend"></param>
+        /// <param name="token"></param>
         /// <returns></returns>
-        public string GetRecharge(string userid, string tokend)
+        public string GetRecharge(string userid, string token)
         {
-            return WebUrl + "/index.php/home/Payment/index?uid=" + userid + "&token=" + tokend;
+            return WebUrl.CombinePath(string.Format("index.php/home/Payment/index?uid={0}&token={1}", userid, token));
+            //            return WebUrl + "/index.php/home/Payment/index?uid=" + userid + "&token=" + tokend;
         }
-          
-        private string _loginParm = "_login";
+
+        private string _loginParm = "login_";
 
         public string GetFullLoginUrl()
         {
-            return string.Format("{0}/index.php/Client/User/{1}?", ServerUrl, _loginParm);
+            return ServerUrl.CombinePath("index.php/Client/User").CombinePath(_loginParm);
+            //            return string.Format("{0}/index.php/Client/User/{1}?", ServerUrl, _loginParm);
+        }
+
+#if UNITY_EDITOR
+        private readonly Dictionary<string,Dictionary<string,string>> _editorAssetDict = new Dictionary<string, Dictionary<string, string>>();
+#endif
+        public SysConfig(bool isDeve)
+        {
+            ServerUrl = AppInfo.ServerUrl;
+#if UNITY_EDITOR
+            IsDeve = isDeve;
+            _editorAssetDict.Clear();  
+#else
+            IsDeve = false;
+#endif
         }
 
         /// <summary>
@@ -194,8 +304,19 @@ namespace Assets.Scripts.Common
         /// <param name="dict"></param>
         public void LoadConfig(Dictionary<string, string> dict)
         {
+            FilterConfig(dict);
             //服务器url
-            ServerUrl = dict.ContainsKey("ServerUrl") ? dict["ServerUrl"] : AppInfo.ServerUrl;
+            if (dict.ContainsKey("ServerUrl"))
+            {
+                ServerUrl = dict["ServerUrl"];
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(NetSelectCfg))
+                {
+                    ServerUrl = AppInfo.ServerUrl;
+                }
+            }
             //web主url 
             WebUrl = dict.ContainsKey("WebUrl") ? dict["WebUrl"] : ServerUrl;
             //登录参数
@@ -204,24 +325,52 @@ namespace Assets.Scripts.Common
             _hallResUrl = dict.ContainsKey("HallResUrl") ? dict["HallResUrl"] : AppInfo.HallResUrl;
             //游戏资源参数
             _gameResUrl = dict.ContainsKey("GameResUrl") ? dict["GameResUrl"] : AppInfo.GameResUrl;
+            //公共资源url
+            _shareResUrl = dict.ContainsKey("ShareResUrl") ? dict["ShareResUrl"] : AppInfo.ShareResUrl;
             //大厅资源配置url
             _hallResCfgUrl = dict.ContainsKey("HallCfgUrl") ? dict["HallCfgUrl"] : AppInfo.HallCfgUrl;
             //游戏资源配置url
             _gameResCfgUrl = dict.ContainsKey("GameResCfgUrl") ? dict["GameResCfgUrl"] : AppInfo.GameResCfgUrl;
+            //公共资源配置url
+            _shareResCfgUrl = dict.ContainsKey("ShareCfgUrl") ? dict["ShareCfgUrl"] : AppInfo.ShareCfgUrl;
+            HallCustomUrlPart = PathHelper.GetUrlRoot(_hallResCfgUrl,3);
+            GameMainUrlPart = PathHelper.GetUrlRoot(_gameResCfgUrl,1);
             //微信appid
-            WxAppId = dict.ContainsKey("AppId") ? dict["WxAppId"] : AppInfo.WxAppId;
+            WxAppId = dict.ContainsKey("WxAppId") ? dict["WxAppId"] : AppInfo.WxAppId;
             QqAppId = dict.ContainsKey("QqAppId") ? dict["QqAppId"] : AppInfo.QqAppId;
 
-            #region 是否开发模式
-
-            if (dict.ContainsKey("IsDeve"))
+            #region 下载等待时间
+            if (dict.ContainsKey("DownLoadWaitTime"))
             {
-                bool isDeve;
-                bool.TryParse(dict["IsDeve"], out isDeve);
-                IsDeve = isDeve;
+                int downWtime;
+                if (int.TryParse(dict["DownLoadWaitTime"], out downWtime))
+                {
+                    DownLoadWaitTime = downWtime;
+                }
             }
-            else IsDeve = AppInfo.IsDeve;
+            else
+            {
+                DownLoadWaitTime = AppInfo.DownLoadWaitTime;
+            }
 
+            #endregion
+
+            #region MyRegion
+
+            var pixe = string.Empty;
+            PixelCfgUrl = DictionaryHelper.Parse(dict, "PixelCfgUrl", ref pixe) ? pixe : AppInfo.PixelCfgUrl;
+
+            #endregion 屏幕配置
+
+            #region 是需要登陆后的幕布
+
+            if (dict.ContainsKey("NeedCurtainAfterLogin"))
+            {
+                bool needCurtain;
+                bool.TryParse(dict["NeedCurtainAfterLogin"], out needCurtain);
+                NeedCurtainAfterLogin = needCurtain;
+            }
+            else NeedCurtainAfterLogin = AppInfo.NeedCurtainAfterLogin;
             #endregion
 
             #region 是否有缓存
@@ -251,8 +400,8 @@ namespace Assets.Scripts.Common
                 HasWechatLogin = hswl;
             }
             else HasWechatLogin = AppInfo.HasWechatLogin;
-            #endregion  
-                    
+            #endregion
+
             #region 是否有qq登录
             if (dict.ContainsKey("HasQqLogin"))
             {
@@ -281,7 +430,6 @@ namespace Assets.Scripts.Common
             #endregion
 
             #region 是否debug模式
-
             if (dict.ContainsKey("IsDebug"))
             {
                 var debugInfo = dict["IsDebug"];
@@ -299,22 +447,28 @@ namespace Assets.Scripts.Common
                     LogUrl = dbInfos[2].Trim();
                 }
             }
-            else IsDebug = -1;
-
+            else
+            {
+#if YX_DEVE
+                IsDebug = 48;
+#else
+                IsDebug = 0;
+#endif
+            }
             #endregion
 
             #region 是否加载本地资源
-            if (dict.ContainsKey("IsLoadLocalRes"))
+            if (dict.ContainsKey("HasLoadLocalRes"))
             {
-                bool isLoadLocalRes;
-                if (bool.TryParse(dict["IsLoadLocalRes"], out isLoadLocalRes))
+                bool hasLoadLocalRes;
+                if (bool.TryParse(dict["HasLoadLocalRes"], out hasLoadLocalRes))
                 {
-                    IsLoadLocalRes = isLoadLocalRes;
+                    HasLoadLocalRes = hasLoadLocalRes;
                 }
             }
             else
             {
-                IsLoadLocalRes = AppInfo.IsLoadLocalRes;
+                HasLoadLocalRes = AppInfo.HasLoadLocalRes;
             }
             #endregion
 
@@ -348,6 +502,21 @@ namespace Assets.Scripts.Common
             }
             #endregion
 
+            #region 是否需要下载提示框
+            if (dict.ContainsKey("NeedDownloadSizeBox"))
+            {
+                var needDownloadSizeBox = false;
+                if (bool.TryParse(dict["NeedDownloadSizeBox"], out needDownloadSizeBox))
+                {
+                    NeedDownloadSizeBox = needDownloadSizeBox;
+                }
+            }
+            else
+            {
+                NeedDownloadSizeBox = AppInfo.NeedDownloadSizeBox;
+            }
+            #endregion
+
             #region 帧率
             if (dict.ContainsKey("FrameRate"))
             {
@@ -375,8 +544,112 @@ namespace Assets.Scripts.Common
             else
             {
                 QuitToLogin = AppInfo.QuitToLogin;
-            } 
+            }
             #endregion
+
+            #region 进入大厅前下载全部资源
+            if (dict.ContainsKey("DownLoadFull"))
+            {
+                bool downLoadFull;
+                if (bool.TryParse(dict["DownLoadFull"], out downLoadFull))
+                {
+                    DownLoadFull = downLoadFull;
+                }
+            }
+            else
+            {
+                DownLoadFull = AppInfo.DownLoadFull;
+            }
+            #endregion
+
+
+            #region 登录类型
+            var loginType = 0;
+            if (dict.Parse("LoginType", ref loginType))
+            {
+                LoginType = (YxELoginType)loginType;
+            }
+            else
+            {
+                LoginType =(YxELoginType)AppInfo.LoginType;
+            }
+            #endregion
+
+
+        }
+
+         
+        private static string GetHallCustomUrlPart(string hallCfgUrl)
+        {
+            const string httpStr = "http://";
+            var temp = hallCfgUrl.Replace(httpStr, "").Trim('/');
+            var arr = temp.Split('/');
+            var arrLen = arr.Length - 3;
+            var hallResCfgUrlPart = httpStr;
+            for (var i = 0; i < arrLen; i++)
+            {
+                hallResCfgUrlPart = hallResCfgUrlPart.CombinePath(arr[i]);
+            }
+            return hallResCfgUrlPart;
+        } 
+
+        /// <summary>
+        /// 初始化开发资源
+        /// </summary>
+        public Object DeveLoadAsset(string gameKey, string bundleName, string assetName)
+        {
+#if UNITY_EDITOR
+            if (IsDeve)
+            {
+                var skins = App.Skin.GetGameKeySkins(gameKey);
+                var count = skins.Length;
+                for (var i = count - 1; i >= 0; i--)
+                {
+                    var skinName = skins[i];
+                    Dictionary<string, string> assetDict;
+                    if (!_editorAssetDict.ContainsKey(skinName))
+                    {
+                        var path = "Assets/StreamingAssets/" + skinName + ".ini"; 
+                        assetDict = new Dictionary<string, string>();
+                        com.yxixia.utile.FileTools.PropertyUtile.ReadFile(path, ref assetDict);
+                        _editorAssetDict[skinName] = assetDict;
+                    }
+                    else
+                    {
+                        assetDict = _editorAssetDict[skinName]; 
+                    }
+                    if (assetDict.ContainsKey(assetName))
+                    {
+                        var filePath = assetDict[assetName];
+                        if (!string.IsNullOrEmpty(filePath))
+                        {
+                            return UnityEditor.AssetDatabase.LoadAssetAtPath(filePath, typeof(Object));
+                        }
+                    }
+                }
+            }
+#endif 
+            return null;
+        }
+
+
+        /// <summary>
+        /// 过滤属性
+        /// </summary>
+        /// <param name="dict"></param>
+        private static void FilterConfig(Dictionary<string, string> dict)
+        {
+            if (_extendConfig == null || dict == null) return;
+            foreach (var kv in _extendConfig)
+            {
+                dict[kv.Key] = kv.Value;
+            }
+        }
+
+        private static Dictionary<string, string> _extendConfig;
+        public static void Extend(Dictionary<string, string> dict)
+        {
+            _extendConfig = dict;
         }
     }
 }

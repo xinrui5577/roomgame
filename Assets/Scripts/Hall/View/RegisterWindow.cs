@@ -3,8 +3,10 @@ using YxFramwork.Common;
 using YxFramwork.Enums;
 using YxFramwork.View;
 using UnityEngine;
+using YxFramwork.Common.Model;
 using YxFramwork.Controller;
 using YxFramwork.Framework;
+using YxFramwork.Manager;
 
 namespace Assets.Scripts.Hall.View
 {
@@ -22,6 +24,10 @@ namespace Assets.Scripts.Hall.View
         /// </summary>
         public UIInput UserPwd;
         /// <summary>
+        /// 确认密码
+        /// </summary>
+        public UIInput UserPwdConfirm;
+        /// <summary>
         /// 昵称
         /// </summary>
         public UIInput NickName;
@@ -29,6 +35,10 @@ namespace Assets.Scripts.Hall.View
         /// 推广码
         /// </summary>
         public UIInput Promote;
+        /// <summary>
+        /// 手机号
+        /// </summary>
+        public UIInput PhoneNumber;
         /// <summary>
         /// 性别Toggle组
         /// </summary>
@@ -45,10 +55,13 @@ namespace Assets.Scripts.Hall.View
         /// 
         /// </summary>
         public GameObject[] NeedHideObject;
-
-        public override WindowName WindowName
+        /// <summary>
+        /// 验证码
+        /// </summary>
+        public UIInput TelVerifyLabel;
+        public override YxEWindowName WindowName
         {
-            get { return WindowName.Register; }
+            get { return YxEWindowName.Register; }
         }
 
         protected override IBaseModel YxBaseModel
@@ -63,13 +76,11 @@ namespace Assets.Scripts.Hall.View
             {
                 var box = Promote.GetComponent<BoxCollider>();
                 if (box != null)
-                {
                     box.enabled = false;
-                }
                 Promote.defaultText = AppInfo.PromoteCode;
             }
 
-            if (App.AppStyle == EAppStyle.Normal) return;
+            if (App.AppStyle == YxEAppStyle.Normal) return;
             var len = NeedHideObject.Length;
             for (var i = 0; i < len; i++)
             {
@@ -81,10 +92,19 @@ namespace Assets.Scripts.Hall.View
             RowItemGrid.repositionNow = true;
             RowItemGrid.Reposition();
         }
-          
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+            App.History.RecordHistory(YxEHistoryPathType.Register);
+        }
+
         public void OnResiter()
         {
-            if (IsNeedPopProtocol()) return;
+            if (LoginWindow.IsNeedPopProtocol(ProtocolToggle))
+            {
+                return;
+            }
             var sexToggle = UIToggle.GetActiveToggle(SexGroup);
             int sex = sexToggle!=null && int.TryParse(sexToggle.name, out sex) ? sex : -1;
             var userName = UserName.value;
@@ -92,45 +112,76 @@ namespace Assets.Scripts.Hall.View
             var prote = string.IsNullOrEmpty(AppInfo.PromoteCode) && Promote != null
                             ? Promote.value
                             : AppInfo.PromoteCode;//推广码
-
             var nikeName = NickName.value; 
 
             if (string.IsNullOrEmpty(userName))
             {
-                YxMessageBox.Show("用户名不能为空！");
+                YxWindowManager.ShowMessageWindow("用户名不能为空！");
                 return;
             }
 
             if (string.IsNullOrEmpty(userPwd))
             {
-                YxMessageBox.Show("密码不能为空！");
+                YxWindowManager.ShowMessageWindow("密码不能为空！");
                 return;
+            }
+            if (UserPwdConfirm != null)
+            {
+                var pwdConfirm = UserPwdConfirm.value;
+                if (string.IsNullOrEmpty(pwdConfirm))
+                {
+                    YxWindowManager.ShowMessageWindow("请确认密码！");
+                    return;
+                }
+                if (!pwdConfirm.Equals(userPwd))
+                {
+                    YxWindowManager.ShowMessageWindow("两次输入密码不一致！");
+                    return;
+                }
             }
 
-            if (string.IsNullOrEmpty(nikeName))
+            var phone = "";
+            if (PhoneNumber != null && PhoneNumber.gameObject.activeSelf)
             {
-                YxMessageBox.Show("昵称不能为空！");
-                return;
+                phone = PhoneNumber.value; 
             }
-            Debug.Log(sex);
-            UserController.Instance.Restier(userName, userPwd, nikeName, prote, sex);
+            var telVerify = "";
+            if (TelVerifyLabel!=null)
+            {
+                telVerify = TelVerifyLabel.value; 
+            } 
+            var info = new RegisterInfo
+            {
+                LoginName = userName,
+                Password = userPwd,
+                NickM = nikeName,
+                SexI = sex,
+                TelVerify = telVerify,
+                PhoneNumber = phone
+            };
+            int.TryParse(prote, out info.SpreadCode);
+            UserController.Instance.Restier(info);
         }
 
         public void OnBackLogin()
         {
             HiddenWindow();
-            PanelManager.ShowWindow(WindowName.Login);
+            App.History.RecordHistory(YxEHistoryPathType.Login);
+            CurPanelManager.ShowWindow(YxEWindowName.Login);
         }
-
+         
         /// <summary>
-        /// 是否需要用户协议
+        /// 发送验证码
         /// </summary>
-        protected bool IsNeedPopProtocol()
+        public void OnSendVerifyCode()
         {
-            if (ProtocolToggle == null) return false;
-            if (!ProtocolToggle.value) return false;
-            YxMessageBox.Show("请同意用户协议，否则不能注册游戏！");
-            return true;
+            if (PhoneNumber == null) return;
+            var number = PhoneNumber.value;
+            if (string.IsNullOrEmpty(number) || number.Length != 11)
+            {
+                YxMessageBox.Show("请正确输入手机号！");
+            }
+            UserController.Instance.SendTelVerify(number);
         }
     }
 }

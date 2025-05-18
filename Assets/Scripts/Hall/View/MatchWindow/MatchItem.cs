@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using Assets.Scripts.Common.Utils;
 using Assets.Scripts.Hall.View.AboutRoomWindows;
 using Assets.Scripts.Hall.View.PageListWindow;
-using Assets.Scripts.Tea;
+using com.yxixia.utile.Utiles;
 using com.yxixia.utile.YxDebug;
 using UnityEngine;
 using YxFramwork.Common.Model;
@@ -21,7 +21,6 @@ using YxFramwork.Controller;
 using YxFramwork.Framework;
 using YxFramwork.Framework.Core;
 using YxFramwork.Manager;
-using YxFramwork.Tool;
 using YxFramwork.View;
 
 namespace Assets.Scripts.Hall.View.MatchWindow
@@ -66,7 +65,7 @@ namespace Assets.Scripts.Hall.View.MatchWindow
         [Tooltip("下限提示")]
         public string LowerLimitNotice = "非常抱歉!!!当前房间最低下限需要{0}{1}，您的{1}只有{2}小于房间的最低下限不能进入!";
         [Tooltip("创建房间窗口名称")]
-        public string CreateRoomWindowName = "DefCreateRoomWindow";
+        public string CreateRoomWindowName = "CreateRoomWindow";
         
         #endregion
 
@@ -78,7 +77,7 @@ namespace Assets.Scripts.Hall.View.MatchWindow
         /// <summary>
         /// tween播放状态
         /// </summary>
-        private bool _tweenState=false;
+        private bool _tweenState;
 
         #endregion
 
@@ -153,9 +152,9 @@ namespace Assets.Scripts.Hall.View.MatchWindow
         {
             if (_curData!=null)
             {
-                YxTools.TrySetComponentValue(Title, _curData.Title);
-                YxTools.TrySetComponentValue(StartTime, _curData.StartTime);
-                YxTools.TrySetComponentValue(EndTime, _curData.EndTime);
+                Title.TrySetComponentValue(_curData.Title);
+                StartTime.TrySetComponentValue(_curData.StartTime);
+                EndTime.TrySetComponentValue(_curData.EndTime);
                 if (StateGroup!=null)
                 {
                     int state = (int) _curData.State;
@@ -186,9 +185,9 @@ namespace Assets.Scripts.Hall.View.MatchWindow
                 , SendMessageOptions.RequireReceiver);
                 }
             }
-            if (YxTools.TrySetComponentValue(SelfContainer, !string.IsNullOrEmpty(detailData.SelfInfo)))
+            if (SelfContainer.TrySetComponentValue(!string.IsNullOrEmpty(detailData.SelfInfo)))
             {
-                YxTools.TrySetComponentValue(SelfInfo, detailData.SelfInfo);
+                SelfInfo.TrySetComponentValue(detailData.SelfInfo);
             }
      
             if (Grid)
@@ -214,7 +213,7 @@ namespace Assets.Scripts.Hall.View.MatchWindow
             {
                 if (_curData != null)
                 {
-                    Facade.Instance<TwManger>().SendAction(
+                    Facade.Instance<TwManager>().SendAction(
                     KeyDetailAction,
                     new Dictionary<string, object>()
                     { {_curData.KeyID,_curData.ID} },
@@ -272,50 +271,12 @@ namespace Assets.Scripts.Hall.View.MatchWindow
 
         private void OnOpenQuickGame()
         {
-            var userInfo = UserInfoModel.Instance.UserInfo;
-            EnumCostType costType = _curData.CostType;
-            var maxCost = _curData.MaxValue;
-            var minCost = _curData.MinVlaue;
-            double haveValue = 0;
-            string costName = "";
-            if(maxCost>0)
-            {
-                switch (costType)
-                {
-                    case EnumCostType.Cash:
-                        haveValue = userInfo.CashA;
-                        costName = CashName;
-                        break;
-                    case EnumCostType.Gold:
-                        haveValue = YxUtiles.GetShowNumber(userInfo.CoinA + userInfo.BankCoin);
-                        costName = GoldName;
-                        break;
-                    case EnumCostType.TempCoin:
-                        haveValue = int.MaxValue;   
-                        break;
-                    case EnumCostType.GroupCoin:
-                        costName = GroupCoinName;
-                        haveValue = int.MaxValue;
-                        break;
-                    default:
-                        haveValue = int.MaxValue;
-                        break;
-                }
-                if (minCost> haveValue)
-                {
-                    YxMessageBox.Show(string.Format(LowerLimitNotice,minCost,costName,haveValue));
-                    return;
-                }
-                if (maxCost < haveValue)
-                {
-                    YxMessageBox.Show(string.Format(UpperLimitNotice, minCost, costName, haveValue));
-                    return;
-                }
-            }
-            RoomUnitModel model=new RoomUnitModel(null);
+            RoomUnitModel model = new RoomUnitModel(null);
             model.TypeId = _curData.GameType.ToString();
             model.GameKey = _curData.GameKey;
-            RoomListController.Instance.OnDirectGame(model);
+            YxTools.GoldJoinRoom(model.GameKey, model.TypeId, delegate {
+                RoomListController.Instance.OpenGameWithCheck(model);
+            });
         }
 
         #endregion
@@ -370,7 +331,7 @@ namespace Assets.Scripts.Hall.View.MatchWindow
         /// <summary>
         /// 创建房间标识小于等于-1的房间都为创建房间模式
         /// </summary>
-        private const int _createRoomFlag = -1;
+        private const int CreateRoomFlag = -1;
         /// <summary>
         /// 比赛ID
         /// </summary>
@@ -505,25 +466,25 @@ namespace Assets.Scripts.Hall.View.MatchWindow
         /// </summary>
         public bool IsQucikGame
         {
-            get { return _gameType>_createRoomFlag; }
+            get { return _gameType>CreateRoomFlag; }
         }
 
         protected override void ParseData(Dictionary<string, object> dic)
         {
             base.ParseData(dic);
-            YxTools.TryGetValueWitheKey(dic, out _id, KeyId);
-            YxTools.TryGetValueWitheKey(dic, out _title, KeyTitle);
-            YxTools.TryGetValueWitheKey(dic, out _startTime, KeyStartTime);
-            YxTools.TryGetValueWitheKey(dic, out _endTime, KeyEndTime);
-            YxTools.TryGetValueWitheKey(dic, out _gameKey, KeyGameKey);
-            YxTools.TryGetValueWitheKey(dic, out _gameType, KeyGameType);
-                YxTools.TryGetValueWitheKey(dic, out _maxValue, KeyGameMaxValue);
-            YxTools.TryGetValueWitheKey(dic, out _minVlaue, KeyGameMinValue);
+            dic.TryGetValueWitheKey(out _id, KeyId);
+            dic.TryGetValueWitheKey(out _title, KeyTitle);
+            dic.TryGetValueWitheKey(out _startTime, KeyStartTime);
+            dic.TryGetValueWitheKey(out _endTime, KeyEndTime);
+            dic.TryGetValueWitheKey(out _gameKey, KeyGameKey);
+            dic.TryGetValueWitheKey(out _gameType, KeyGameType);
+            dic.TryGetValueWitheKey(out _maxValue, KeyGameMaxValue);
+            dic.TryGetValueWitheKey(out _minVlaue, KeyGameMinValue);
             var status = 0;
-            YxTools.TryGetValueWitheKey(dic, out status, KeyStatus);
+            dic.TryGetValueWitheKey(out status, KeyStatus);
             _state = (EnumMatchState)status;
             var costType = "";
-            YxTools.TryGetValueWitheKey(dic, out costType, KeyGameCostType);
+            dic.TryGetValueWitheKey(out costType, KeyGameCostType);
             _costType = YxTools.GetCostTypeByString(costType);
         }
 

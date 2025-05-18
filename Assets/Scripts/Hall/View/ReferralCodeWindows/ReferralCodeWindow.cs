@@ -31,7 +31,7 @@ namespace Assets.Scripts.Hall.View.ReferralCodeWindows
             }
             var dic = new Dictionary<string, object>();
             dic["AffilateID"] = InputLable.value;
-            Facade.Instance<TwManger>().SendAction("getAffilateRelationAward", dic, OnFreshInfo);
+            Facade.Instance<TwManager>().SendAction("getAffilateRelationAward", dic, OnFreshInfo);
         }
 
         private void OnFreshInfo(object data)

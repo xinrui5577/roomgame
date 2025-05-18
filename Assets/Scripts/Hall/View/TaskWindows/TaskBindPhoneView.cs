@@ -41,38 +41,49 @@ namespace Assets.Scripts.Hall.View.TaskWindows
         public bool MustFillin;
 
         protected override void OnStart()
-        {
-            base.OnShow();
-            var mobileNum = UserInfoModel.Instance.UserInfo.MobileN;
+        { 
+            var mobileNum = UserInfoModel.Instance.UserInfo.PhoneNumber;
             ChangeState(!string.IsNullOrEmpty(mobileNum));
             MobileNumLabel.text = mobileNum;
             MobileNumInput.value = mobileNum;
         }
 
-        private UIButton _veriBtn;
+        private UIButton _veriBtn; 
+        private UILabel _verifyLabel; 
         /// <summary>
         /// 发送验证码请求
         /// </summary>
         public void OnSendVerification(UIButton btn,UILabel label)
         {
+            if (!btn.isEnabled)
+            {
+                YxMessageTip.Show("验证码已发送，请稍后再试！");
+                return;
+            }
             _veriBtn = btn;
+            _verifyLabel = label;
             var phone = MobileNumInput.value;
             if (string.IsNullOrEmpty(phone) || phone.Length<11)
             {
                 YxMessageBox.Show("请输入手机号码！！！");
                 return;
             }
-            if (!btn.isEnabled) return;
             btn.isEnabled = false;
             var parm = new Dictionary<string, object>();
             parm["phone"] = phone;
-            Facade.Instance<TwManger>().SendAction("sendTelephoneVerify", parm, OnVerificationSuccess, true, OnFaile);
-            StartCoroutine(VerifFinishCyc(btn, label));
+            Facade.Instance<TwManager>().SendAction("sendTelephoneVerify", parm, OnVerificationSuccess, true, OnFaile);
+            _coroutine = StartCoroutine(VerifFinishCyc(btn, label));
         }
-         
+
+        private Coroutine _coroutine;
         private void OnFaile(object msg)
-        { 
-            _veriBtn.isEnabled = true;
+        {
+            if (_coroutine != null)
+            {
+                StopCoroutine(_coroutine);
+            }
+            if(_veriBtn!=null) _veriBtn.isEnabled = true;
+            if (_verifyLabel != null) _verifyLabel.text = "";
             if (!(msg is IDictionary<string, object>)) return;
             var dict = (IDictionary<string, object>) msg;
             var emsgobj = dict["errorMessages"];
@@ -135,7 +146,7 @@ namespace Assets.Scripts.Hall.View.TaskWindows
             var pram = new Dictionary<string, object>();
             pram["phone"] = mobile;
             pram["verify"] = verification;
-            Facade.Instance<TwManger>().SendAction("getBindPhoneAward", pram, BoundphoneSuccess);
+            Facade.Instance<TwManager>().SendAction("getBindPhoneAward", pram, BoundphoneSuccess);
         }
 
         /// <summary>
@@ -148,7 +159,7 @@ namespace Assets.Scripts.Hall.View.TaskWindows
             if (FinishState!=null) ChangeState(true);
             
             var mobileNum = MobileNumInput.value;
-            UserInfoModel.Instance.UserInfo.MobileN = mobileNum;
+            UserInfoModel.Instance.UserInfo.PhoneNumber = mobileNum;
             MobileNumLabel.text = mobileNum;
             UserInfoModel.Instance.Save();
             var pram = (IDictionary)msg;
@@ -175,7 +186,7 @@ namespace Assets.Scripts.Hall.View.TaskWindows
         {
             var pram = new Dictionary<string, object>();
             pram["verify"] = UnBindVerificationInput.value;
-            Facade.Instance<TwManger>().SendAction("getUnBindPhoneAward", pram, UnBoundphoneSuccess);
+            Facade.Instance<TwManager>().SendAction("getUnBindPhoneAward", pram, UnBoundphoneSuccess);
         }
 
         /// <summary>
@@ -186,7 +197,7 @@ namespace Assets.Scripts.Hall.View.TaskWindows
         { 
             UnBindVerificationInput.value = "";
             ShowInfos(msg, "该账号已经解除手机绑定！！！");
-            UserInfoModel.Instance.UserInfo.MobileN = "";
+            UserInfoModel.Instance.UserInfo.PhoneNumber = "";
             MobileNumLabel.text = "";
             ChangeState(false);
         }
@@ -195,7 +206,7 @@ namespace Assets.Scripts.Hall.View.TaskWindows
         public override void Close()
         {
             if (ParentWindow == null) return;
-            if (MustFillin && string.IsNullOrEmpty(UserInfoModel.Instance.UserInfo.MobileN)) return;
+            if (MustFillin && string.IsNullOrEmpty(UserInfoModel.Instance.UserInfo.PhoneNumber)) return;
             ParentWindow.Close();
         }
     }

@@ -44,17 +44,54 @@ namespace Assets.Scripts.Common.components
     [Flags]
     public enum CallerCueId
     {
+        /// <summary>
+        /// 任务
+        /// </summary>
         Task = 1,
+        /// <summary>
+        /// 银行
+        /// </summary>
         Bank = 2,
+        /// <summary>
+        /// 好友
+        /// </summary>
         Friend = 4,
+        /// <summary>
+        /// 公告
+        /// </summary>
         Notice = 8,
+        /// <summary>
+        /// 商店
+        /// </summary>
         Shop = 16,
+        /// <summary>
+        /// 茶馆列表
+        /// </summary>
         CaffAskList = 32,
-        CaffBill = 64
+        /// <summary>
+        /// 茶馆账单
+        /// </summary>
+        CaffBill = 64,
+        /// <summary>
+        /// 比赛
+        /// </summary>
+        Match=128,
+        /// <summary>
+        /// 邮件
+        /// </summary>
+        Mail=256,
+        
     }
 
     public enum CallerCueType
     {
-        hall
+        /// <summary>
+        /// 大厅
+        /// </summary>
+        hall,
+        /// <summary>
+        /// 任务
+        /// </summary>
+        task
     }
 }

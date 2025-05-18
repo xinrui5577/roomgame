@@ -17,13 +17,13 @@ namespace Assets.Scripts.Hall.View.BankWindows
         protected override void OnStart()
         {
             base.OnStart();
-            Facade.Instance<TwManger>().SendAction("bankLog", new Dictionary<string, object>(), UpdateView);
+            Facade.Instance<TwManager>().SendAction("bankLog", new Dictionary<string, object>(), UpdateView);
         }
 
-        protected override void OnEnableEx()
+        protected override void OnEnable()
         {
-            base.OnEnableEx();
-            Facade.Instance<TwManger>().SendAction("bankLog", new Dictionary<string, object>(), UpdateView);
+            base.OnEnable();
+            Facade.Instance<TwManager>().SendAction("bankLog", new Dictionary<string, object>(), UpdateView);
         }
 
         protected override void OnFreshView()

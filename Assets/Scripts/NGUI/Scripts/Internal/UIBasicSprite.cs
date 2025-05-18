@@ -291,10 +291,10 @@ public abstract class UIBasicSprite : UIWidget
 	{
 		get
 		{
-			Color colF = color;
-			colF.a = finalAlpha;
+		    var colF = FinalColorType == EColorType.Gray ? new Color(-1, -1, -1, color.a) : color;
+            colF.a = finalAlpha;
 			if (premultipliedAlpha) colF = NGUITools.ApplyPMA(colF);
-			return colF;
+            return colF;
 		}
 	}
 
@@ -306,8 +306,7 @@ public abstract class UIBasicSprite : UIWidget
 	{
 		mOuterUV = outer;
 		mInnerUV = inner;
-
-		switch (type)
+	    switch (type)
 		{
 			case Type.Simple:
 			SimpleFill(verts, uvs, cols);

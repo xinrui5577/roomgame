@@ -68,7 +68,19 @@ Shader "Hidden/Unlit/Transparent Colored 1"
 				float2 factor = (float2(1.0, 1.0) - abs(IN.worldPos)) * _ClipArgs0;
 			
 				// Sample the texture
-				half4 col = tex2D(_MainTex, IN.texcoord) * IN.color;
+				fixed4 col;
+				col = tex2D(_MainTex, IN.texcoord);
+
+				fixed ctype = IN.color;
+				if (ctype == -1)
+				{
+					float grey = dot(col.rgb, float3(0.299, 0.587, 0.114));
+					col.rgb = float3(grey, grey, grey);
+				}
+				else
+				{
+					col = col * IN.color;
+				}
 				col.a *= clamp( min(factor.x, factor.y), 0.0, 1.0);
 				return col;
 			}

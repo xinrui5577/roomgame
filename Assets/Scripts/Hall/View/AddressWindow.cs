@@ -52,12 +52,12 @@ namespace Assets.Scripts.Hall.View
             parm["phone"] = phone;
             parm["address"] = address;
             parm["name"] = addressee;
-            Facade.Instance<TwManger>().SendAction("userAddress_yr", parm, OnSuccess);
+            Facade.Instance<TwManager>().SendAction("userAddress_yr", parm, OnSuccess);
         }
 
         private void OnSuccess(object msg)
         {
-            if (CallBack != null) CallBack(msg);
+            CallBack(msg);
             YxMessageBox.Show("提交成功！");
             Close();
         }

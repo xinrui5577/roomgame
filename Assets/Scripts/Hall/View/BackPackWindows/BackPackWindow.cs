@@ -2,6 +2,7 @@
 using Assets.Scripts.Common.Utils;
 using Assets.Scripts.Common.Windows;
 using Assets.Scripts.Common.components;
+using com.yxixia.utile.Utiles;
 using UnityEngine;
 using YxFramwork.Common;
 using YxFramwork.Common.Model;
@@ -33,7 +34,7 @@ namespace Assets.Scripts.Hall.View.BackPackWindows
             base.OnFreshView();
             var back = UserInfoModel.Instance.BackPack;
             var keys = back.GetKeys();
-            YxWindowUtils.CreateItemGrid(ItemGridPerfab, ref _itemGrid); 
+            YxWindowUtils.CreateMonoParent(ItemGridPerfab, ref _itemGrid); 
             var ts = _itemGrid.transform;
             foreach (var key in keys)
             {

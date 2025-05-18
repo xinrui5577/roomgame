@@ -37,7 +37,6 @@ namespace Assets.Scripts.Hall.View.CombatGains
 
         protected override void OnFreshView()
         {
-            if (Data == null) return;
             var dict = Data as IDictionary;
             if (dict == null) return;
             name = dict.Contains("room_id") ? dict["room_id"].ToString() : "";
@@ -112,7 +111,7 @@ namespace Assets.Scripts.Hall.View.CombatGains
             if (Data == null) return;
             var dict = Data as IDictionary;
             if (dict == null) return;
-            var win = YxWindowManager.OpenWindow("DefCombatGainsDetailWindow",true);
+            var win = YxWindowManager.OpenWindow("CombatGainsDetailWindow",true);
             if (win == null) return;
             var replayWin = win as CombatGainsDetailWindow;
             if (replayWin == null) return;

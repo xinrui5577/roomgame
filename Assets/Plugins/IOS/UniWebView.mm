@@ -242,7 +242,7 @@ static NSString *UniWebViewDoneButtonTitle = nil;
     CGRect f = CGRectMake(insets.left,
                           insets.top,
                           viewRect.size.width - insets.left - insets.right,
-                          viewRect.size.height - insets.top - insets.bottom);
+                          viewRect.size.height - insets.top - insets.bottom-25);
     self.frame = f;
     self.insets = insets;
 }
@@ -395,7 +395,7 @@ static NSString *UniWebViewDoneButtonTitle = nil;
     }
     
     if (fade || direction != UniWebViewTransitionEdgeNone) {
-        webView.viewAnimating = YES;
+        webView.viewAnimating = NO;
         
         webView.alpha = 1.0;
         if (fade) {
@@ -626,6 +626,9 @@ static NSString *UniWebViewDoneButtonTitle = nil;
 }
 
 - (void)webView:(UniWebView *)webView didFailLoadWithError:(NSError *)error {
+    if (error.code==NSURLErrorCancelled) {
+        return;
+    }
     [webView.spinner hide];
     NSString *webViewName = [self webViewName:webView];
     [webView updateToolBtn];
@@ -817,7 +820,7 @@ void _UniWebViewInit(const char *name, int top, int left, int bottom, int right)
 }
 
 void _UniWebViewChangeInsets(const char *name, int top, int left, int bottom, int right) {
-    UIEdgeInsets insets = UIEdgeInsetsMake(top, left, bottom, right);
+    UIEdgeInsets insets = UIEdgeInsetsMake(top, left, bottom , right);
     [[UniWebViewManager sharedManager] changeWebViewName:UniWebViewMakeNSString(name) insets:insets];
 }
 

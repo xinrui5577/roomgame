@@ -16,7 +16,7 @@ public class UIButtonScale : MonoBehaviour
 	public Vector3 hover = new Vector3(1.1f, 1.1f, 1.1f);
 	public Vector3 pressed = new Vector3(1.05f, 1.05f, 1.05f);
 	public float duration = 0.2f;
-
+    public UIButton Button;
 	Vector3 mScale;
 	bool mStarted = false;
 
@@ -25,18 +25,29 @@ public class UIButtonScale : MonoBehaviour
 		if (!mStarted)
 		{
 			mStarted = true;
-			if (tweenTarget == null) tweenTarget = transform;
+		    if (tweenTarget == null) tweenTarget = transform; 
 			mScale = tweenTarget.localScale;
 		}
 	}
 
-	void OnEnable () { if (mStarted) OnHover(UICamera.IsHighlighted(gameObject)); }
+    public Transform GetTweenTarget()
+    {
+        if (Button == null)
+        {
+            return tweenTarget;
+        }
+        var btnTarget = Button.tweenTarget;
+        return btnTarget == null? tweenTarget: btnTarget.transform; 
+    }
+
+    void OnEnable () { if (mStarted) OnHover(UICamera.IsHighlighted(gameObject)); }
 
 	void OnDisable ()
 	{
-		if (mStarted && tweenTarget != null)
+	    var twTarget = GetTweenTarget();
+        if (mStarted && twTarget != null)
 		{
-			TweenScale tc = tweenTarget.GetComponent<TweenScale>();
+			TweenScale tc = twTarget.GetComponent<TweenScale>();
 
 			if (tc != null)
 			{
@@ -50,8 +61,9 @@ public class UIButtonScale : MonoBehaviour
 	{
 		if (enabled)
 		{
-			if (!mStarted) Start();
-			TweenScale.Begin(tweenTarget.gameObject, duration, isPressed ? Vector3.Scale(mScale, pressed) :
+		    var twTarget = GetTweenTarget();
+            if (!mStarted) Start();
+			TweenScale.Begin(twTarget.gameObject, duration, isPressed ? Vector3.Scale(mScale, pressed) :
 				(UICamera.IsHighlighted(gameObject) ? Vector3.Scale(mScale, hover) : mScale)).method = UITweener.Method.EaseInOut;
 		}
 	}
@@ -60,8 +72,9 @@ public class UIButtonScale : MonoBehaviour
 	{
 		if (enabled)
 		{
-			if (!mStarted) Start();
-			TweenScale.Begin(tweenTarget.gameObject, duration, isOver ? Vector3.Scale(mScale, hover) : mScale).method = UITweener.Method.EaseInOut;
+		    var twTarget = GetTweenTarget();
+            if (!mStarted) Start();
+			TweenScale.Begin(twTarget.gameObject, duration, isOver ? Vector3.Scale(mScale, hover) : mScale).method = UITweener.Method.EaseInOut;
 		}
 	}
 

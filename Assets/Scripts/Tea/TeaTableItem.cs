@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts.Common.components;
 using Assets.Scripts.Common.Utils;
 using Assets.Scripts.Tea.House;
 using com.yxixia.utile.YxDebug;
 using UnityEngine;
 using YxFramwork.Common;
+using YxFramwork.Common.Adapters;
+using YxFramwork.Common.DataBundles;
 using YxFramwork.ConstDefine;
 using YxFramwork.Controller;
 using YxFramwork.Framework;
 using YxFramwork.Framework.Core;
 using YxFramwork.Manager;
+using YxFramwork.Tool;
 using YxFramwork.View;
 
 namespace Assets.Scripts.Tea
@@ -29,10 +31,12 @@ namespace Assets.Scripts.Tea
         public UILabel GameRound;
         public UILabel GameName;
         public UILabel[] UserNames;
-        public UITexture[] Avatars;
+        public YxBaseTextureAdapter[] Avatars;
         public UISprite[] EmptySeat;
         public UISprite ColorSprite;
         public GameObject yxz;
+
+        public TeaRoomCtrl TeaRoomCtrl;
 
         [HideInInspector]
         public string InfoStr;
@@ -56,8 +60,26 @@ namespace Assets.Scripts.Tea
         [Tooltip("消耗下限")]
         public UILabel GoldMin;
 
+        [Tooltip("排序ID")]
+        public YxBaseLabelAdapter OrderId;
+
         [Tooltip("最小值显示格式")]
         public string MinLabelForMat = "{0}~";
+
+        [Tooltip("分享状态事件")]
+        public List<EventDelegate> ShareStateAction=new List<EventDelegate>();
+
+        /// <summary>
+        /// 分享按钮显示状态(1.权限整体受创建开关影响2.完结牌桌不分享)
+        /// </summary>
+        public bool ShareShowState
+        {
+            get { return TeaUtil.OnlyOwener == 0&& TableState!= TableState.Over; }
+        }
+
+        public string TableGameKey { private set; get; }
+
+        private RoomInfoData _roomData;
 
         public void SetTableState(TableState state)
         {
@@ -108,7 +130,6 @@ namespace Assets.Scripts.Tea
                     AddBt.SetActive(false);
                     RoomId.gameObject.SetActive(true);
                     CloseBt.SetActive(true);
-                    Users.SetActive(false);
                     OverIcon.SetActive(true);
                     Info.SetActive(true);
                     UserInfos.SetActive(true);
@@ -119,24 +140,26 @@ namespace Assets.Scripts.Tea
 
         protected override void OnFreshView()
         {
-            var roomData = GetData<RoomInfoData>();
-            if (roomData == null) return;
+            _roomData = GetData<RoomInfoData>();
+            if (_roomData == null) return;
+            TableGameKey = _roomData.GameKey;
             Reset();
-            InfoStr = roomData.InfoStr;
-            RealRoomId = roomData.RoomId;
-            RoomId.text = TeaUtil.SubId(roomData.RoomId);
-            GameName.text = roomData.GameName;
-            GameRound.text = roomData.GameRound+(roomData.IsQuan? "圈":"局");
-            CostShow(roomData);
+            InfoStr = _roomData.InfoStr;
+            RealRoomId = _roomData.RoomId;
+            RoomId.text = TeaUtil.SubId(_roomData.RoomId);
+            GameName.text = _roomData.GameName;
+            GameRound.text = _roomData.GameRound+(_roomData.IsQuan? "圈":"局")+ _roomData.LimitGold;
+            CostShow(_roomData);
+            SetOrderId(Id);
             if (Layout)
             {
-                Layout.SetLayoutByNum(roomData.UserNum);
+                Layout.SetLayoutByNum(_roomData.UserNum);
             }
-            if (roomData.UserNum > 0)
+            if (_roomData.UserNum > 0)
             {
                 for (int i = 0; i < EmptySeat.Length; i++)
                 {
-                    if (roomData.UserNum > i)
+                    if (_roomData.UserNum > i)
                     {
                         EmptySeat[i].gameObject.SetActive(true);
                     }
@@ -144,63 +167,100 @@ namespace Assets.Scripts.Tea
                     {
                         EmptySeat[i].gameObject.SetActive(false);
                     }
-
+                    
                 }
             }
-            for (int i = 0; i < roomData.UserInfos.Length; i++)
+
+            for (int i = 0; i < _roomData.UserInfos.Length; i++)
             {
-                if (string.IsNullOrEmpty(roomData.UserInfos[i].UserName))
+                if (string.IsNullOrEmpty(_roomData.UserInfos[i].UserName))
                 {
                     continue;
                 }
-                UserNames[i].text = roomData.UserInfos[i].UserName;
-                string url = roomData.UserInfos[i].Avatar;
+                UserNames[i].text = _roomData.UserInfos[i].UserName;
+                string url = _roomData.UserInfos[i].Avatar;
                 if (!string.IsNullOrEmpty(url))
                 {
-                    PortraitRes.SetPortrait(url, Avatars[i], 1);
+                    PortraitDb.SetPortrait(url, Avatars[i], 1);
                 }
                 Avatars[i].gameObject.SetActive(true);
             }
-            if (TeaPanel.TableGameKey.Contains(roomData.GameKey))
+            if (TeaPanel.TableGameKey.Contains(_roomData.GameKey))
             {
                 for (int i = 0; i < TeaPanel.TableGameKey.Length; i++)
                 {
-                    if (roomData.GameKey==TeaPanel.TableGameKey[i])
+                    if (_roomData.GameKey==TeaPanel.TableGameKey[i])
                     {
                         ColorSprite.color=TeaPanel.TableColor[i];
                     }
                 }
             }
-            if (roomData.status>0)
+            if (_roomData.Status>0)
             {
                 yxz.SetActive(true);
             }
 
+            if (TeaRoomCtrl)
+            {
+                TeaRoomCtrl.ChangeTableItemBg(_roomData, EmptySeat);
+            }
+            if (gameObject.activeInHierarchy)
+            {
+                StartCoroutine(ShareStateAction.WaitExcuteCalls());
+            }
         }
 
         public void ClickJieSan()
         {
             if (TableState == TableState.Over)
             {
-                Dictionary<string, object> dic = new Dictionary<string, object>();
-                object obj = RealRoomId;
-                dic["roomId"] = obj;
-                Facade.Instance<TwManger>().SendAction("group.dissolveRoom", dic, msg =>
-                {
-                    TeaUtil.GetBackString(msg);
-                    TeaPanel.GetTableList(false);
-                });
+                YxMessageBox.Show(
+                    "您是否确定删除房间",
+                    null,
+                    (window, btnname) =>
+                    {
+                        switch (btnname)
+                        {
+                            case YxMessageBox.BtnLeft:
+                                Dictionary<string, object> dic = new Dictionary<string, object>();
+                                object obj = RealRoomId;
+                                dic["roomId"] = obj;
+                                Facade.Instance<TwManager>().SendAction("group.dissolveRoom", dic, msg =>
+                                {
+                                    TeaUtil.GetBackString(msg);
+                                    TeaPanel.GetTableList(false);
+                                });
+                                break;
+                        }
+                    },
+                    true,
+                    YxMessageBox.LeftBtnStyle | YxMessageBox.RightBtnStyle
+                );
             }
             else
             {
-                Dictionary<string, object> dic = new Dictionary<string, object>();
-                object obj = RealRoomId;
-                dic["roomId"] = obj;
-                Facade.Instance<TwManger>().SendAction("group.removeRoom", dic, msg =>
-                {
-                    TeaUtil.GetBackString(msg);
-                    TeaPanel.GetTableList(false);
-                });
+                YxMessageBox.Show(
+                    "您是否确定解散房间",
+                    null,
+                    (window, btnname) =>
+                    {
+                        switch (btnname)
+                        {
+                            case YxMessageBox.BtnLeft:
+                                Dictionary<string, object> dic = new Dictionary<string, object>();
+                                object obj = RealRoomId;
+                                dic["roomId"] = obj;
+                                Facade.Instance<TwManager>().SendAction("group.removeRoom", dic, msg =>
+                                {
+                                    TeaUtil.GetBackString(msg);
+                                    TeaPanel.GetTableList(false);
+                                });
+                                break;
+                        }
+                    },
+                    true,
+                    YxMessageBox.LeftBtnStyle | YxMessageBox.RightBtnStyle
+                );
             }
         }
         /// <summary>
@@ -242,7 +302,6 @@ namespace Assets.Scripts.Tea
         {
             RoomListController.Instance.FindRoom(roomId, obj =>
             {
-                YxWindowManager.HideWaitFor();
                 var data = obj as IDictionary<string, object>;
                 if (data == null)
                 {
@@ -274,14 +333,13 @@ namespace Assets.Scripts.Tea
                 roomData.roomId = Rid;
                 roomData.GameKey = gameKey;
                 roomData.Info = InfoStr;
-                var win = CreateOtherWindow("TeaRoomInfoWindow");
-                win.UpdateView(roomData);
+                MainYxView.OpenWindowWithData("TeaRoomInfoWindow", roomData);
             });
         }
 
         public void Reset()
         {
-            foreach (UITexture texture in Avatars)
+            foreach (var texture in Avatars)
             {
                 texture.gameObject.SetActive(false);
             }
@@ -294,10 +352,10 @@ namespace Assets.Scripts.Tea
 
         public void Press()
         {
-            if (TableState != TableState.BeforePlay && TableState != TableState.PlayerBeforPlay)
-            {
-                return;
-            }
+//            if (TableState != TableState.BeforePlay && TableState != TableState.PlayerBeforPlay)
+//            {
+//                return;
+//            }
             transform.localScale = Vector3.one * 0.9f;
         }
 
@@ -305,6 +363,10 @@ namespace Assets.Scripts.Tea
         {
             if (TableState != TableState.BeforePlay && TableState != TableState.PlayerBeforPlay)
             {
+                if (TableState == TableState.Over)
+                {
+                    OnCreateUserInfoWindow();
+                }
                 return;
             }
             FindRoom(int.Parse(RoomId.text));
@@ -312,11 +374,76 @@ namespace Assets.Scripts.Tea
 
         public void Release()
         {
-            if (TableState != TableState.BeforePlay && TableState != TableState.PlayerBeforPlay)
-            {
-                return;
-            }
+//            if (TableState != TableState.BeforePlay && TableState != TableState.PlayerBeforPlay)
+//            {
+//                return;
+//            }
             transform.localScale = Vector3.one;
+        }
+
+        /// <summary>
+        ///  设置排序ID
+        /// </summary>
+        public void SetOrderId(string num)
+        {
+            OrderId.TrySetComponentValue(num);
+        }
+
+
+        /// <summary>
+        /// 点击分享按钮
+        /// </summary>
+        /// <param name="roomId">房间ID</param>
+        /// <param name="roomInfo">房间信息</param>
+        /// <param name="gameKey"></param>
+        public void OnClickShareBtn(string roomId, string roomInfo,string gameKey)
+        {
+            YxTools.ShareFriend(roomId, roomInfo,gameKey,TeaUtil.CurTeaId);
+        }
+        /// <summary>
+        /// 点击历史房间显示结算信息
+        /// </summary>
+        public void OnCreateUserInfoWindow()
+        {
+            var pWin = MainYxView as YxWindow;
+            if (pWin == null)return;
+            YxWindow obj = pWin.CreateChildWindow("TeaUserInfoPanel");
+            TeaUserInfoPanel infoPanel = obj.GetComponent<TeaUserInfoPanel>();
+            infoPanel.GameName.text = _roomData.GameName;
+            infoPanel.RoomId.text = _roomData.RoomId;
+            infoPanel.RoundAndUse.text = string.Format("{0}{1} {2}房卡", _roomData.GameRound, _roomData.IsQuan ? "圈" : "局", _roomData.UseNum);
+            string rule = _roomData.InfoStr;
+            string[] strList = rule.Split(' ');
+            rule = "";
+            for (int i = 0; i < strList.Length; i++)
+            {
+                if (strList[i] == "")
+                {
+                    continue;
+                }
+                if (i == strList.Length - 1)
+                {
+                    rule += strList[i];
+                    continue;
+                }
+                rule += strList[i] + "\n";
+            }
+            infoPanel.RuleInfo.text = rule;
+
+            var users = _roomData.UserInfos;
+            for (int i = 0; i < users.Length; i++)
+            {
+                infoPanel.UserNames[i].text = users[i].UserName;
+                infoPanel.UserNames[i].gameObject.SetActive(true);
+                infoPanel.Scores[i].text = YxUtiles.GetShowNumberForm(long.Parse(users[i].Gold), 0, "N0");
+                infoPanel.Scores[i].gameObject.SetActive(true);
+                infoPanel.Heads[i].mainTexture = Avatars[i].GetTexture();
+                infoPanel.Heads[i].gameObject.SetActive(true);
+                if (infoPanel.Ids.Length != 0)
+                {
+                    infoPanel.Ids[i].text = users[i].Id;
+                }
+            }
         }
     }
 

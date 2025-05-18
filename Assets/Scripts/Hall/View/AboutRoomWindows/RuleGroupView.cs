@@ -1,32 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using Assets.Scripts.Common.Adapters;
+using Assets.Scripts.Common.Models.CreateRoomRules;
 using Assets.Scripts.Common.UI;
-using Assets.Scripts.Common.Utils;
+using com.yxixia.utile.Utiles;
 using UnityEngine;
+using YxFramwork.Framework;
 
 namespace Assets.Scripts.Hall.View.AboutRoomWindows
 {
-    public class RuleGroupView : NguiView
+    public class RuleGroupView : FreshLayoutBaseView
     {
         /// <summary>
         /// 组名
         /// </summary>
         [Tooltip("组名")]
-        public UILabel TabTagLabel;
-        /// <summary>
-        /// 多选预制
-        /// </summary>
-        [Tooltip("多选预制")]
-        public NguiCheckBox CheckBoxPerfab;
-        /// <summary>
-        /// 单选预制
-        /// </summary>
-        [Tooltip("单选预制")]
-        public NguiCheckBox RadioPerfab;
-        /// <summary>
-        /// 按钮预制
-        /// </summary>
-        [Tooltip("按钮预制")]
-        public NguiCheckBox ButtonPerfab;
+        public UILabel TabTagLabel;   
          
         /// <summary>
         /// 行Grid
@@ -36,146 +23,193 @@ namespace Assets.Scripts.Hall.View.AboutRoomWindows
         /// <summary>
         /// 行容器
         /// </summary>
-        [Tooltip("行容器")]
-        public Transform RowContainer;
+//        [Tooltip("行容器")]
+//        public Transform RowContainer;
         /// <summary>
         /// 行容器
         /// </summary>
         [Tooltip("行容器")]
         public RuleRowView RuleRowViewPrefab;
-        [Tooltip("行间的线，盛将特殊需求")]
-        public GameObject _Line;
+        [Tooltip("组的线")]
+        public GameObject Line;
 
-        public float _lineHeight;
+//        private readonly List<RuleRowView> _curViewList = new List<RuleRowView>();
 
-        public EGroupLayout GVLayout;
-        public enum EGroupLayout
+        private float _gridCellWidth;
+        private float _gridCellHeight;
+        private float _nameDefaultX;
+        private float _nameDefaultY;
+        protected override void OnAwake()
         {
-            Left,
-            Center,
-            Right
-        }
-
-        private List<RuleRowView> _curViewList;
-        private int _curMaxViewCount;
-        private int _viewFreshCount;
-
-        protected override void OnFreshView()
-        {
-            if (Data == null) return;
-            var groupData = Data as GroupData;
-            if (groupData == null) return;
+            InitStateTotal = 2;
+            CheckIsStart = true;
+            _gridCellWidth = RowViewGrid.cellWidth;
+            _gridCellHeight = RowViewGrid.cellHeight;
             if (TabTagLabel != null)
             {
-                var groupName = groupData.Name;
-                TabTagLabel.text = string.IsNullOrEmpty(groupName) || groupName == "none" ? "" : groupName;
-                if (groupData.NameWidth > 0)
-                {
-                    TabTagLabel.overflowMethod = UILabel.Overflow.ShrinkContent;
-                    TabTagLabel.width = groupData.NameWidth;
-                }
-                else
-                {
-                    TabTagLabel.overflowMethod = UILabel.Overflow.ResizeFreely;
-                }
-            } 
-            var listData = groupData.RowDatas;// pair.Value as IList;
-            if (listData == null) return;
-            var gridTs = RowViewGrid.transform;
-            var count = listData.Count;
-
-            if (RuleRowViewPrefab == null) return;
-            ReadyRepaint(count);
-            for (var i = 0; i < count; i++)
-            {
-                var rowData = listData[i];
-                if (rowData == null) continue;
-                Transform rowContainer = null;
-                YxWindowUtils.CreateItemParent(RowContainer, ref rowContainer, gridTs);
-                var rowView = YxWindowUtils.CreateItem(RuleRowViewPrefab, rowContainer);
-                if (_Line != null)
-                {
-                    var line = rowView.gameObject.AddChild(_Line);
-                    line.SetActive(true);
-                }
-                _curViewList.Add(rowView);
-                rowView.UpdateViewWithCallBack(rowData, FreshRowsView);
+                var nameLabelPos = TabTagLabel.transform.localPosition;
+                _nameDefaultX = nameLabelPos.x;
+                _nameDefaultY = nameLabelPos.y;
             }
+            base.OnAwake();
         }
- 
-        private static bool NeedHide(ItemData itemData)
+
+        protected override void OnStart()
         {
-            var parent = itemData.Parent;
-            if (parent == null) return false;
-            var itemId = itemData.Id;
-            var tabs = parent.Tabs;
-            if (tabs == null) return false;
-            var tabId = parent.CurTabItemId;
-            if (!tabs.ContainsKey(tabId)) return false;
-            var hides = parent.Tabs[tabId];
-            foreach (var hideId in hides)
+            var widgetAdapter = GetWidgetAdapter();
+            if (widgetAdapter == null)
             {
-                if (itemId == hideId)
-                {
-                    return true;
-                }
+                gameObject.AddComponent<NguiWidgetAdapter>();
             }
-            return false;
+            base.OnStart();
         }
 
-        private void ReadyRepaint(int maxCount)
+        protected override void InitViews()
         {
-            _curViewList = new List<RuleRowView>();
-            _curMaxViewCount = maxCount;
-            _viewFreshCount = 0;
-        }
-
-        private void FreshRowsView(object obj)
-        {
-            _viewFreshCount++;
-            if (_viewFreshCount < _curMaxViewCount) return;
-            if (Data == null) return;
             var groupData = Data as GroupData;
-            if (groupData == null) return;
-            var count = _curViewList.Count;
+            if (groupData == null || groupData.Parent.ViewIsHide(groupData.Id))
+            {
+                Hide();
+                CallBack(IdCode);
+                return;
+            } 
+            gameObject.SetActive(true);
+            InitGroupNameLabel(groupData);
+            
+            if (RuleRowViewPrefab == null)
+            {
+                Hide();
+                CallBack(IdCode);
+                return;
+            }
+            var listData = groupData.RowDatas;// pair.Value as IList;
+            if (listData == null)
+            {
+                Hide();
+                CallBack(IdCode);
+                return;
+            }
+            var gridTs = RowViewGrid.transform;
+            gridTs.gameObject.SetActive(true);
+            var dataCount = listData.Count;
+            var oldCount = BufferViewCount;
+            var minCount = Mathf.Min(oldCount, dataCount);
+            UpdateGrid((int)groupData.CellWidth, (int)groupData.CellHeight);
+            var i = FreshBufferView(0, minCount, listData);
+            i = HideOdd(i, oldCount);
+            CreateNewView(i, dataCount, listData, gridTs);
+        }
+
+        private void InitGroupNameLabel(GroupData groupData)
+        {
+            if (TabTagLabel == null) { return;}
+            var gname = groupData.Name;
+            var groupName = gname;
+            var gnameWidth = groupData.NameWidth;
+            var nameX = groupData.NameX;
+            var nameY = groupData.NameY;
+            TabTagLabel.text = string.IsNullOrEmpty(groupName) || groupName == "none" ? "" : groupName;
+            if (gnameWidth > 0)
+            {
+                TabTagLabel.overflowMethod = UILabel.Overflow.ShrinkContent;
+                TabTagLabel.width = gnameWidth;
+            }
+            else
+            {
+                TabTagLabel.overflowMethod = UILabel.Overflow.ResizeFreely;
+            }
+            var labelTs = TabTagLabel.transform;
+            var pos = labelTs.localPosition;
+            pos.x = float.IsNaN(nameX) ? _nameDefaultX : nameX;
+            pos.y = float.IsNaN(nameY) ? _nameDefaultY : nameY;
+            labelTs.localPosition = pos;
+        }
+
+        protected override void OnFreshLayout()
+        {
+            var groupData = Data as GroupData;
+            if (groupData == null)
+            {
+                CallBack(IdCode);
+                return;
+            }
+            var count = BufferViewCount;
+            var totalRow = 0;
+            RuleRowView rowView = null;
+            var cellHeight = RowViewGrid.cellHeight;
+            var maxRight = 0f;
             for (var i = 0; i < count; i++)
             {
-                var rowView = _curViewList[i];
-                var rowBound = rowView.Bounds;
-                var rowSize = rowBound.size;
+                var view = GetBufferView(i) as RuleRowView;
+                if (view == null)
+                {
+                    continue;
+                }
+                if (!view.IsShow() || !view.HasChildView())
+                {
+                    view.Hide();
+                    continue;
+                }
+                rowView = view;
+                totalRow++;
                 var rowViewTs = rowView.transform;
                 var rowPos = rowViewTs.localPosition;
-                switch (GVLayout)
-                {
-                    case EGroupLayout.Center:
-                        rowPos.x = -rowSize.x / 2;
-                        break;
-                    case EGroupLayout.Left:
-                        rowPos.x = 0;
-                        break;
-                    case EGroupLayout.Right:
-                        rowPos.x = -rowSize.x;
-                        break;
-                }
+                rowPos.x = 0;
                 rowViewTs.localPosition = rowPos;
+                var curW = rowView.Bounds.size.x;
+                if (curW > maxRight)
+                {
+                    maxRight = curW;
+                }
+                view.DrawLine(cellHeight);
             }
-            if (groupData.CellHeight > 0)
+            if (rowView != null && Line!=null)
             {
-                RowViewGrid.cellHeight = groupData.CellHeight;
+                rowView.HideLine();
             }
-            if (groupData.CellWidth > 0)
+            var gridPos = RowViewGrid.transform.localPosition;
+            var height = -(int)gridPos.y;
+            if (totalRow > 0)
             {
-                RowViewGrid.cellWidth = groupData.CellWidth;
+                Show();
+                
+                RowViewGrid.repositionNow = true;
+                RowViewGrid.Reposition();
+                height += (int)(cellHeight * totalRow);
             }
-            RowViewGrid.repositionNow = true;
-            RowViewGrid.Reposition();
-            var ngui = RowViewGrid.GetComponent<NguiView>();
-            if (ngui != null)
+            else
             {
-                ngui.UpdateWidget();
+                Hide();
             }
-            UpdateWidget(_uiWidget.width);
-            if (CallBack != null) CallBack(null);
+            var width = gridPos.x + maxRight;
+            UpdateWidget(width, height);
+            DrawLine(height);
+            CallBack(IdCode);
+        }
+
+        protected override YxView CreateView<T>(T data, Transform pts, Vector3 pos = default(Vector3))
+        {
+            var itemRowData = data as ItemRowData;
+            if (itemRowData != null)
+            {
+                itemRowData.Height = RowViewGrid.cellHeight;
+            }
+            var view = YxWindowUtils.CreateItem(RuleRowViewPrefab, pts, pos);
+            return view;
+        }
+
+        private int UpdateGrid(int cellWidth, int cellHeight)
+        {
+            RowViewGrid.cellWidth = cellWidth > 0 ? cellWidth : _gridCellWidth;
+            RowViewGrid.cellHeight = cellHeight > 0 ? cellHeight : _gridCellHeight;
+            return (int)RowViewGrid.cellHeight;
+        }
+
+        private void DrawLine(int y)
+        {
+            if (Line == null) { return;}
+            var pos = new Vector3(0,-y,0);
+            Line.transform.localPosition = pos;
         }
     }
 }

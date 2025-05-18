@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assets.Scripts.Common.Utils;
+using com.yxixia.utile.Utiles;
 using UnityEngine;
+using YxFramwork.Enums;
 using YxFramwork.Framework;
 using YxFramwork.Framework.Core;
 using YxFramwork.Manager;
@@ -24,8 +26,9 @@ namespace Assets.Scripts.Hall.View.SpinningWindows
         public string ActionName= "UserAwardInfo_yr";
         [Tooltip("奖励请求类型:0.中奖名单1.我的奖品")]
         public string AwardRange = "";
-        private UIGrid _itemGrid;
-        protected override void OnEnableEx()
+        private UIGrid _itemGrid; 
+
+        protected override void OnEnable()
         {
             UpdateData();
         }
@@ -36,7 +39,7 @@ namespace Assets.Scripts.Hall.View.SpinningWindows
             {
                 param.Add(AwardRange,name);
             }
-            Facade.Instance<TwManger>().SendAction(ActionName, param, UpdateView);
+            Facade.Instance<TwManager>().SendAction(ActionName, param, UpdateView);
         }
 
         protected override void OnFreshView()
@@ -61,13 +64,12 @@ namespace Assets.Scripts.Hall.View.SpinningWindows
             if (list == null) return;
             SpringPanel.Begin(ScrollView.gameObject, Vector3.zero, int.MaxValue);
             var count = list.Count;
-            YxWindowUtils.CreateItemGrid(ItemsGridPrefab, ref _itemGrid);
+            YxWindowUtils.CreateMonoParent(ItemsGridPrefab, ref _itemGrid);
             _itemGrid.onCustomSort = OnCustomSort;
             var tsParent = _itemGrid.transform;
             for (var i = 0; i < count; i++)
             {
                 var obj = list[i];
-                if(obj==null)continue;
                 var dict = obj as Dictionary<string, object>;
                 if(dict == null)continue;
                 var item = YxWindowUtils.CreateItem(RewardItemPrefab, tsParent);
@@ -108,13 +110,13 @@ namespace Assets.Scripts.Hall.View.SpinningWindows
             switch (data.Type)
             {
                 case 0:
-                    var win = CreateChildWindow("DefAddressWindow");
+                    var win = CreateChildWindow("AddressWindow");
                     if (win == null) return;
                     win.UpdateViewWithCallBack(data.Id, item.UpdateBtns);
                     break;
                 case 1:          
                 case 2:
-                    Facade.Instance<TwManger>().SendAction("userAddress_yr",
+                    Facade.Instance<TwManager>().SendAction("userAddress_yr",
                         new Dictionary<string, object>()
                         {
                             {"id", data.Id}
@@ -131,7 +133,7 @@ namespace Assets.Scripts.Hall.View.SpinningWindows
         public void OnShowInfo(RewardItemView item)
         {
             RewardItemData data = item.GetData<RewardItemData>();
-            Facade.Instance<TwManger>().SendAction("userAddress_yr",
+            Facade.Instance<TwManager>().SendAction("userAddress_yr",
                       new Dictionary<string, object>()
                       {
                             {"id", data.Id}
@@ -144,9 +146,14 @@ namespace Assets.Scripts.Hall.View.SpinningWindows
 
         private void ShowRewardInfo(object data)
         {
-            var win = CreateChildWindow("DefRewardInfoWindow");
+            var win = CreateChildWindow("RewardInfoWindow");
             if (win == null) return;
             win.UpdateViewWithCallBack(data,null);
+        }
+
+        public override YxEUIType UIType
+        {
+            get { return YxEUIType.Nguid; }
         }
     }
 }

@@ -39,7 +39,7 @@ namespace Assets.Scripts.Hall.View.TaskWindows
 
         private bool _isStartTime;
         private void OnInitRwared(ISFSObject msg)
-        {
+        { 
             var flag = CheckReward(msg);
             _isStartTime = flag;
             ChangeState(!flag);
@@ -88,8 +88,8 @@ namespace Assets.Scripts.Hall.View.TaskWindows
                     _isStartTime = hasReward;
                     ChangeState(!hasReward);
                 });
-            UserInfoModel.Instance.UserInfo.CoinA = coin;
-            UserInfoModel.Instance.Save();
+//            UserInfoModel.Instance.UserInfo.CoinA = coin;
+//            UserInfoModel.Instance.Save();
         }
 
         private bool CheckReward(ISFSObject msg)

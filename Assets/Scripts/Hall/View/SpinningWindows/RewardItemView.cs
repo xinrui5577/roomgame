@@ -86,7 +86,7 @@ namespace Assets.Scripts.Hall.View.SpinningWindows
             if (rData == null) return;
             var parm = new Dictionary<string, object>();
             parm["id"] = rData.Id;
-            Facade.Instance<TwManger>().SendAction("shareInfo_yr", parm, obj => ChangeBtnState(1));
+            Facade.Instance<TwManager>().SendAction("shareInfo_yr", parm, obj => ChangeBtnState(1));
         }
 
         private void OnShareFailed(string obj)
@@ -97,7 +97,7 @@ namespace Assets.Scripts.Hall.View.SpinningWindows
         public void UpdateBtns(object obj)
         {
             ChangeBtnState(2); 
-            if (CallBack != null) CallBack(obj);
+            CallBack(obj);
         }
     }
 

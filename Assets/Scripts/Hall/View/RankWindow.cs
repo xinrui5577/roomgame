@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Common.Utils;
 using Assets.Scripts.Common.Windows.TabPages;
+using Assets.Scripts.Tea;
+using com.yxixia.utile.Utiles;
 using com.yxixia.utile.YxDebug;
 using UnityEngine;
 using YxFramwork.Common.Model;
@@ -49,6 +51,12 @@ namespace Assets.Scripts.Hall.View
         public GameObject TabsArea;
         [Tooltip("只有一种排行榜时显示的文本")]
         public UILabel SingleLabel;
+        [Tooltip("只有一种排行时，是否只显示文本内容")]
+        public bool ShowSingleLabel;
+        [Tooltip("请求时是否发送茶馆信息")]
+        public bool RequestWithTeaInfo;
+        [Tooltip("请求时是否有转圈显示")]
+        public bool RequestWithHasWait=true;
         #region LocalDatas
         /// <summary>
         /// 临时排行布局
@@ -75,7 +83,23 @@ namespace Assets.Scripts.Hall.View
                 if (TabDatas.Length==0)
                 {
                     RankTypes = "";
-                    base.OnAwake();
+                    InitViewDict();
+                    if (!string.IsNullOrEmpty(TabActionName))
+                    {
+                        InitStateTotal++;
+                        var parm = new Dictionary<string, object>();
+                        if (RequestWithTeaInfo)
+                        {
+                            parm[YxTools.KeyTeaId] = TeaUtil.CurTeaId;
+                        }
+                        Facade.Instance<TwManager>()
+                            .SendAction(TabActionName, parm, UpdateView, false,null, RequestWithHasWait);
+                    }
+                    else
+                    {
+                        InitStateTotal++;
+                        UpdateView(TabSatate);
+                    }
                 }
                 else
                 {
@@ -133,20 +157,17 @@ namespace Assets.Scripts.Hall.View
             if (tdata == null) return;
             var parm = new Dictionary<string, object>();
             parm[_keyGamekey] = tdata.Data.ToString();
-            Facade.Instance<TwManger>().SendAction(TabActionName, parm, OnLoadData); 
+            Facade.Instance<TwManager>().SendAction(TabActionName, parm, OnLoadData,true,null, RequestWithHasWait); 
         }
         /// <summary>
         /// 预制体挂载对应排行类型请求排行榜数据
         /// </summary>
         /// <param name="toggle"></param>
         public void OnTableClickWithType(UIToggle toggle)
-        {
+        { 
             if (TabsView != null) TabsView.localScale = new Vector3(0, 1, 1);
             if (!toggle.value) return;
-            if (toggle.name.Equals(RankTypes))
-            {
-                return;
-            }
+            if (toggle.name.Equals(RankTypes)){return;}
             RankTypes = toggle.name;
             RequestWithParm(OnLoadData);
         }
@@ -156,21 +177,13 @@ namespace Assets.Scripts.Hall.View
         /// <param name="tableView"></param>
         public void OnTabClickWithData(YxTabItem tableView)
         {
-            if (tableView.GetToggle().value)
-            {
-                if (tableView.name.Equals(_curTabData.Index.ToString()))
-                {
-                    return;
-                }
-                else
-                {
-                    object data = tableView.GetData<TabData>().Data;
-                    _curTabData = data as RankTabData;
-                    RankTypes = _curTabData.Key;
-                }
-                base.OnTableClick(tableView);
-                RequestWithParm(UpdateView);
-            }
+            if (!tableView.GetToggle().value) { return;}
+            if (tableView.name.Equals(_curTabData.Index.ToString())) { return; }
+            var data = tableView.GetData<TabData>().Data;
+            _curTabData = data as RankTabData;
+            if (_curTabData != null) { RankTypes = _curTabData.Key;}
+            base.OnTableClick(tableView);
+            RequestWithParm(UpdateView);
         }
         /// <summary>
         /// 发送对应类型请求
@@ -178,8 +191,15 @@ namespace Assets.Scripts.Hall.View
         public void RequestWithParm(TwCallBack callback)
         {
             var parm = new Dictionary<string, object>();
-            if (!string.IsNullOrEmpty(RankTypes)) parm[_keyType] = RankTypes;
-            Facade.Instance<TwManger>().SendAction(TabActionName, parm, callback);
+            if (!string.IsNullOrEmpty(RankTypes))
+            {
+                parm[_keyType] = RankTypes;
+                if (RequestWithTeaInfo)
+                {
+                    parm[YxTools.KeyTeaId] = TeaUtil.CurTeaId;
+                }
+            }
+            Facade.Instance<TwManager>().SendAction(TabActionName, parm, callback);
         }
 
         public void ReSendRequestWithType()
@@ -201,21 +221,14 @@ namespace Assets.Scripts.Hall.View
         protected override void OnFreshView()
         {
             base.OnFreshView();
-            if (Data == null)
-            {
-                return;
-            }
-            if(Data is Dictionary<string,object>)
-            {
-                OnLoadData(Data);
-                if (_firstRequest)
-                {
-                    ShowView();
-                    _firstRequest = false;
-                }
-
-            }
+            var dict = GetData<Dictionary<string, object>>();
+            if (dict == null) { return;}
+            OnLoadData(Data);
+            if (!_firstRequest) { return;}
+            ShowView();
+            _firstRequest = false;
         }
+
         protected virtual void DealData(object data)
         {
             _data = new RankData(data);
@@ -241,7 +254,7 @@ namespace Assets.Scripts.Hall.View
         /// </summary>
         protected virtual void ShowView()
         {
-            bool isSingle = _data.TabDatas.Count == 1;
+            bool isSingle = _data.TabDatas.Count == 1&& ShowSingleLabel;
             DealSingle(isSingle);
             DealTabs(isSingle);
         }
@@ -265,7 +278,9 @@ namespace Assets.Scripts.Hall.View
                     Name = itemData.ShowName,
                     StarttingState = itemData.Key.Equals(_data.SelectTab),
                     Data = itemData,
-                    Index = index
+                    Index = index,
+                    UpStateName = string.Format("{0}{1}", PrefixUpStateName, itemData.Key),
+                    DownStateName = string.Format("{0}{1}", PrefixDownStateName, itemData.Key),
                 };
                 TabDatas[index++] = data;
             }
@@ -300,10 +315,10 @@ namespace Assets.Scripts.Hall.View
             {
                 SpringPanel.Begin(ShowPanel.gameObject, Vector3.zero, int.MaxValue);
             }
-            YxWindowUtils.CreateItemGrid(GridPrefab, ref _itemGrid);
+            YxWindowUtils.CreateMonoParent(GridPrefab, ref _itemGrid);
             foreach (var rankItemData in _data.RankDatas)
             {
-                RankItemView item = YxWindowUtils.CreateItem(PrefabItem, _itemGrid.transform);
+                var item = YxWindowUtils.CreateItem(PrefabItem, _itemGrid.transform);
                 item.UpdateView(rankItemData);
             }
             _itemGrid.repositionNow = true;

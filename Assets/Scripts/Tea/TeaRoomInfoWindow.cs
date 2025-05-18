@@ -14,6 +14,7 @@ namespace Assets.Scripts.Tea
         {
             var JoinRoomData = GetData<JoinRoomData>();
             if (JoinRoomData == null) return;
+            if (JoinRoomData.Info.Contains(";")) JoinRoomData.Info = JoinRoomData.Info.Replace(";", ";\n");
             Info.text = JoinRoomData.Info;
             RoomId = JoinRoomData.roomId;
             GameKey = JoinRoomData.GameKey;

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using Assets.Scripts.Hall_01.Item;
 using System.Collections.Generic;

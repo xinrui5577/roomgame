@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Common.Utils;
+using com.yxixia.utile.Utiles;
 using YxFramwork.Framework;
 using YxFramwork.Framework.Core;
 using YxFramwork.Manager;
@@ -25,8 +26,7 @@ namespace Assets.Scripts.Hall.View.NnRecordWindow
 
         protected override void OnFreshView()
         {
-            YxWindowUtils.CreateItemGrid(ItemGridPrefab, ref _itemGrid);
-            if (Data == null) return;
+            YxWindowUtils.CreateMonoParent(ItemGridPrefab, ref _itemGrid);
             var dict = Data as IDictionary;
             if (dict == null) return;
             _roomId = dict.Contains("room_id") ? dict["room_id"].ToString() : "";
@@ -56,12 +56,12 @@ namespace Assets.Scripts.Hall.View.NnRecordWindow
             var dic = new Dictionary<string, object>();
             dic["game_key_c"] = _gameKey;
             dic["room_id"] = _roomId;
-            Facade.Instance<TwManger>().SendAction(_function, dic, OnFreshData);
+            Facade.Instance<TwManager>().SendAction(_function, dic, OnFreshData);
         }
 
         private void OnFreshData(object msg)
         {
-            var win = YxWindowManager.OpenWindow("DefRecordDetialWindow", true);
+            var win = YxWindowManager.OpenWindow("RecordDetialWindow", true);
             if (win == null) return;
             win.UpdateView(msg);
         }

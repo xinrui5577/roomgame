@@ -91,7 +91,6 @@ namespace MMT
 #else
                 GL.IssuePluginEvent(7);
 #endif
-
             }
         }
     }

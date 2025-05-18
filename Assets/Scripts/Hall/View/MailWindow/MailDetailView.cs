@@ -57,9 +57,9 @@ namespace Assets.Scripts.Hall.View.MailWindow
         {
             if(_cacheInfo!=null)
             {
-                YxTools.TrySetComponentValue(Author, _cacheInfo.Sender);
-                YxTools.TrySetComponentValue(Content, _cacheInfo.Content);
-                YxTools.TrySetComponentValue(Time, _cacheInfo.Time);
+                Author.TrySetComponentValue(_cacheInfo.Sender);
+                Content.TrySetComponentValue(_cacheInfo.Content);
+                Time.TrySetComponentValue(_cacheInfo.Time);
             }
   
         }
@@ -172,12 +172,12 @@ namespace Assets.Scripts.Hall.View.MailWindow
 
         protected override void ParseData(Dictionary<string, object> dic)
         {
-            YxTools.TryGetValueWitheKey(dic,out _status,KeyStatus);
-            YxTools.TryGetValueWitheKey(dic, out _content, KeyContent);
-            YxTools.TryGetValueWitheKey(dic, out _mid, KeyMid);
-            YxTools.TryGetValueWitheKey(dic, out _title, KeyTitle);
-            YxTools.TryGetValueWitheKey(dic, out _sender, KeySender);
-            YxTools.TryGetValueWitheKey(dic, out _time, KeyCreateTime);
+            dic.TryGetValueWitheKey(out _status, KeyStatus);
+            dic.TryGetValueWitheKey(out _content, KeyContent);
+            dic.TryGetValueWitheKey(out _mid, KeyMid);
+            dic.TryGetValueWitheKey(out _title, KeyTitle);
+            dic.TryGetValueWitheKey(out _sender, KeySender);
+            dic.TryGetValueWitheKey(out _time, KeyCreateTime);
         }
 
         public MailDetailInfo(object data):base(data)

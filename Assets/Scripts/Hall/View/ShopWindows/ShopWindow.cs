@@ -1,21 +1,19 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
 using Assets.Scripts.Common;
-using Assets.Scripts.Common.Adapters;
 using Assets.Scripts.Common.Utils;
 using Assets.Scripts.Common.Windows;
+using com.yxixia.utile.Utiles;
 using UnityEngine;
 using YxFramwork.Common;
 using YxFramwork.Common.Model;
-using YxFramwork.Framework.Core;
-using YxFramwork.Manager;
-using com.yxixia.utile.YxDebug;
 
 namespace Assets.Scripts.Hall.View.ShopWindows
 {
     /// <summary>
-    /// 商店窗口 todo 继承 yxtabpagewindow
+    /// 商店窗口
     /// </summary>
+    [Obsolete("Use Assets.Scripts.Hall.View.ShopWindows.YxShopWindow")]
     public class ShopWindow:YxNguiWindow
     {
         [Tooltip("item预制")]
@@ -25,26 +23,17 @@ namespace Assets.Scripts.Hall.View.ShopWindows
         [Tooltip("标签的grid")]
         public UIGrid TableGrid;
         [Tooltip("item的grid")]
-        public UIGrid GoodsGrid;
-        [Tooltip("自己金币")]
-        public UILabel Coin;
-        [Tooltip("金币adapter")]
-        public NguiLabelAdapter CoinAdapter;
-        [Tooltip("自己的元宝")]
-        public UILabel Gold;
-        [Tooltip("自己的奖券")]
-        public UILabel Coupon;
-        [Tooltip("自己的房卡")]
-        public UILabel RoomCard;
+        public UIGrid GoodsGrid;    
         [Tooltip("滚动条")]
         public UIScrollView ScrollView;
         private UIGrid _curItemParent;
+        [Tooltip("界面刷新处理")]
+        public List<EventDelegate> OnWindowFresh;
 
+        public ShopTableItemView[] SpecialTabs;
         protected override void OnAwake()
         {
-            InitStateTotal = 2;
-            YxWindowManager.ShowWaitFor();
-            Facade.Instance<TwManger>().SendAction("goodsItem", new Dictionary<string, object>(), OnData, false);
+            CurTwManager.SendAction("goodsItem", new Dictionary<string, object>(), OnData, false);
         }
 
         private void OnData(object msg)
@@ -53,23 +42,23 @@ namespace Assets.Scripts.Hall.View.ShopWindows
             FreshView();
         }
 
-        protected override void OnStart()
-        {
-            OnBindDate();
-        } 
-
         protected override void OnFreshView()
         {
             //创建tabel；
             var shopModel = ShopModel.Instance;
-            var goodses = shopModel.Goodses;
-            var types = goodses.Keys;
             var typeDises = shopModel.GoodsTyps;
-            var count = types.Count;
+            foreach (var tab in SpecialTabs)
+            {
+                if (tab == null) continue;
+                var key = tab.name;
+                var has = typeDises.ContainsKey(key);
+                typeDises[key] = null;
+                tab.SetActive(has);
+            }
             foreach (var typeDise in typeDises)
             {
                 var index = typeDise.Key;
-                var typeName = typeDise.Value;
+                var typeName = typeDise.Value; 
                 if (string.IsNullOrEmpty(index)|| string.IsNullOrEmpty(typeName))
                 {
                     continue;
@@ -81,6 +70,10 @@ namespace Assets.Scripts.Hall.View.ShopWindows
             if (_selectedToggle != null)
             {
                 OnChangeToggle(_selectedToggle);
+            }
+            if (gameObject.activeInHierarchy)
+            {
+                StartCoroutine(OnWindowFresh.WaitExcuteCalls());
             }
         }
 
@@ -126,7 +119,6 @@ namespace Assets.Scripts.Hall.View.ShopWindows
             tabelTs.localScale = Vector3.one;
             goodsItem.name = data.Id;
             goodsItem.UpdateView(data);
-            goodsItem.OnDataUpdate = OnFreshView;
         }
 
         public void OnOpenPay()
@@ -136,12 +128,7 @@ namespace Assets.Scripts.Hall.View.ShopWindows
             var info = LoginInfo.Instance;
             Application.OpenURL(cfg.GetRecharge(info.user_id,info.token));
         }
-
-        private void OnFreshView(object msg)
-        {
-            OnBindDate();
-        }
-
+         
         /// <summary>
         /// 购买元宝
         /// </summary>
@@ -151,19 +138,8 @@ namespace Assets.Scripts.Hall.View.ShopWindows
             OnOpenPay();
         }
 
-        protected void OnBindDate()
-        {
-            var userInfoModel = UserInfoModel.Instance;
-            var userinfo = userInfoModel.UserInfo;
-            if (Coin != null) Coin.text = userinfo.CoinA.ToString(CultureInfo.InvariantCulture);
-            YxTools.TrySetComponentValue(CoinAdapter, userinfo.CoinA, "1");
-            if (Gold != null) Gold.text = userinfo.CashA.ToString(CultureInfo.InvariantCulture);
-            if (Coupon != null) Coupon.text = userinfo.CouponA.ToString(CultureInfo.InvariantCulture);
-            var backPack = userInfoModel.BackPack; 
-            if (RoomCard != null) RoomCard.text = backPack.GetItem("item2_q").ToString(CultureInfo.InvariantCulture);
-        } 
 
-        protected override void OnDestroy()
+        public override void OnDestroy()
         {
             base.OnDestroy();
             ShopModel.Instance.Gc();

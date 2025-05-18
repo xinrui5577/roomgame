@@ -1,8 +1,14 @@
 ﻿using UnityEngine;
-using YxFramwork.Framework; 
+using YxFramwork.Common;
+using YxFramwork.Enums;
+using YxFramwork.Framework;
+using YxFramwork.View;
 
 namespace Assets.Scripts.Hall.View
 {
+    /// <summary>
+    /// 登录总界面
+    /// </summary>
     class LoadEntranceWindow:YxBaseMoreWindow
     {
 
@@ -23,9 +29,9 @@ namespace Assets.Scripts.Hall.View
         }
 
 
-        public override WindowName WindowName
+        public override YxEWindowName WindowName
         {
-            get { return WindowName.LoadEntrance; }
+            get { return YxEWindowName.LoadEntrance; }
         }
     }
 }

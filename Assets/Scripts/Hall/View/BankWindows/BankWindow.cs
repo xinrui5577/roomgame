@@ -1,15 +1,13 @@
 ﻿using System.Collections;
-using Assets.Scripts.Common.Adapters;
-using Assets.Scripts.Common.Utils;
+using System.Globalization;
 using Assets.Scripts.Common.Windows;
 using UnityEngine;
-using YxFramwork.Common;
-using YxFramwork.Common.Model;
-using YxFramwork.ConstDefine;
 using YxFramwork.Controller;
-using YxFramwork.View;
 using com.yxixia.utile.YxDebug;
+using YxFramwork.Common.Model;
+using YxFramwork.Manager;
 using YxFramwork.Tool;
+using YxFramwork.View;
 
 namespace Assets.Scripts.Hall.View.BankWindows
 {
@@ -17,18 +15,10 @@ namespace Assets.Scripts.Hall.View.BankWindows
     /// 银行窗口
     /// </summary>
     public class BankWindow : YxNguiWindow
-    { 
-        [Tooltip("银行金币")]
-        public UILabel BankCoin;
-        [Tooltip("银行金币Adapter")]
-        public NguiLabelAdapter BankCoinAdapter;
-        [Tooltip("用户金币")]
-        public UILabel UserCoin;
-        [Tooltip("用户金币Adapter")]
-        public NguiLabelAdapter UserCoinAdapter;
+    {
         [Tooltip("要存入银行的金币UIInput")]
         public UIInput SaveLabel;
-        [Tooltip("要去除银行的金币UIInput")]
+        [Tooltip("要取出银行的金币UIInput")]
         public UIInput DrawMoneyLabel;
         [Tooltip("密码UIInput")]
         public UIInput PassWordLabel;
@@ -38,18 +28,9 @@ namespace Assets.Scripts.Hall.View.BankWindows
         public UIInput NewPwdLabel;
         [Tooltip("重复密码UIInput")]
         public UIInput AgainPwdLabel;
-        [Tooltip("单位：10的unit次幂")]
-        public int CoinUnit = 4;
-
-        
         private bool _isClick;
-
-        protected void Start()
-        {
-            YxMsgCenterHandler.GetIntance().AddListener(RequestCmd.Sync, OnUpCoin);
-            OnUpCoin();
-        }
-
+        [Tooltip("是否需要清除密码value")]
+        public bool NeelClearPwd=true;
         /// <summary>
         /// 修改密码
         /// </summary>
@@ -61,20 +42,26 @@ namespace Assets.Scripts.Hall.View.BankWindows
 
             if (string.IsNullOrEmpty(oldPwdStr))
             {
-                YxMessageBox.Show("旧密码不能为空");
+                YxWindowManager.ShowMessageWindow("旧密码不能为空");
                 return;
             }
-
             if (repPwdStr != newPwdStr)
             {
-                YxMessageBox.Show("两次输入不一致");
+                YxWindowManager.ShowMessageWindow("两次输入不一致");
                 return;
-            } 
+            }
             UserController.Instance.ChangeBankPwd(oldPwdStr, newPwdStr);
         }
+
         public UIInput TheOtherAccount;
         public UIInput GoldLine;
         public UIInput AccountKey;
+        [Tooltip("确认赠送ID")]
+        public UIInput SureId;
+        [Tooltip("是否需要校验发送信息")]
+        public bool CheckSendInfo;
+        [Tooltip("检测信息格式配合CheckSendInfo使用")]
+        public string CheckInfoFormat = "接收人昵称:{0};\n接收人ID:{1};\n赠送数量:{2};";
         /// <summary>
         /// 赠送金币
         /// </summary>
@@ -83,29 +70,68 @@ namespace Assets.Scripts.Hall.View.BankWindows
             var theOtherAccount = TheOtherAccount.value;
             float returnValue;
             float.TryParse(GoldLine.value, out returnValue);
-            long realValue = YxUtiles.RecoverShowNumber(returnValue);
+            var realValue = YxUtiles.RecoverShowNumber(returnValue);
             var accountKey = AccountKey.value;
 
             if (string.IsNullOrEmpty(theOtherAccount))
             {
-                YxMessageBox.Show("账号不能为空");
+                YxWindowManager.ShowMessageWindow("账号不能为空");
                 return;
             }
             if (realValue < 1)
             {
-                YxMessageBox.Show("输入金额过小，请重新输入!!!");
+                YxWindowManager.ShowMessageWindow("输入金额过小，请重新输入!!!");
                 return;
             }
             if (string.IsNullOrEmpty(accountKey))
             {
-                YxMessageBox.Show("密码不能为空");
+                YxWindowManager.ShowMessageWindow("密码不能为空");
                 return;
             }
+            if (SureId!=null)
+            {
+                if (!SureId.value.Equals(theOtherAccount))
+                {
+                    YxWindowManager.ShowMessageWindow("两次输入ID不一致");
+                    return;
+                }
+            }
+            if (CheckSendInfo)
+            {
+                FriendController.Instance.SendFindUser(theOtherAccount, msg =>
+                {
+                    var friendInfo = new UserInfo();
+                    friendInfo.Parse((IDictionary)msg);
+                    YxMessageBoxData messageData=new YxMessageBoxData();
+                    messageData.Msg = string.Format(CheckInfoFormat, friendInfo.NickM, friendInfo.UserId, GoldLine.value);
+                    YxMessageBox.Show(messageData.Msg,null, (box, btnName) =>
+                    {
+                        if (btnName.Equals(YxMessageBox.BtnLeft))
+                        {
+                            SendBankCoin(theOtherAccount, (int)realValue, accountKey);
+                        }
+                    },false, YxMessageBox.LeftBtnStyle | YxMessageBox.RightBtnStyle);
+                });
+            }
+            else
+            {
+                SendBankCoin(theOtherAccount, (int)realValue, accountKey);
+            }
 
+        }
+
+        /// <summary>
+        /// 赠送金币
+        /// </summary>
+        /// <param name="account">赠送帐号</param>
+        /// <param name="value">赠送值</param>
+        /// <param name="password">密码</param>
+        private void SendBankCoin(string account,int value,string password)
+        {
             if (_isClick) return;
             _isClick = true;
             StartCoroutine(RetClickState());
-            UserController.Instance.PresentBankCoin(theOtherAccount, (int)realValue, accountKey, OnUpCoin,CoinUnit);
+            UserController.Instance.PresentBankCoin(account,value, password);
         }
 
         private IEnumerator RetClickState()
@@ -118,21 +144,23 @@ namespace Assets.Scripts.Hall.View.BankWindows
         /// 保存金币
         /// </summary>
         public void OnSaveMoneyClick()
-        { 
-            YxDebug.LogError("存钱！！！！","BankWin");
+        {
+            YxDebug.LogError("存钱！！！！", "BankWin");
             var count = SaveLabel.value;
             if (string.IsNullOrEmpty(count))
-            { 
-                YxMessageBox.Show("请输入正确金额!!!");
+            {
+                YxWindowManager.ShowMessageWindow("请输入正确金额!!!");
                 return;
             }
-            long realValue = YxUtiles.RecoverShowNumber(double.Parse(count));
+            var realValue = YxUtiles.RecoverShowNumber(double.Parse(count));
+            
             if (realValue < 1)
             {
-                YxMessageBox.Show("输入金额过小，请重新输入!!!");
+                YxWindowManager.ShowMessageWindow("输入金额不在有效范围内，请重新输入!!!");
                 return;
             }
-            UserController.Instance.SaveCoin("1", realValue.ToString(), null, OnUpCoin, CoinUnit);
+            UserController.Instance.SaveCoin("1", realValue.ToString());
+            SaveLabel.value = "";
         }
 
         /// <summary>
@@ -144,42 +172,51 @@ namespace Assets.Scripts.Hall.View.BankWindows
             var pwd = PassWordLabel.value;
             if (string.IsNullOrEmpty(count))
             {
-                YxMessageBox.Show("请输入正确金额!!!");
+                YxWindowManager.ShowMessageWindow("请输入正确金额!!!");
                 return;
             }
             if (string.IsNullOrEmpty(pwd))
             {
-                YxMessageBox.Show("密码不能为空!!!");
+                YxWindowManager.ShowMessageWindow("密码不能为空!!!");
                 return;
             }
-            long realValue = YxUtiles.RecoverShowNumber(double.Parse(count));
+            var realValue = YxUtiles.RecoverShowNumber(double.Parse(count));
             if (realValue < 1)
             {
-                YxMessageBox.Show("输入金额过小，请重新输入!!!");
+                YxWindowManager.ShowMessageWindow("输入金额不在有效范围内，请重新输入!!!");
                 return;
-            }        
-            YxDebug.Log("Real value is:"+ realValue);
-            UserController.Instance.SaveCoin("2", realValue.ToString(), pwd, OnUpCoin,CoinUnit);
+            }
+            YxDebug.Log("Real value is:" + realValue);
+            UserController.Instance.SaveCoin("2", realValue.ToString(), pwd);
+            DrawMoneyLabel.value = "";
+            if (NeelClearPwd)
+            {
+                PassWordLabel.value = "";
+            }
         }
 
-        protected void OnBindDate()
-        { 
-            OnUpCoin();
-        }
-
-        protected void OnUpCoin(object msg=null)
+        public void GetAllCoin()
         {
-            var userinfo = UserInfoModel.Instance.UserInfo;
-            YxTools.TrySetComponentValue(BankCoin, userinfo.BankCoin.ToString());
-            YxTools.TrySetComponentValue(UserCoin, userinfo.CoinA.ToString());
-            YxTools.TrySetComponentValue(BankCoinAdapter, userinfo.BankCoin, "1");
-            YxTools.TrySetComponentValue(UserCoinAdapter, userinfo.CoinA, "1");
+            var allCoin = UserInfoModel.Instance.UserInfo.CoinA;
+            SaveLabel.value = YxUtiles.GetShowNumberForm(allCoin,0,"N0").ToString(CultureInfo.InvariantCulture);
         }
 
-
-        public virtual  void OnFreshCoin()
+        public void GetAllBankCoin()
         {
-            OnUpCoin();
+            var allBcoin = UserInfoModel.Instance.UserInfo.BankCoin;
+            DrawMoneyLabel.value =YxUtiles.GetShowNumberForm(allBcoin,0,"N0").ToString(CultureInfo.InvariantCulture);
         }
-    } 
+
+        public void SetSaveCoin(float process)
+        {
+            var allCoin = UserInfoModel.Instance.UserInfo.CoinA * process;
+            SaveLabel.value = YxUtiles.GetShowNumberForm((long)allCoin,0,"N0").ToString(CultureInfo.InvariantCulture);
+        }
+
+        public void SetGetCoin(float process)
+        {
+            var allBcoin = UserInfoModel.Instance.UserInfo.BankCoin * process;
+            DrawMoneyLabel.value = YxUtiles.GetShowNumberForm((long)allBcoin,0,"N0").ToString(CultureInfo.InvariantCulture);
+        }
+    }
 }

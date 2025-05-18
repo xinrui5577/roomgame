@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using Assets.Scripts.Common.Utils;
+﻿using System;
+using System.Collections.Generic;
 using Assets.Scripts.Common.Windows.TabPages;
+using com.yxixia.utile.Utiles;
 using UnityEngine;
 using YxFramwork.Common;
 using YxFramwork.Common.Model;
@@ -8,6 +9,7 @@ using YxFramwork.Manager;
 
 namespace Assets.Scripts.Hall.View.AboutRoomWindows
 {
+    [Obsolete("Use Assets.Scripts.Hall.View.RuleWindows.YxRuleTabWindow")]
     public class RuleWindow : YxTabPageWindow {
 
         public string PrefixUpStateName;
@@ -65,23 +67,46 @@ namespace Assets.Scripts.Hall.View.AboutRoomWindows
             }
         }
 
+        protected override void TabSelectAction(YxTabItem tableView)
+        {
+            base.TabSelectAction(tableView);
+            TabItemClick(tableView);
+        }
+        /// <summary>
+        /// 重置方法//todo:ngui scorllview 重置有问题，待查找出问题后弃用
+        /// </summary>
+        /// <param name="moveObj"></param>
+        public void SpringToStart(GameObject moveObj)
+        {
+            SpringPanel.Begin(moveObj, Vector3.zero, 10000);
+        }
+
         public override void OnTableClick(YxTabItem tableView)
         {
             if (!tableView.GetToggle().value) return;
-            
-            YxWindowUtils.CreateItemParent(ContainerTs,ref _containerTs,ContainerTs.parent);
+            TabItemClick(tableView);
+        }
+
+        private void TabItemClick(YxTabItem tableView)
+        {
+            YxWindowUtils.CreateItemParent(ContainerTs, ref _containerTs, ContainerTs.parent);
             var tdata = tableView.GetData<TabData>();
             if (tdata == null) return;
             if (NameInView != null) NameInView.text = tdata.Name;
             var gk = tdata.Data.ToString();
-            var rulePath = App.RuleListPath;
-            var ruleName = string.Format("{0}_{1}",rulePath,gk);
-            var pfb = ResourceManager.LoadAsset(rulePath, ruleName, ruleName);
+            var prefix = App.Skin.GameInfo;
+            var ruleName = string.Format("rulelist_{0}", gk);
+            var namePrefix = string.Format("{0}_{1}", prefix, gk);
+            var bundleName = string.Format("{0}/{1}", namePrefix, ruleName);
+            var pfb = ResourceManager.LoadAsset(prefix, bundleName, ruleName);
             if (pfb == null) return;
             var content = YxWindowUtils.CreateGameObject(pfb, _containerTs);
             var widget = content.GetComponent<UIWidget>();
-            widget.SetAnchor(_containerTs.gameObject,0,0,0,0);
-            UpOrder(); 
+            if (widget)
+            {
+                widget.SetAnchor(_containerTs.gameObject, 0, 0, 0, 0);
+            }
+            UpOrder();
         }
     }
 }

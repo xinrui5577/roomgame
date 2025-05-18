@@ -863,11 +863,12 @@ public class UIWidgetInspector : UIRectEditor
 
 	static public void DrawColor (SerializedObject so, UIWidget w)
 	{
+		NGUIEditorTools.DrawProperty("Color Type", so, "_colorType", GUILayout.MinWidth(20f));
 		if ((w.GetType() != typeof(UIWidget)))
 		{
-			NGUIEditorTools.DrawProperty("Color Tint", so, "mColor", GUILayout.MinWidth(20f));
-		}
-		else if (so.isEditingMultipleObjects)
+            NGUIEditorTools.DrawProperty("Color Tint", so, "mColor", GUILayout.MinWidth(20f));
+        }
+        else if (so.isEditingMultipleObjects)
 		{
 			NGUIEditorTools.DrawProperty("Alpha", so, "mColor.a", GUILayout.Width(120f));
 		}

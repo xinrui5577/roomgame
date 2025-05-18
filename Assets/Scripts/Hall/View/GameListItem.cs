@@ -1,6 +1,8 @@
-﻿using Assets.Scripts.Common.Adapters;
+﻿using System;
+using Assets.Scripts.Common.Adapters;
 using Assets.Scripts.Common.Components;
 using Assets.Scripts.Hall.View.AboutRoomWindows;
+using com.yxixia.utile.YxDebug;
 using UnityEngine;
 using YxFramwork.Common;
 using YxFramwork.Common.Model;
@@ -12,6 +14,7 @@ namespace Assets.Scripts.Hall.View
 {
     [RequireComponent(typeof(NguiPanelAdapter))]
     [RequireComponent(typeof(Rigidbody))]
+    [Obsolete("Use Assets.Scripts.Hall.View.ListViews.GameListItem")]
     public class GameListItem : NguiListItem
     {
         [Tooltip("背景")]
@@ -19,13 +22,14 @@ namespace Assets.Scripts.Hall.View
         [Tooltip("背景名称前缀，后边会自动加上游戏列表分组对应的值")]
         public string BackgroundNamePrefix;
         [Tooltip("游戏名称")]
-        public UILabel GameNameLabel;
-
+        public NguiLabelAdapter GameNameLabel;
+        [Tooltip("Item默认的box大小，如果GamelistItemView中的Widget为空时，将使用此Widget")]
+        public UIWidget DefaultBoxWidget;
         private UIButton _btn;
         private GameListItemView _itemView;
         private NguiPanelAdapter _panelAdapter;
         private GameUnitModel _model;
-         
+        
         protected override void OnAwake()
         {
             _panelAdapter = GetComponent<NguiPanelAdapter>();
@@ -33,7 +37,7 @@ namespace Assets.Scripts.Hall.View
 //            _btn.state = UIButtonColor.State.Disabled;
         }
 
-        protected override void OnChangeData(IItemData itemData)
+        protected override void OnChangeData(IItemData itemData, string itemType)
         {
             _model = itemData as GameUnitModel;
             if (_model == null)
@@ -42,17 +46,23 @@ namespace Assets.Scripts.Hall.View
                 return;
             }
             gameObject.SetActive(true);
-            if (GameNameLabel != null) GameNameLabel.text = _model.GameName;
+            if (GameNameLabel != null) GameNameLabel.Text(_model.GameName);
             if (Background != null)
             {
                 var gm = GameListModel.Instance;
                 var group = gm.GetGroup(gm.CurGroup);
                 Background.spriteName = string.Format("{0}{1}", BackgroundNamePrefix, group.Type);
+            } 
+            name = _model.GameKey;
+            if (_itemView != null) { Destroy(_itemView.gameObject); }
+            var assetname = string.Format("gamelist_{0}",name);
+            if (!string.IsNullOrEmpty(itemType))
+            {
+                assetname = string.Format("{0}_{1}", assetname, itemType);
             }
-            name = _model.GameKey; 
-            var namePrefix = string.Format("{0}_{1}",App.GameListPath, name);
-            if (_itemView != null) Destroy(_itemView.gameObject);
-            var go = ResourceManager.LoadAsset(App.GameListPath, namePrefix, namePrefix);//App.HallName
+            var bundlePrefix = string.Format("{0}_{1}", App.Skin.GameInfo,name);
+            var bundleName = string.Format("{0}/{1}", bundlePrefix, assetname);
+            var go = ResourceManager.LoadAsset(App.Skin.GameInfo, bundleName, assetname);//App.HallName
             if (go == null) return;
             go = Instantiate(go);
             var ts = go.transform;
@@ -64,7 +74,14 @@ namespace Assets.Scripts.Hall.View
             ts.localRotation = lcRot;
             ts.localScale = lcScale;
             _itemView = go.GetComponent<GameListItemView>();
-            _itemView.FreshBtnClickBound(_btn,_model.GameState == GameState.Developing);
+            if (_itemView!=null)
+            {
+                _itemView.FreshBtnClickBound(_btn, DefaultBoxWidget, _model.GameState == GameState.Developing);
+            }
+            else
+            {
+                YxDebug.LogError("没有GameListItemView","GameListItem");
+            }
         }
 
         /// <summary>
@@ -100,7 +117,7 @@ namespace Assets.Scripts.Hall.View
                 YxMessageBox.Show("游戏在努力开发中，\r\n敬请期待!!!!");
                 return;
             }
-            var win = CreateOhterWindowWithT<CreateRoomWindow>("DefCreateRoomWindow");
+            var win = CreateOhterWindowWithT<CreateRoomWindow>("CreateRoomWindow");
             win.GameKey = name;
         }
 
@@ -114,7 +131,7 @@ namespace Assets.Scripts.Hall.View
                 YxMessageBox.Show("游戏在努力开发中，\r\n敬请期待!!!!");
                 return;
             }
-            var win = CreateOhterWindowWithT<CreateRoomWindow>("DefCreateRoomWindow");
+            var win = CreateOhterWindowWithT<CreateRoomWindow>("CreateRoomWindow");
             win.GameKey = name;
             win.IsDesignated = true;
         }

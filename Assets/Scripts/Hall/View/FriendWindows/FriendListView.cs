@@ -19,7 +19,7 @@ namespace Assets.Scripts.Hall.View.FriendWindows
         private UIGrid _curItemParent;
         private readonly List<FriendItemView> _items = new List<FriendItemView>(); 
 
-        protected override void OnEnableEx()
+        protected override void OnEnable()
         {
             FreshView();
         }

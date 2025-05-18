@@ -50,7 +50,7 @@ namespace Assets.Scripts.Hall.View
         protected override void OnAwake()
         {
             InitStateTotal = 2;
-//            Facade.Instance<TwManger>().SendAction("",new Dictionary<string,object>(),UpdateView);
+//            Facade.Instance<TwManager>().SendAction("",new Dictionary<string,object>(),UpdateView);
         }
 
         protected override void OnFreshView()
@@ -68,7 +68,7 @@ namespace Assets.Scripts.Hall.View
             if (!_canLaunch) return;
             _canLaunch = false;
             if (HandTip!=null)HandTip.SetActive(false);
-//            Facade.Instance<TwManger>().SendAction("",new Dictionary<string,object>(),OnGetReward);
+//            Facade.Instance<TwManager>().SendAction("",new Dictionary<string,object>(),OnGetReward);
             _curState = State.SpeedUp;
         }
 

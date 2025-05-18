@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Assets.Scripts.Common.Utils;
+using com.yxixia.utile.Utiles;
 using YxFramwork.Framework;
 
 namespace Assets.Scripts.Hall.View.NnRecordWindow

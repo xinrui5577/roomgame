@@ -1,15 +1,18 @@
-using System.Collections;
+using System.Collections.Generic;
 using Assets.Scripts.Common;
 using Assets.Scripts.Common.Adapters;
-using Assets.Scripts.Common.Windows;
 using Assets.Scripts.Common.components;
 using Assets.Scripts.Common.Utils;
+using Assets.Scripts.Common.Windows;
 using UnityEngine;
 using YxFramwork.Common;
+using YxFramwork.Common.DataBundles;
 using YxFramwork.Common.Model;
 using YxFramwork.ConstDefine;
 using YxFramwork.Controller;
+using YxFramwork.Framework.Core;
 using YxFramwork.Manager;
+using YxFramwork.Tool;
 using YxFramwork.View;
 
 namespace Assets.Scripts.Hall.View
@@ -49,7 +52,7 @@ namespace Assets.Scripts.Hall.View
         /// <summary>
         /// 头像
         /// </summary>
-        public UITexture Portrait;
+        public NguiTextureAdapter Portrait;
         /// <summary>
         /// 签名
         /// </summary>
@@ -58,26 +61,55 @@ namespace Assets.Scripts.Hall.View
         /// 电话
         /// </summary>
         public UILabel PhoneNumber;
+        /// <summary>
+        /// 手机绑定按钮
+        /// </summary>
+        public YxGameObjectSelector BindPhoneSelector;
         public string IdForm = "ID:";
         /// <summary>
         /// 推广码按钮
         /// </summary>
         public GameObject SpreadBtn;
+        /// <summary>
+        /// 推广码可操作状态
+        /// </summary>
+        public UIButton SpreadStateBtn;
+        /// <summary>
+        /// 推广码显示
+        /// </summary>
+        public UILabel Spread;
+        /// <summary>
+        /// 代理码描述
+        /// </summary>
+        public string PromoterMsg = "无代理码";
+        /// <summary>
+        /// 是否自己 TODO 临时方案
+        /// </summary>
+        public bool IsSelf = true;
+        /// <summary>
+        /// 游客状态额外执行事件
+        /// </summary>
+        public List<EventDelegate> VisitorAction=new List<EventDelegate>();
 
         protected override void OnAwake()
         {
             base.OnAwake();
-            YxMsgCenterHandler.GetIntance().AddListener(string.Format("{0}_OnChange", UserInfoModel.Instance.GetType().Name), delegate
-            {
-                var userInfo = UserInfoModel.Instance.UserInfo;
-                PortraitRes.SetPortrait(userInfo.AvatarX, Portrait, userInfo.SexI);
-            });
-        } 
+            if (!IsSelf) return;
+            AddListeners(string.Format("{0}_OnChange", UserInfoModel.Instance.GetType().Name),
+                                           delegate
+                                               {
+                                                   var userInfo = UserInfoModel.Instance.UserInfo;
+                PortraitDb.SetPortrait(userInfo.AvatarX, Portrait, userInfo.SexI);
+                                                   UpdateView();
+                                               });
+        }
 
         protected override void OnStart()
-        { 
-            OnBindDate();
-            YxMsgCenterHandler.GetIntance().AddListener(RequestCmd.Sync, UpdateView);
+        {
+            if (!IsSelf) return;
+            OnBindDate(UserInfoModel.Instance.UserInfo);
+            AddListeners(RequestCmd.Sync, UpdateView);
+            if (Sign!=null) UIEventListener.Get(Sign.gameObject).onSelect = OnChangeSign;  
         }
 
         /// <summary>
@@ -86,12 +118,12 @@ namespace Assets.Scripts.Hall.View
         public void OnChangePwd()
         {
             var userInfo = UserInfoModel.Instance.UserInfo;
-            if (string.IsNullOrEmpty(userInfo.LoginM))
+            if (string.IsNullOrEmpty(userInfo.LoginName))
             {
                 YxMessageBox.Show("您好，您现在的身份为游客，无需设置密码！！！",3);
                 return;
             }
-            YxWindowManager.OpenWindow("ChangePwdWindow",true);
+            YxWindowManager.OpenWindow("ChangePwdWindow");
         }
 
         /// <summary>
@@ -107,14 +139,22 @@ namespace Assets.Scripts.Hall.View
 
         protected override void OnFreshView()
         {
-            OnBindDate();
+            UserInfo userInfo;
+            if (IsSelf)
+            {
+                userInfo = UserInfoModel.Instance.UserInfo;
+            }
+            else
+            {
+                userInfo = Data as UserInfo;
+            }
+            OnBindDate(userInfo);
         }
 
-        protected virtual void OnBindDate()
+        protected virtual void OnBindDate(UserInfo userInfo)
         {
-            var userInfo = UserInfoModel.Instance.UserInfo;
-            var loginName = userInfo.LoginM;
-            if (UserId != null) UserId.text = string.Format("{0}{1}", IdForm,App.UserId);
+            var loginName = userInfo.LoginName;
+            if (UserId != null) UserId.text = string.Format("{0}{1}", IdForm, userInfo.UserId);
             if (UserName != null) UserName.text = string.IsNullOrEmpty(loginName) ? "游客" : loginName;
             if (Sex != null)
             {
@@ -131,18 +171,49 @@ namespace Assets.Scripts.Hall.View
                         break;
                 } 
             }
-            YxTools.TrySetComponentValue(UserCoin, userInfo.CoinA.ToString());
-            YxTools.TrySetComponentValue(UserGold, userInfo.CashA.ToString());
-            YxTools.TrySetComponentValue(UserCoinAdapter, userInfo.CoinA, "1");
+
+            if (UserCoin != null) UserCoin.text = YxUtiles.ReduceNumber(userInfo.CoinA);
+            if (UserGold!=null) UserGold.text = userInfo.CashA.ToString();
+            UserCoinAdapter.TrySetComponentValue( userInfo.CoinA, "1");
             if (ClienIp != null) ClienIp.text = userInfo.ClientIP;
             if (NikeName != null) NikeName.text = userInfo.NickM;
-            if (PhoneNumber != null) PhoneNumber.text = userInfo.MobileN;
+            if (PhoneNumber != null) PhoneNumber.text = userInfo.PhoneNumber;
+            if (Sign != null)
+            {
+                var uiinput = Sign.GetComponent<UIInput>();
+                if (uiinput != null)
+                {
+                    uiinput.value = userInfo.Signature;
+                }
+                else
+                {
+                    Sign.text = userInfo.Signature;
+                }
+            }
             if (SpreadBtn != null)
             {
                 var needShow = userInfo.Promoter != null && userInfo.Promoter == false;
                 SpreadBtn.SetActive(needShow);
             }
-            PortraitRes.SetPortrait(userInfo.AvatarX, Portrait, userInfo.SexI);
+            if (SpreadStateBtn != null)
+            {
+                if (string.IsNullOrEmpty(loginName))
+                {
+                    SpreadStateBtn.transform.parent.gameObject.SetActive(false);
+                    if (gameObject.activeInHierarchy)
+                    {
+                        StartCoroutine(VisitorAction.WaitExcuteCalls());
+                    }
+                }
+                Spread.text = userInfo.PromoterId ?? PromoterMsg;
+                SpreadStateBtn.gameObject.SetActive(string.IsNullOrEmpty(userInfo.PromoterId));
+            }
+            if (BindPhoneSelector!=null)
+            {
+                BindPhoneSelector.Change(string.IsNullOrEmpty(userInfo.PhoneNumber) ? 0 : 1);
+            }
+
+            PortraitDb.SetPortrait(userInfo.AvatarX, Portrait, userInfo.SexI);
         }
 
         /// <summary>
@@ -160,6 +231,27 @@ namespace Assets.Scripts.Hall.View
         {
             HallMainController.Instance.ChangeAccount();
             Close();
+        }
+        /// <summary>
+        /// 修改个性签名
+        /// </summary>
+        public void OnChangeSign(GameObject obj, bool isSelect)
+        {
+            if (!isSelect)
+            {
+                var content = obj.GetComponent<UIInput>().value;
+                if (UserInfoModel.Instance.UserInfo.Signature.Equals(content))
+                {
+                    return;
+                }
+                var dic = new Dictionary<string, object>();
+                dic["newSignature"] = content;
+                Facade.Instance<TwManager>()
+                    .SendAction("changeUserOptions", dic, data =>
+                    {
+                        UserController.Instance.GetUserDate();
+                    });
+            }
         }
     }
 }

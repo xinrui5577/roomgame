@@ -121,6 +121,7 @@ public class UIButtonColor : UIWidgetContainer
 		{
 			mDefaultColor = mWidget.color;
 			mStartingColor = mDefaultColor;
+		    mWidget.ColorType = UIRect.EColorType.Normal;
 		}
 		else if (tweenTarget != null)
 		{
@@ -294,29 +295,48 @@ public class UIButtonColor : UIWidgetContainer
 		}
 	}
 
-	/// <summary>
-	/// Update the button's color. Call this method after changing the colors of the button at run-time.
-	/// </summary>
+    /// <summary>
+    /// Update the button's color. Call this method after changing the colors of the button at run-time.
+    /// </summary>
+    public bool HasGray = true;
 
+    private Color _disableColor = new Color(-1,-1,-1);
 	public void UpdateColor (bool instant)
 	{
-		TweenColor tc;
-
-		if (tweenTarget != null)
-		{
-			switch (mState)
-			{
-				case State.Hover: tc = TweenColor.Begin(tweenTarget, duration, hover); break;
-				case State.Pressed: tc = TweenColor.Begin(tweenTarget, duration, pressed); break;
-				case State.Disabled: tc = TweenColor.Begin(tweenTarget, duration, disabledColor); break;
-				default: tc = TweenColor.Begin(tweenTarget, duration, mDefaultColor); break;
-			}
-
-			if (instant && tc != null)
-			{
-				tc.value = tc.to;
-				tc.enabled = false;
-			}
-		}
+        if (tweenTarget != null)
+        {
+            UIRect.EColorType ctype;
+            Color color;
+            switch (mState)
+            {
+                case State.Hover:
+                    color = hover;
+                    ctype = UIRect.EColorType.Normal;
+                    break;
+                case State.Pressed:
+                    color = pressed;
+                    ctype = UIRect.EColorType.Normal;
+                    break;
+                case State.Disabled:
+                    color = disabledColor;
+                    ctype = HasGray ? UIRect.EColorType.Gray : UIRect.EColorType.Normal;
+                    break;
+                default:
+                    color = mDefaultColor;
+                    ctype = UIRect.EColorType.Normal;
+                    break;
+            }
+            if (mWidget != null)
+            {
+                mWidget.ColorType = ctype;
+                mWidget.color = color;
+            }
+            var tc = HasGray? null : TweenColor.Begin(tweenTarget, duration, color);
+            if (instant && tc != null)
+            {
+                tc.value = tc.to;
+                tc.enabled = false;
+            }
+        }
 	}
 }

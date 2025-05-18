@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Common;
+﻿using com.yxixia.utile.YxDebug;
 using UnityEngine;
 using YxFramwork.Common;
 using YxFramwork.Common.Model;
@@ -9,16 +9,16 @@ using YxFramwork.Framework;
 using YxFramwork.Framework.Core;
 using YxFramwork.Manager;
 using YxFramwork.Tool;
-using YxFramwork.View;
-using com.yxixia.utile.Utiles;
+using YxFramwork.Enums;
+using YxFramwork.View.Develops;
 
 namespace Assets.Scripts.Hall.View
 {
     public class LoginWindow:YxBaseWindow
     { 
-        public override WindowName WindowName
+        public override YxEWindowName WindowName
         {
-            get { return WindowName.Login; }
+            get { return YxEWindowName.Login; }
         }
 
         protected override IBaseModel YxBaseModel
@@ -28,10 +28,19 @@ namespace Assets.Scripts.Hall.View
 
         public UIInput UserName;
 
+        public UILabel RemberUserId;
+
         public UIInput UserPwd;
 
         public UIToggle RemberName;
-
+        /// <summary>
+        /// 手机号登陆
+        /// </summary>
+        public UIInput PhoneNumber;
+        /// <summary>
+        /// 验证
+        /// </summary>
+        public UIInput VerifyCode;
         /// <summary>
         /// 用户协议
         /// </summary>
@@ -45,23 +54,33 @@ namespace Assets.Scripts.Hall.View
         /// 微信
         /// </summary>
         public GameObject BtnWechat;
-
-        private void OnLoginEvent(object msg)
+        [Tooltip("是否需要自动登陆")]
+        public bool NeedAutoLogin = true;
+        protected override void OnStart()
         {
+            base.OnStart();
+#if UNITY_EDITOR || YX_DEVE
+            gameObject.AddComponent<YxDevelopLoginWindow>();
+#else 
+            if(YxDebug.IsDebug)
+            {
+                gameObject.AddComponent<YxDevelopLoginWindow>();
+            }       
+#endif
         }
 
         protected override void OnCreate()
         {
-            #region 初始化组件 
-            AddListien("onLogin", OnLoginEvent);
-            #endregion
             #region 本地信息
-
             var rember = false;
+            App.UserId = "";
+            if (RemberUserId!=null)
+            {
+                RemberUserId.text = Util.GetString(AppConst.PlayerPrefsUserIdStr);
+            }
             if (RemberName != null)
             {
-                
-                rember = Util.GetInt(AppConst.PlayerPrefsRemenberInt) == 1;
+                rember = Util.GetInt(AppConst.PlayerPrefsRemenberInt) == 1 || NeedAutoLogin;
                 RemberName.value = rember;
             }
             if (rember)
@@ -89,18 +108,20 @@ namespace Assets.Scripts.Hall.View
             if (!string.IsNullOrEmpty(App.Config.WxAppId) && Application.isMobilePlatform && App.Config.HasWechatLogin) //&& App.Config.HasWechatLogin)
             {
                 var wechatApi = Facade.Instance<WeChatApi>();
-                ChangeOtherLogin(wechatApi.InitWechat() && wechatApi.IsInstalledWechat() && wechatApi.IsCheckWechatApiLevel());
+                ChangeOtherLogin(wechatApi.NeedWechat() && wechatApi.InitWechat() && wechatApi.IsInstalledWechat() && wechatApi.IsCheckWechatApiLevel());
             }
             else
             {
                 ChangeOtherLogin(false);
             }
-#if !YX_DEVE && !UNITY_EDITOR
-            UserController.Instance.AutoLogin();
-#endif
-#endregion
+            #if !YX_DEVE && !UNITY_EDITOR
+            if (NeedAutoLogin)
+            {
+                UserController.Instance.AutoLogin();
+            }
+            #endif
+            #endregion
         }
-
 
 
         private void ChangeOtherLogin(bool isWechat)
@@ -112,7 +133,6 @@ namespace Assets.Scripts.Hall.View
                 if (isWechat)
                 {
                     Facade.Instance<WeChatApi>().InitWechat();
-                    
                 }
             }
         }
@@ -122,28 +142,49 @@ namespace Assets.Scripts.Hall.View
         /// </summary>
         public void OnLogin()
         {
-            if (string.IsNullOrEmpty(UserName.value))
+            if (IsNeedPopProtocol(UserAgementToggle))
             {
-                YxMessageBox.Show("用户名不能为空！");
                 return;
             }
-            if (string.IsNullOrEmpty(UserPwd.value))
+            OnLogin(UserName.value, UserPwd.value,RemberName != null && RemberName.value);
+        }
+
+        /// <summary>
+        /// 手机登录
+        /// </summary>
+        public void OnPhoneLogin()
+        {
+            if (IsNeedPopProtocol(UserAgementToggle))
             {
-                YxMessageBox.Show("密码不能为空！");
+                return;
+            }
+            OnLogin(PhoneNumber.value, VerifyCode.value,RemberName != null && RemberName.value,true);
+        }
+
+        private static void OnLogin(string userName,string pwd, bool remberName = true, bool isVcode = false)
+        {
+            
+            if (string.IsNullOrEmpty(userName))
+            {
+                YxWindowManager.ShowMessageWindow(isVcode?"手机号不能为空！":"用户名不能为空！");
+                return;
+            }
+            if (string.IsNullOrEmpty(pwd))
+            {
+                YxWindowManager.ShowMessageWindow(isVcode ?"请输入验证码" :"密码不能为空！");
                 return;
             }
             //HiddenWindow();
-            UserController.Instance.Login(UserName.value, UserPwd.value, RemberName != null && RemberName.value);
-        }
+            UserController.Instance.Login(userName, pwd, remberName, isVcode);
+        } 
 
         /// <summary>
         /// 游客登录
         /// </summary>
         public void OnVisitor()
         {
-            if (UserAgementToggle != null && UserAgementToggle.value==false)
+            if (IsNeedPopProtocol(UserAgementToggle))
             {
-                YxMessageBox.Show("必须同意用户协议");
                 return;
             }
             UserController.Instance.VisitorLogin();
@@ -155,7 +196,8 @@ namespace Assets.Scripts.Hall.View
         public void OnRester()
         {
             HiddenWindow();
-            PanelManager.ShowWindow(WindowName.Register);
+            CurPanelManager.ShowWindow(YxEWindowName.Register);
+            App.History.RecordHistory(YxEHistoryPathType.Register);
         }
 
         /// <summary>
@@ -163,84 +205,26 @@ namespace Assets.Scripts.Hall.View
         /// </summary>
         public void OnWeChatLogin()
         {
-            if (UserAgementToggle != null && UserAgementToggle.value == false)
+            if (IsNeedPopProtocol(UserAgementToggle))
             {
-                YxMessageBox.Show("必须同意用户协议");
                 return;
-            }
-
+            } 
             UserController.Instance.WeChatLogin();
         }
 
         protected override void OnShow(object o)
         {
             base.OnShow(o);
-            App.GameKey = App.HallName;
             CurtainManager.CloseCurtain();
         }
 
-#if UNITY_EDITOR || YX_DEVE
-        private bool _isShow;
-
-        protected void OnGUI()
+        public static bool IsNeedPopProtocol(UIToggle toggle)
         {
-            GlobalUtile.ResizeGUIMatrix();
-            var sh = Screen.height;
-            var fontStyle = new GUIStyle
-                {
-                    normal =
-                        {
-//                            background = null,
-                            textColor = Color.white
-                        }
-//                    fontSize = rowH
-                };  
-
-            GUILayout.BeginHorizontal();
-            if (GUI.Button(new Rect(0, 10, 10, sh), ""))
-            {
-                _isShow = !_isShow;
-            } 
-            GUILayout.EndHorizontal();
-
-            if (!_isShow) return;
-            const int gx = 30;
-            GUILayout.BeginHorizontal();
-            GUI.Label(new Rect(gx, 10, 40, 20), "IP", fontStyle);
-            var oldIp = GUI.TextField(new Rect(gx + 55, 10, 100, 20), PlayerPrefs.GetString("login_editor_ip"));
-            PlayerPrefs.SetString("login_editor_ip", oldIp);
-            var isUse = PlayerPrefs.GetInt("login_editor_use") == 1;
-            isUse = GUI.Toggle(new Rect(gx + 170, 10, 25, 25), isUse, "");
-            PlayerPrefs.SetInt("login_editor_use", isUse ? 1 : 0);
-            if (isUse)
-            {
-                App.DevGameServer = oldIp;
-            }
-            GUILayout.EndHorizontal();
-            GUILayout.BeginHorizontal();
-            GUI.Label(new Rect(gx, 35, 40, 20), "用户名", fontStyle);
-            var newName = GUI.TextField(new Rect(gx + 55, 35, 100, 20), PlayerPrefs.GetString("login_editor_userName"));
-            PlayerPrefs.SetString("login_editor_userName", newName);
-            UserName.value = newName;
-            GUILayout.EndHorizontal();
-            GUILayout.BeginHorizontal();
-            GUI.Label(new Rect(gx, 60, 40, 20), "密  码", fontStyle);
-            var pwd = GUI.TextField(new Rect(gx + 55, 60, 100, 20), PlayerPrefs.GetString("login_editor_userPwd"));
-            PlayerPrefs.SetString("login_editor_userPwd", pwd);
-            UserPwd.value = pwd;
-            GUILayout.EndHorizontal();
-            GUILayout.BeginHorizontal();
-            if (GUI.Button(new Rect(gx, 95, 40, 20), "登 录"))
-            { 
-                OnLogin();
-            }
-            if (GUI.Button(new Rect(gx + 90, 95, 40, 20), "游 客"))
-            {
-                OnVisitor();
-            }
-            GUILayout.EndHorizontal();
+            if (toggle == null) return false;
+            if (toggle.value) return false;
+            YxWindowManager.ShowMessageWindow("请同意用户协议，否则不能注册游戏！");
+            return true;
         }
-#endif
     }
 }
 

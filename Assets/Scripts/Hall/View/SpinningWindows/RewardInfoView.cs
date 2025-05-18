@@ -77,10 +77,7 @@ namespace Assets.Scripts.Hall.View.SpinningWindows
                     ShowCardInfo(awardMes);
                     break;
             }
-            if (CallBack != null)
-            {
-                CallBack(Data);
-            }
+            CallBack(Data);
         }
         private void ShowAddress(Dictionary<string, object> dic)
         {

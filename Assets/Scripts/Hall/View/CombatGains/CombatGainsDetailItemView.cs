@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using YxFramwork.Controller;
+using YxFramwork.Enums;
 using YxFramwork.Framework;
 
 namespace Assets.Scripts.Hall.View.CombatGains

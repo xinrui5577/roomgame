@@ -10,11 +10,7 @@
 */
 
 using System.Collections.Generic;
-using System.Linq;
-using com.yxixia.utile.YxDebug;
 using UnityEngine;
-using UnityEngine.Networking;
-using YxFramwork.Framework;
 
 namespace Assets.Scripts.Tea.House
 {
@@ -59,7 +55,7 @@ namespace Assets.Scripts.Tea.House
             }
         }
 
-        private List<Vector3> GetPosByNum(int num)
+        public List<Vector3> GetPosByNum(int num)
         {
             TableLayoutItem layout = Layouts.Find(item => item.SeatNum == num);
             if(layout==null)

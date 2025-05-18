@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Common.Windows;
+using UnityEngine;
 using YxFramwork.Common.Model;
 using YxFramwork.Framework.Core;
 using YxFramwork.Manager;
@@ -12,10 +13,14 @@ namespace Assets.Scripts.Hall.View
     /// </summary>
     public class TrumpetWindow : YxNguiWindow
     {
+        [Tooltip("喊话内容")]
         public UIInput InputLabel;
+        [Tooltip("喇叭剩余数Label")]
         public UILabel SurplusLabel;
+        [Tooltip("喇叭剩余数内容格式")]
         public string SurplusTip = "您还剩余 [ffff00]{0}[-] 个喇叭";
-
+        [Tooltip("喇叭id")]
+        public string TrumpetId = "item4_q";
         protected override void OnStart()
         {
             UpdateTrumpet();
@@ -25,7 +30,7 @@ namespace Assets.Scripts.Hall.View
         {
             if (SurplusLabel == null) return;
             var bp = UserInfoModel.Instance.BackPack;
-            var count = bp.GetItem("item4_q");
+            var count = bp.GetItem(TrumpetId);
             SurplusLabel.text = string.Format(SurplusTip, count);
         }
 
@@ -38,7 +43,7 @@ namespace Assets.Scripts.Hall.View
                 return;
             }
             var backPack = UserInfoModel.Instance.BackPack;
-            var count = backPack.GetItem("item4_q");
+            var count = backPack.GetItem(TrumpetId);
             if (count < 1)
             {
                 YxMessageBox.Show("喇叭个数不够，请到商城购买！");
@@ -50,16 +55,16 @@ namespace Assets.Scripts.Hall.View
                     {
                         var parm = new Dictionary<string, object>();
                         parm["msg"] = msg;
-                        Facade.Instance<TwManger>().SendAction("addHornNotice", parm, msgObj =>
+                        Facade.Instance<TwManager>().SendAction("addHornNotice", parm, msgObj =>
                             {
-                                if (!(msgObj is Dictionary<string, object>)) return;
                                 var msgDict = msgObj as Dictionary<string, object>;
+                                if (msgDict == null) { return;}
                                 if (!msgDict.ContainsKey("info")) return;
                                 var msgTemp = msgDict["info"];
                                 if (msgTemp != null) YxMessageBox.Show(msgTemp.ToString());
                             }); 
                     }
-                    backPack.DeleteItem("item4_q",1);
+                    backPack.DeleteItem(TrumpetId, 1);
                     UpdateTrumpet();
                     Close();
                 }, true, YxMessageBox.LeftBtnStyle | YxMessageBox.RightBtnStyle);

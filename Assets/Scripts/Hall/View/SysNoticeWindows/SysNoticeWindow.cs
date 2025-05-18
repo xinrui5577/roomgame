@@ -22,7 +22,7 @@ namespace Assets.Scripts.Hall.View.SysNoticeWindows
         protected override void OnAwake ()
         {
             var parm = new Dictionary<string, object>();
-            Facade.Instance<TwManger>().SendActions(new[] { ActionItemKey, NoticeItemKey }, parm, OnCallBack, false);
+            Facade.Instance<TwManager>().SendActions(new[] { ActionItemKey, NoticeItemKey }, parm, OnCallBack, false);
         }
 
         private void OnCallBack(object msg)

@@ -37,9 +37,8 @@ namespace Assets.Scripts.Hall.View.ShareWindow
                 {"bundle_id",Application.bundleIdentifier},
                 {"share_plat",((int)sp).ToString(CultureInfo.InvariantCulture) },
             };
-            Facade.Instance<TwManger>().SendAction("shareAwards", parm, str =>
+            Facade.Instance<TwManager>().SendAction("shareAwards", parm, str =>
             {
-                YxWindowManager.HideWaitFor();
                 YxDebug.Log("分享查询回数据:" + str.ToString());
                 var data = (Dictionary<string, object>)str;
                 SetDate(data["infoClient"].ToString(), data["awardCount"].ToString(),(bool)data["todayShare"],
@@ -67,16 +66,14 @@ namespace Assets.Scripts.Hall.View.ShareWindow
         /// </summary>
         public void OnShareSuccess(object msg) {
             //发送分享成功
-            YxWindowManager.ShowWaitFor();
             var parm = new Dictionary<string, object>
                 {
                 {"option", 2},
                 {"bundle_id", Application.bundleIdentifier},
                 {"share_plat", Id.ToString(CultureInfo.InvariantCulture)},
             };
-            Facade.Instance<TwManger>().SendAction("shareAwards", parm, str =>
+            Facade.Instance<TwManager>().SendAction("shareAwards", parm, str =>
             {
-                YxWindowManager.HideWaitFor();
                 var data = (Dictionary<string, object>)str;
                 if ((bool)data["enableAward"])
                 {
@@ -95,16 +92,14 @@ namespace Assets.Scripts.Hall.View.ShareWindow
         /// </summary>
         public void GetReward()
         {
-            YxWindowManager.ShowWaitFor();
             var parm = new Dictionary<string, object>
                 {
                 {"option",3},
                 {"bundle_id",Application.bundleIdentifier},
                 {"share_plat",Id.ToString(CultureInfo.InvariantCulture) },
             };
-            Facade.Instance<TwManger>().SendAction("shareAwards", parm, str =>
+            Facade.Instance<TwManager>().SendAction("shareAwards", parm, str =>
             {
-                YxWindowManager.HideWaitFor();
                 var data = (Dictionary<string, object>)str;
                 YxMessageBox.Show(data["awardInfo"].ToString());
                 UserController.Instance.GetBackPack();

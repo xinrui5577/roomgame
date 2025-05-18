@@ -21,7 +21,7 @@ namespace Assets.Scripts.Common.WebView
         {
             get
             {
-#if UNITY_IOS&&!UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
             return UniWebViewPlugin.ScreenHeight();
 #else
 
@@ -54,6 +54,8 @@ namespace Assets.Scripts.Common.WebView
 #endif
             }
         }
+
+        public static string JsInterFaceName { get; set; }
 
         /// <summary>
         /// Get the screen scale. In iOS or OS X Editor, it could be 1, 2 or 3 now, depending on the type of your screen.

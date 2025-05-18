@@ -19,6 +19,7 @@ using Object = System.Object;
 
 namespace Assets.Scripts.Hall.View.PageListWindow
 {
+    [Obsolete("优先使用YxPageListView和YxTabPageWindow组合处理,本脚本弃用,继承本脚本的功能会陆续修改")]
     public class YxPageListWindow : YxTabPageWindow
     {
         #region UI Param
@@ -29,6 +30,8 @@ namespace Assets.Scripts.Hall.View.PageListWindow
         public YxView ListItem;
         [Tooltip("ScrollView")]
         public UIScrollView ScrollView;
+        [Tooltip("有状态显示界面")]
+        public GameObject HasDataSign;
         [Tooltip("空状态显示界面")]
         public GameObject NoDataSign;
         #endregion
@@ -69,7 +72,7 @@ namespace Assets.Scripts.Hall.View.PageListWindow
         /// <summary>
         /// 总数
         /// </summary>
-        private int _totalCount;
+        protected int _totalCount;
 
         /// <summary>
         /// 当前页数据数量
@@ -137,7 +140,10 @@ namespace Assets.Scripts.Hall.View.PageListWindow
 
         protected override void OnShow()
         {
-            StartCoroutine(YxTools.WaitExcuteCalls(OnShowAction));
+            if (gameObject.activeInHierarchy)
+            {
+                StartCoroutine(OnShowAction.WaitExcuteCalls());
+            }
         }
 
         /// <summary>
@@ -151,7 +157,10 @@ namespace Assets.Scripts.Hall.View.PageListWindow
 
         protected override void OnHide()
         {
-            StartCoroutine(YxTools.WaitExcuteCalls(OnHideAction));
+            if (gameObject.activeInHierarchy)
+            {
+                StartCoroutine(YxTools.WaitExcuteCalls(OnHideAction));
+            }
         }
 
         #endregion
@@ -167,13 +176,17 @@ namespace Assets.Scripts.Hall.View.PageListWindow
         protected void DealPageData(PageRequestData data)
         {
             var showState = data.DataCount != 0;
-            YxTools.TrySetComponentValue(NoDataSign, !showState);
-            YxTools.TrySetComponentValue(Table.gameObject, showState);
+            NoDataSign.TrySetComponentValue(!showState);
+            HasDataSign.TrySetComponentValue(showState);
+            Table.gameObject.TrySetComponentValue(showState);
             if (_isFirst)
             {
                 _totalCount = data.TotalCount;
                 _perPageCount = data.PageCount;
-                StartCoroutine(YxTools.WaitExcuteCalls(OnFirstAction));
+                if (gameObject.activeInHierarchy)
+                {
+                    StartCoroutine(OnFirstAction.WaitExcuteCalls());
+                }
                 _isFirst = false;
             }
             _curCount += data.DataCount;
@@ -205,6 +218,7 @@ namespace Assets.Scripts.Hall.View.PageListWindow
             SetActionDic();
             if (ActionWithCacheKey)
             {
+                YxDebug.LogDictionary(ActionParam);
                 cacaheKey = YxTools.GetCacahKey(TabActionName,ActionParam);
             }
             YxTools.SendActionWithCacheKey(TabActionName, ActionParam, UpdateView, cacaheKey);
@@ -244,9 +258,10 @@ namespace Assets.Scripts.Hall.View.PageListWindow
 
         protected virtual void RefreshView(List<YxData> data, int startIndex = 0)
         {
+
             for (int i = startIndex, endIndex = data.Count + startIndex; i < endIndex; i++)
             {
-                var view = YxTools.GetChildView(i,ListItem,Table.transform);
+                var view = Table.transform.GetChildView(i, ListItem);
                 var itemData = data[i - startIndex];
                 view.Id = (IdAntitone? _totalCount - i :i+1).ToString();
                 view.UpdateView(itemData);
@@ -309,6 +324,7 @@ namespace Assets.Scripts.Hall.View.PageListWindow
         {
             _isFirst = true;
             _curPage = 0;
+            _curCount = 0;
             Items.Clear();
         }
 
@@ -387,10 +403,10 @@ namespace Assets.Scripts.Hall.View.PageListWindow
         protected override void ParseData(Dictionary<string, object> dic)
         {
             base.ParseData(dic);
-            YxTools.TryGetValueWitheKey(dic, out _dataCount, KeyCount);
-            YxTools.TryGetValueWitheKey(dic, out _pageCount, KeyPageCount);
-            YxTools.TryGetValueWitheKey(dic, out _pageNum, KeyPageNumber);
-            YxTools.TryGetValueWitheKey(dic, out _totalCount, KeyTotalCount);
+            dic.TryGetValueWitheKey(out _dataCount, KeyCount);
+            dic.TryGetValueWitheKey(out _pageCount, KeyPageCount);
+            dic.TryGetValueWitheKey(out _pageNum, KeyPageNumber);
+            dic.TryGetValueWitheKey(out _totalCount, KeyTotalCount);
         }
 
         /// <summary>
@@ -468,14 +484,14 @@ namespace Assets.Scripts.Hall.View.PageListWindow
 
         protected virtual List<YxData> GetDatas(List<object> list) 
         {
-            bool canChange = typeof(YxData).IsAssignableFrom(Type);
-            List<YxData> datas = new List<YxData>();
+            var canChange = typeof(YxData).IsAssignableFrom(Type);
+            var datas = new List<YxData>();
             if (canChange)
             {
                 for (int i = 0, count = list.Count; i < count; i++)
                 {
                     var paramData = list[i];
-                    YxData data = (YxData)Activator.CreateInstance(Type, new object[]
+                    var data = (YxData)Activator.CreateInstance(Type, new object[]
                     {
                         paramData
                     });
@@ -487,13 +503,13 @@ namespace Assets.Scripts.Hall.View.PageListWindow
 
         protected virtual Dictionary<string, YxData> GetDatas(Dictionary<string, object> dic)
         {
-            bool canChange = typeof(YxData).IsAssignableFrom(Type);
+            var canChange = typeof(YxData).IsAssignableFrom(Type);
             var datas = new Dictionary<string, YxData>();
             if (canChange)
             {
                 foreach (var item in dic)
                 {
-                    YxData data = (YxData)Activator.CreateInstance(
+                    var data = (YxData)Activator.CreateInstance(
                         Type, new object[]
                         {
                         item.Value
@@ -516,14 +532,14 @@ namespace Assets.Scripts.Hall.View.PageListWindow
         protected virtual void TryGetList(Dictionary<string, object> dic)
         {
             List<object> list;
-            YxTools.TryGetValueWitheKey(dic, out list,KeyData);
+            dic.TryGetValueWitheKey(out list,KeyData); 
             Items = GetDatas(list);
         }
 
         protected virtual void TryGetDic(Dictionary<string, object> dic)
         {
             Dictionary<string, object> dataDic;
-            YxTools.TryGetValueWitheKey(dic, out dataDic, KeyData);
+            dic.TryGetValueWitheKey(out dataDic, KeyData);
             Dic = GetDatas(dataDic);
         }
     }

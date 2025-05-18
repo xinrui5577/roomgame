@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Assets.Scripts.Common;  
+﻿using System.Collections.Generic;
+using Assets.Scripts.Common.Utils;
+using Assets.Scripts.Tea;
 using UnityEngine;
 using YxFramwork.Common;
 using YxFramwork.Common.Model;
@@ -14,28 +14,56 @@ using YxFramwork.View;
 namespace Assets.Scripts.Hall.View.TaskWindows
 {
     /// <summary>
-    /// todo 待修改
+    /// 分享界面（通用分享与茶馆内分享公用）
     /// </summary>
     public class TaskShareView : TaskBasseView
-    {
+    {   
+        [Tooltip("二维码")]
+        public UITexture QrCodeTexture;
+        [Tooltip("分享提示信息")]
+        public UILabel ShareNoticeInfo;
+        [Tooltip("获取奖励按钮")]
+        public UIButton GetRewordBtn;
+        [Tooltip("分享时是否带茶馆信息（茶馆分享使用）")]
+        public bool ShareWithTeaInfo;
+        [Tooltip("分享提示格式")]
+        public string ShareNoticeFormat = "分享到朋友圈累计{0}次(每天一次)可获得{2}({1}/{0})";
         /// <summary>
-        /// 分享的信息
+        /// Key 有效分享次数
         /// </summary>
-        [SerializeField]
-        private UILabel _shareInfo;
+        private const string KeyValuedShare = "validShare";
         /// <summary>
-        /// 获取奖励按钮
+        /// Key 领取奖励所需次数
         /// </summary>
-        [SerializeField]
-        private UIButton _getRewordBtn;
+        private const string KeyAwardNeedTime = "awardTime";
         /// <summary>
-        /// 当前的分享次数
+        /// Key 是否允许领取奖励
         /// </summary>
-        private int _curNum;
+        private const string KeyEnableAward = "enableAward";
         /// <summary>
-        /// 目标次数
+        /// key 奖励信息
         /// </summary>
-        private int _targetNum;
+        private const string KeyAwardInfo = "infoClient";
+        /// <summary>
+        /// Key分享选项 1.分享信息查询 2.分享成功 3.领取分享奖励
+        /// </summary>
+        private const string KeyShareOption = "option";
+        /// <summary>
+        /// Key 分享平台
+        /// </summary>
+        private const string KeySharePlatform = "share_plat";
+        /// <summary>
+        /// Key 分享bundle id 
+        /// </summary>
+        private const string KeyShareBundleId = "bundle_id";
+        /// <summary>
+        /// Key获得奖励信息
+        /// </summary>
+        private const string KeyGetAwardInfo = "awardInfo";
+        /// <summary>
+        /// Key 分享请求名称
+        /// </summary>
+        private const string KeyShareAwardAction = "shareAwards";
 
         #region 微信分享
         /// <summary>
@@ -43,42 +71,60 @@ namespace Assets.Scripts.Hall.View.TaskWindows
         /// </summary>
         public void OnShareWeChat()
         {
-            var wechatApi = Facade.Instance<WeChatApi>();
-            if (!wechatApi.CheckWechatValidity()) return;
-            UserController.Instance.GetShareInfo(SendWechatShare);
+            UserController.Instance.GetShareInfo(
+                GetDicData(SharePlat.WxSenceSession),
+                SendWechatShare,
+                ShareType.Website,
+                SharePlat.WxSenceSession,
+                null,
+                App.GameKey
+                );
+        }
+
+
+        #region Life Cricle
+
+        private Dictionary<string,object> GetDicData(SharePlat plat)
+        {
+            var dic = new Dictionary<string, object>();
+            dic.Add(YxTools.KeySharePlat, plat);
+            if (ShareWithTeaInfo)
+            {
+                dic.Add(YxTools.KeyTeaId, TeaUtil.CurTeaId);
+            }
+            return dic;
         }
 
         protected override void OnFreshView()
         {
             base.OnFreshView();
-            if (Data == null) return;
-            var data = (Dictionary<string, object>)Data;
-            SetSharedInfo(int.Parse(data["validShare"].ToString()),
-                          int.Parse(data["awardTime"].ToString()),
-                          (bool)data["enableAward"],
-                          data["infoClient"].ToString());
+            var data = Data as Dictionary<string, object>;
+            if (data == null) return;
+            int validShare;
+            int awardTime;
+            bool enableAward;
+            string infoClient;
+            data.TryGetValueWitheKey(out validShare, KeyValuedShare);
+            data.TryGetValueWitheKey(out awardTime, KeyAwardNeedTime);
+            data.TryGetValueWitheKey(out enableAward, KeyEnableAward);
+            data.TryGetValueWitheKey(out infoClient, KeyAwardInfo);
+            SetSharedInfo(validShare, awardTime, enableAward, infoClient);
         }
 
         protected override void OnAwake()
         {
             base.OnAwake();
             //打开分享前查询分享次数
-            YxWindowManager.ShowWaitFor();
             var parm = new Dictionary<string, object>()
                         {
-                            {"option",1},
-                            {"bundle_id",Application.bundleIdentifier},
-                            {"share_plat",SharePlat.WxSenceTimeLine.ToString() },
+                            {KeyShareOption,1},
+                            {KeyShareBundleId,Application.bundleIdentifier},
+                            {KeySharePlatform,SharePlat.WxSenceTimeLine.ToString() },
                         };
-            Facade.Instance<TwManger>().SendAction("shareAwards", parm, str =>
-            {
-                YxWindowManager.HideWaitFor();
-                Data = str;
-                OnFreshView();
-            });//TODO 待修复
+            Facade.Instance<TwManager>().SendAction(KeyShareAwardAction, parm, UpdateView);
         }
 
-        protected override void OnEnableEx()
+        protected override void OnEnable()
         {
             OnShow();
         }
@@ -86,27 +132,34 @@ namespace Assets.Scripts.Hall.View.TaskWindows
         protected override void OnShow()
         {
             base.OnShow();
-            if (_shareInfo!=null)
+            if (ShareNoticeInfo != null)
             {
-                _shareInfo.gameObject.SetActive(App.AppStyle.Equals(EAppStyle.Normal));
-                _shareInfo.text = "";
+                ShareNoticeInfo.gameObject.SetActive(App.AppStyle.Equals(YxEAppStyle.Normal));
+                ShareNoticeInfo.text = "";
             }
-            if (_getRewordBtn!=null)
+            if (GetRewordBtn != null)
             {
-                _getRewordBtn.gameObject.SetActive(App.AppStyle.Equals(EAppStyle.Normal));
-                _getRewordBtn.isEnabled = false;
+                GetRewordBtn.gameObject.SetActive(App.AppStyle.Equals(YxEAppStyle.Normal));
+                GetRewordBtn.isEnabled = false;
             }
         }
+        #endregion
 
+        /// <summary>
+        /// 微信分享信息
+        /// </summary>
         private ShareInfo _curShareInfo;
-        private void SendWechatShare(ShareInfo info)
+
+        /// <summary>
+        /// 获取微信分享数据
+        /// </summary>
+        /// <param name="info"></param>
+        private void  SendWechatShare(ShareInfo info)
         { 
             var wechatApi = Facade.Instance<WeChatApi>();
-            var appId = App.Config.WxAppId;
-            if (string.IsNullOrEmpty(appId)) return;
-            _curShareInfo = info;
             wechatApi.InitWechat();
-            info.Title = string.Format("{0}{1}", UserInfoModel.Instance.UserInfo.NickM, info.Title);
+            if (!wechatApi.CheckWechatValidity()) return;
+            _curShareInfo = info;
             wechatApi.ShareContent(info, OnShareSuccess, null, OnShareFailed);
         }
         /// <summary>
@@ -118,52 +171,48 @@ namespace Assets.Scripts.Hall.View.TaskWindows
         /// <param name="award"></param>
         public void SetSharedInfo(int cur, int target, bool receive, string award)
         {
-            _curNum = cur;
-            _targetNum = target;
-            if (_shareInfo!=null)
+            ShareNoticeInfo.TrySetComponentValue(string.Format(ShareNoticeFormat, target, cur, award));
+            if (GetRewordBtn!=null)
             {
-                _shareInfo.text = string.Format("分享到朋友圈累计{0}次（每天一次）可获得{2}（{1}/{0}）", _targetNum, _curNum, award);
+                GetRewordBtn.isEnabled = receive;
             }
-            if (_getRewordBtn!=null)
-            {
-                _getRewordBtn.isEnabled = receive;
-            }   
         }
         /// <summary>
         /// 领取分享奖励（分享按钮点击）
         /// </summary>
         public void GetReward()
         {
-            YxWindowManager.ShowWaitFor();
             var parm = new Dictionary<string, object>()
                         {
-                            {"option",3},
-                            {"bundle_id",Application.bundleIdentifier},
-                            {"share_plat",SharePlat.WxSenceTimeLine.ToString() },
+                            {KeyShareOption,3},
+                            {KeyShareBundleId,Application.bundleIdentifier},
+                            {KeySharePlatform,SharePlat.WxSenceTimeLine.ToString() },
                         };
-            Facade.Instance<TwManger>().SendAction("shareAwards", parm, str =>
+            Facade.Instance<TwManager>().SendAction(KeyShareAwardAction, parm, str =>
             {
-                YxWindowManager.HideWaitFor();
                 UpdateView(str);
                 var data = (Dictionary<string, object>)str;
-                ShowInfos(str,data["awardInfo"].ToString());
-                UserController.Instance.GetBackPack(callBack => YxMsgCenterHandler.GetIntance().FireEvent(string.Format("{0}_OnChange", typeof(UserInfoModel).Name)));
+                ShowInfos(str,data[KeyGetAwardInfo].ToString());
+                UserController.Instance.GetBackPack(callBack => Facade.EventCenter.DispatchEvent<string,object>(string.Format("{0}_OnChange", typeof(UserInfoModel).Name)));
             });
         }
-        private void OnShareFailed(string obj)
+        private void OnShareFailed(string info)
         {
-            YxMessageBox.Show("非常抱歉，分享失败了！");
+            YxWindowManager.ShowMessageWindow(info);
         }
 
         protected virtual void OnShareSuccess(object msg)
         {
-            var parm = new Dictionary<string, object>()
+            if (!ShareWithTeaInfo) //茶馆内部分享无奖励领取（目前需求）
+            {
+                var parm = new Dictionary<string, object>()
                         {
-                            {"option",2},
-                            {"bundle_id",Application.bundleIdentifier},
-                            {"share_plat",_curShareInfo.Plat.ToString() },
+                            {KeyShareOption,2},
+                            {KeyShareBundleId,Application.bundleIdentifier},
+                            {KeySharePlatform,_curShareInfo.Plat.ToString() },
                         };
-            Facade.Instance<TwManger>().SendAction("shareAwards", parm, UpdateView); 
+                Facade.Instance<TwManager>().SendAction(KeyShareAwardAction, parm, UpdateView);
+            }
         }
 
         #endregion
@@ -174,9 +223,15 @@ namespace Assets.Scripts.Hall.View.TaskWindows
         /// </summary>
         public void OnSharefriends()
         {
-            var wechatApi = Facade.Instance<WeChatApi>();
-            if (!wechatApi.CheckWechatValidity()) return;
-            UserController.Instance.GetShareInfo(SendWechatShare, ShareType.Website, SharePlat.WxSenceTimeLine);
+            UserController.Instance.GetShareInfo
+                (
+                   GetDicData(SharePlat.WxSenceTimeLine),
+                   SendWechatShare,
+                   ShareType.Website,
+                   SharePlat.WxSenceTimeLine,
+                   null,
+                   App.GameKey
+                );
         }
         #endregion
 

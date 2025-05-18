@@ -4,38 +4,38 @@
         <name>YxUtile</name>
     </assembly>
     <members>
-        <member name="T:YxFramwork._7zip.Compress.LzmaAlone.LzmaBench">
+        <member name="T:com.yxixia.utile._7zip.Compress.LzmaAlone.LzmaBench">
             <summary>
             LZMA Benchmark
             </summary>
         </member>
-        <member name="T:YxFramwork._7zip.Compress.LzmaAlone.Properties.Resources">
+        <member name="T:com.yxixia.utile._7zip.Compress.LzmaAlone.Properties.Resources">
             <summary>
                A strongly-typed resource class, for looking up localized strings, etc.
             </summary>
         </member>
-        <member name="P:YxFramwork._7zip.Compress.LzmaAlone.Properties.Resources.ResourceManager">
+        <member name="P:com.yxixia.utile._7zip.Compress.LzmaAlone.Properties.Resources.ResourceManager">
             <summary>
                Returns the cached ResourceManager instance used by this class.
             </summary>
         </member>
-        <member name="P:YxFramwork._7zip.Compress.LzmaAlone.Properties.Resources.Culture">
+        <member name="P:com.yxixia.utile._7zip.Compress.LzmaAlone.Properties.Resources.Culture">
             <summary>
                Overrides the current thread's CurrentUICulture property for all
                resource lookups using this strongly typed resource class.
             </summary>
         </member>
-        <member name="F:YxFramwork._7zip.Compress.LZMA.Decoder._enable">
+        <member name="F:com.yxixia.utile._7zip.Compress.LZMA.Decoder._enable">
             <summary>
             是否可用
             </summary>
         </member>
-        <member name="M:YxFramwork._7zip.Compress.LZMA.Decoder.Stop">
+        <member name="M:com.yxixia.utile._7zip.Compress.LZMA.Decoder.Stop">
             <summary>
             停止
             </summary>
         </member>
-        <member name="T:YxFramwork._7zip.DataErrorException">
+        <member name="T:com.yxixia.utile._7zip.DataErrorException">
             <summary>
             7Zip压缩解压
             </summary>
@@ -43,12 +43,12 @@
             The exception that is thrown when an error in input stream occurs during decoding.
             </summary>
         </member>
-        <member name="T:YxFramwork._7zip.InvalidParamException">
+        <member name="T:com.yxixia.utile._7zip.InvalidParamException">
             <summary>
             The exception that is thrown when the value of an argument is outside the allowable range.
             </summary>
         </member>
-        <member name="M:YxFramwork._7zip.ICodeProgress.SetProgress(System.Int64,System.Int64)">
+        <member name="M:com.yxixia.utile._7zip.ICodeProgress.SetProgress(System.Int64,System.Int64)">
             <summary>
             Callback progress.
             </summary>
@@ -59,7 +59,7 @@
             output size. -1 if unknown.
             </param>
         </member>
-        <member name="M:YxFramwork._7zip.ICoder.Code(System.IO.Stream,System.IO.Stream,System.Int64,System.Int64,YxFramwork._7zip.ICodeProgress)">
+        <member name="M:com.yxixia.utile._7zip.ICoder.Code(System.IO.Stream,System.IO.Stream,System.Int64,System.Int64,com.yxixia.utile._7zip.ICodeProgress)">
             <summary>
             Codes streams.
             </summary>
@@ -78,74 +78,74 @@
             <param name="progress">
             callback progress reference.
             </param>
-            <exception cref="T:YxFramwork._7zip.DataErrorException">
+            <exception cref="T:com.yxixia.utile._7zip.DataErrorException">
             if input stream is not valid
             </exception>
         </member>
-        <member name="T:YxFramwork._7zip.CoderPropID">
+        <member name="T:com.yxixia.utile._7zip.CoderPropID">
             <summary>
             Provides the fields that represent properties idenitifiers for compressing.
             </summary>
         </member>
-        <member name="F:YxFramwork._7zip.CoderPropID.DefaultProp">
+        <member name="F:com.yxixia.utile._7zip.CoderPropID.DefaultProp">
             <summary>
             Specifies default property.
             </summary>
         </member>
-        <member name="F:YxFramwork._7zip.CoderPropID.DictionarySize">
+        <member name="F:com.yxixia.utile._7zip.CoderPropID.DictionarySize">
             <summary>
             Specifies size of dictionary.
             </summary>
         </member>
-        <member name="F:YxFramwork._7zip.CoderPropID.UsedMemorySize">
+        <member name="F:com.yxixia.utile._7zip.CoderPropID.UsedMemorySize">
             <summary>
             Specifies size of memory for PPM*.
             </summary>
         </member>
-        <member name="F:YxFramwork._7zip.CoderPropID.Order">
+        <member name="F:com.yxixia.utile._7zip.CoderPropID.Order">
             <summary>
             Specifies order for PPM methods.
             </summary>
         </member>
-        <member name="F:YxFramwork._7zip.CoderPropID.BlockSize">
+        <member name="F:com.yxixia.utile._7zip.CoderPropID.BlockSize">
             <summary>
             Specifies Block Size.
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "F:YxFramwork._7zip.CoderPropID.PosStateBits" -->
-        <!-- Badly formed XML comment ignored for member "F:YxFramwork._7zip.CoderPropID.LitContextBits" -->
-        <!-- Badly formed XML comment ignored for member "F:YxFramwork._7zip.CoderPropID.LitPosBits" -->
-        <member name="F:YxFramwork._7zip.CoderPropID.NumFastBytes">
+        <!-- Badly formed XML comment ignored for member "F:com.yxixia.utile._7zip.CoderPropID.PosStateBits" -->
+        <!-- Badly formed XML comment ignored for member "F:com.yxixia.utile._7zip.CoderPropID.LitContextBits" -->
+        <!-- Badly formed XML comment ignored for member "F:com.yxixia.utile._7zip.CoderPropID.LitPosBits" -->
+        <member name="F:com.yxixia.utile._7zip.CoderPropID.NumFastBytes">
             <summary>
             Specifies number of fast bytes for LZ*.
             </summary>
         </member>
-        <member name="F:YxFramwork._7zip.CoderPropID.MatchFinder">
+        <member name="F:com.yxixia.utile._7zip.CoderPropID.MatchFinder">
             <summary>
             Specifies match finder. LZMA: "BT2", "BT4" or "BT4B".
             </summary>
         </member>
-        <member name="F:YxFramwork._7zip.CoderPropID.MatchFinderCycles">
+        <member name="F:com.yxixia.utile._7zip.CoderPropID.MatchFinderCycles">
             <summary>
             Specifies the number of match finder cyckes.
             </summary>
         </member>
-        <member name="F:YxFramwork._7zip.CoderPropID.NumPasses">
+        <member name="F:com.yxixia.utile._7zip.CoderPropID.NumPasses">
             <summary>
             Specifies number of passes.
             </summary>
         </member>
-        <member name="F:YxFramwork._7zip.CoderPropID.Algorithm">
+        <member name="F:com.yxixia.utile._7zip.CoderPropID.Algorithm">
             <summary>
             Specifies number of algorithm.
             </summary>
         </member>
-        <member name="F:YxFramwork._7zip.CoderPropID.NumThreads">
+        <member name="F:com.yxixia.utile._7zip.CoderPropID.NumThreads">
             <summary>
             Specifies the number of threads.
             </summary>
         </member>
-        <member name="F:YxFramwork._7zip.CoderPropID.EndMarker">
+        <member name="F:com.yxixia.utile._7zip.CoderPropID.EndMarker">
             <summary>
             Specifies mode with end marker.
             </summary>
@@ -155,12 +155,15 @@
             
             </summary>
         </member>
-        <member name="M:com.yxixia.utile.FileTools.FileHelper.CopyFolder(System.String,System.String)">
+        <member name="M:com.yxixia.utile.FileTools.FileHelper.CopyFolder(System.String,System.String,System.String,System.Boolean,System.Boolean)">
             <summary>
             
             </summary>
-            <param name="sourcePath"></param>
-            <param name="copyPath"></param>
+            <param name="sourcePath">原路径</param>
+            <param name="copyPath">拷贝路径</param>
+            <param name="filters">过滤内容</param>
+            <param name="isContain"></param>
+            <param name="copyInRoot"></param>
         </member>
         <member name="M:com.yxixia.utile.FileTools.FileHelper.DeleteFolder(System.String)">
             <summary>
@@ -168,24 +171,62 @@
             </summary>
             <param name="path"></param>
         </member>
+        <member name="M:com.yxixia.utile.FileTools.FileHelper.IsFileInUse(System.String)">
+            <summary>
+            文件是否被占用
+            </summary>
+            <param name="fileName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.FileHelper.RenameFolder(System.String,System.String)">
+            <summary>
+            更改文件夹名称
+            </summary>
+            <param name="src"></param>
+            <param name="newName"></param>
+        </member>
         <member name="T:com.yxixia.utile.FileTools.PropertyUtile">
             <summary>
             配置文件解析器
             </summary>
         </member>
-        <member name="M:com.yxixia.utile.FileTools.PropertyUtile.ReadFile(System.String)">
+        <member name="M:com.yxixia.utile.FileTools.PropertyUtile.ReadFile(System.String,System.Collections.Generic.Dictionary{System.String,System.String}@,System.Char)">
             <summary>
             读取内容
             </summary>
             <param name="path"></param>
+            <param name="dict"></param>
+            <param name="split"></param>
             <returns>返回信息</returns>
         </member>
-        <member name="M:com.yxixia.utile.FileTools.PropertyUtile.ReadFromString(System.String,System.Collections.IDictionary)">
+        <member name="M:com.yxixia.utile.FileTools.PropertyUtile.ReadFromString(System.String,System.Collections.IDictionary,System.Char,System.Int32)">
             <summary>
-            
+            将文本‘=’格式的  复制到字典中
             </summary>
             <param name="info"></param>
             <param name="dict"></param>
+            <param name="split"></param>
+            <param name="peekLine"></param>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.PropertyUtile.ReadFromString(System.String,System.Func{System.String,System.String,System.Boolean},System.Char,System.Int32)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.PropertyUtile.ResolveInfo(System.String,System.Collections.IDictionary,System.Char)">
+            <summary>
+            解析
+            </summary>
+            <param name="info"></param>
+            <param name="dict"></param>
+            <param name="split"></param>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.PropertyUtile.ResolveInfo(System.String,System.Char)">
+            <summary>
+            解析
+            </summary>
+            <param name="info"></param>
+            <param name="split"></param>
         </member>
         <member name="M:com.yxixia.utile.FileTools.PropertyUtile.WriteFile(System.Collections.Generic.Dictionary{System.String,System.String},System.String)">
             <summary>
@@ -200,10 +241,61 @@
             
             </summary>
         </member>
+        <member name="M:com.yxixia.utile.FileTools.ZipHelper.CompressFile(System.String)">
+            <summary>
+            压缩文件
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.ZipHelper.DecompressFile(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="path"></param>
+            <param name="extension"></param>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.ZipHelper.DecompressFilesInDirectory(System.String)">
+             <summary>
+             解压文件夹中的文件 
+            [MenuItem("Compress/Decompress Files In Directory")]
+             </summary>
+             <param name="path"></param>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.ZipHelper.CompressFileLzma(System.String,System.String,com.yxixia.utile._7zip.ICodeProgress)">
+            <summary>
+            使用LZMA算法压缩文件
+            </summary>
+            <param name="inFile"></param>
+            <param name="outFile"></param>
+            <param name="progress"></param>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.ZipHelper.DecompressFileLzma(System.String,System.String,com.yxixia.utile._7zip.ICodeProgress)">
+            <summary>
+            使用LZMA算法解压文件
+            </summary>
+            <param name="inFile"></param>
+            <param name="outFile"></param>
+            <param name="progress"></param>
+        </member>
         <member name="M:com.yxixia.utile.FileTools.ZipHelper.StopDecompress">
             <summary>
             停止解压
             </summary>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.ZipHelper.CopyAll(System.IO.DirectoryInfo,System.IO.DirectoryInfo,System.Collections.ArrayList)">
+            <summary>
+             复制源文件夹到目标文件夹
+            </summary>
+            <param name="source"></param>
+            <param name="target"></param>
+            <param name="extensions"></param>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.ZipHelper.ListFiles(System.IO.FileSystemInfo,System.Boolean)">
+            <summary>
+            遍历文件夹中的所有文件，压缩或解压缩
+            </summary>
+            <param name="info"></param>
+            <param name="isCompress"></param>
         </member>
         <member name="M:com.yxixia.utile.FileTools.ZipHelper.CompressDirectory(System.String,System.String,System.Int32,System.String,System.Int32)">
             <summary>
@@ -232,6 +324,286 @@
             <param name="zipFilePath">解压的zip文件路径</param>
             <param name="extractPath">解压到的文件夹路径</param>
             <param name="bufferSize">读取文件的缓冲区大小</param>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.ZipHelper.UnzipFile(System.String,System.String,System.String,com.yxixia.utile.FileTools.UnzipCallback)">
+            <summary>
+            解压Zip包
+            </summary>
+            <param name="filePathName">Zip包的文件路径名</param>
+            <param name="outputPath">解压输出路径</param>
+            <param name="password">解压密码</param>
+            <param name="unzipCallback">UnzipCallback对象，负责回调</param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.ZipHelper.UnzipFile(System.IO.Stream,System.String,System.String,com.yxixia.utile.FileTools.UnzipCallback)">
+            <summary>
+            解压Zip包
+            </summary>
+            <param name="inputStream">Zip包输入流</param>
+            <param name="outputPath">解压输出路径</param>
+            <param name="password">解压密码</param>
+            <param name="unzipCallback">UnzipCallback对象，负责回调</param>
+            <returns></returns>
+        </member>
+        <member name="T:com.yxixia.utile.FileTools.UnzipCallback">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.UnzipCallback.OnPreUnzip(ICSharpCode.SharpZipLib.Zip.ZipEntry)">
+            <summary>
+            解压单个文件或文件夹前执行的回调
+            </summary>
+            <param name="entry"></param>
+            <returns>如果返回true，则压缩文件或文件夹，反之则不压缩文件或文件夹</returns>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.UnzipCallback.OnPostUnzip(ICSharpCode.SharpZipLib.Zip.ZipEntry)">
+            <summary>
+            解压单个文件或文件夹后执行的回调
+            </summary>
+            <param name="entry"></param>
+        </member>
+        <member name="M:com.yxixia.utile.FileTools.UnzipCallback.OnFinished(System.Boolean)">
+            <summary>
+            解压执行完毕后的回调
+            </summary>
+            <param name="result">true表示解压成功，false表示解压失败</param>
+        </member>
+        <member name="T:com.yxixia.utile.Utiles.ArrayHelper">
+            <summary>
+            数组辅助类
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.ArrayHelper.GetElement``1(``0[],System.Int32)">
+            <summary>
+            获取数组的第index 元素，如果不能存在返回null
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="arr"></param>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="T:com.yxixia.utile.Utiles.DictionaryHelper">
+            <summary>
+            字典助手
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.DictionaryHelper.Parse(System.Collections.IDictionary,System.Object,System.Int32@)">
+            <summary>
+            从字典中获取int
+            </summary>
+            <param name="dict"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.DictionaryHelper.Parse(System.Collections.IDictionary,System.Object,System.Boolean@)">
+            <summary>
+            从字典中获取bool
+            </summary>
+            <param name="dict"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.DictionaryHelper.Parse(System.Collections.IDictionary,System.Object,System.Single@)">
+            <summary>
+            从字典中获取float
+            </summary>
+            <param name="dict"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.DictionaryHelper.Parse(System.Collections.IDictionary,System.Object,System.Int64@)">
+            <summary>
+            从字典中获取long
+            </summary>
+            <param name="dict"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.DictionaryHelper.Parse(System.Collections.IDictionary,System.Object,System.Double@)">
+            <summary>
+            从字典中获取double
+            </summary>
+            <param name="dict"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.DictionaryHelper.Parse(System.Collections.IDictionary,System.Object,System.Int16@)">
+            <summary>
+            从字典中获取short
+            </summary>
+            <param name="dict"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.DictionaryHelper.Parse(System.Collections.IDictionary,System.Object,System.String@)">
+            <summary>
+            从字典中获取string
+            </summary>
+            <param name="dict"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.DictionaryHelper.Parse(System.Collections.IDictionary,System.Object,System.Char@)">
+            <summary>
+            从字典中获取string
+            </summary>
+            <param name="dict"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.DictionaryHelper.Parse(System.Collections.IDictionary,System.Object,System.DateTime@)">
+            <summary>
+            日期
+            </summary>
+            <param name="dict"></param>
+            <param name="key"></param>
+            <param name="dateTime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.DictionaryHelper.Parse``1(System.Collections.IDictionary,System.Object,``0@)">
+            <summary>
+            从字典中获取class
+            </summary>
+            <typeparam name="T">class类型</typeparam>
+            <param name="dict"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.DictionaryHelper.ParseEnum``1(System.Collections.IDictionary,System.Object,``0@)">
+            <summary>
+            从字典中获取Enum
+            </summary>
+            <typeparam name="T">enum类型</typeparam>
+            <param name="dict"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.DictionaryHelper.ParseList``1(System.Collections.IDictionary,System.Object,System.Collections.Generic.List{``0}@)">
+            <summary>
+            从字典中获取list
+            </summary>
+            <typeparam name="T">list包含的类型</typeparam>
+            <param name="dict"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.DictionaryHelper.ParseDict``2(System.Collections.IDictionary,System.Object,System.Collections.Generic.Dictionary{``0,``1}@)">
+            <summary>
+            从字典中获取dict
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TK"></typeparam>
+            <param name="dict"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.DictionaryHelper.Foreach``2(System.Collections.Generic.IDictionary{``0,``1},System.Action{``0,``1},System.Boolean)">
+            <summary>
+            循环遍历字典
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TK"></typeparam>
+            <param name="dict"></param>
+            <param name="action"></param>
+            <param name="needDelete"></param>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.DictionaryHelper.ReplaceKey``2(System.Collections.Generic.IDictionary{``0,``1},``0,``0)">
+            <summary>
+            替换key
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TK"></typeparam>
+            <param name="dict"></param>
+            <param name="oldKey"></param>
+            <param name="newKey"></param>
+        </member>
+        <member name="T:com.yxixia.utile.Utiles.GameObjectUtile">
+            <summary>
+            GameObject的工具类
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GameObjectUtile.Instantiate(UnityEngine.GameObject,UnityEngine.Transform)">
+            <summary>
+            实例化
+            </summary> 
+            <param name="prefabObj"></param>
+            <param name="parentTs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GameObjectUtile.Instantiate``1(``0,UnityEngine.Transform)">
+            <summary>
+            实例化
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="prefabObj"></param>
+            <param name="parentTs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GameObjectUtile.ResetTransformInfo(UnityEngine.Transform,UnityEngine.Transform)">
+            <summary>
+            重置Transform的父类，位置，缩放，旋转
+            </summary>
+            <param name="ts"></param>
+            <param name="parentTs"></param>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GameObjectUtile.ResetTransform(UnityEngine.Transform)">
+            <summary>
+            重置ts
+            </summary>
+            <param name="ts">要重置的transform</param>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GameObjectUtile.DisplayComponent(System.Collections.Generic.IList{UnityEngine.GameObject},System.Boolean)">
+            <summary>
+            组件
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="list"></param>
+            <param name="isShow"></param>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GameObjectUtile.DisplayComponent``1(System.Collections.Generic.IList{``0},System.Boolean)">
+            <summary>
+            组件
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="list"></param>
+            <param name="isShow"></param>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GameObjectUtile.SetActive``1(``0,System.Boolean)">
+            <summary>
+            激活mono对象
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="mono"></param>
+            <param name="isActivet"></param>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GameObjectUtile.CreateContainer(UnityEngine.Transform,System.String)">
+            <summary>
+            创建容器
+            </summary>
+            <param name="parentTs"></param>
+            <param name="goName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GameObjectUtile.CreateMonoContainer``1(UnityEngine.Transform,System.String)">
+            <summary>
+            创建容器
+            </summary>
+            <param name="parentTs"></param>
+            <param name="goName"></param>
+            <returns></returns>
         </member>
         <member name="T:com.yxixia.utile.Utiles.GlobalUtile">
             <summary>
@@ -290,16 +662,18 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:com.yxixia.utile.Utiles.GlobalUtile.ResizeGUIMatrix(System.Single,System.Single)">
-            <summary>
-            Gui缩放
-            </summary>
-        </member>
         <member name="M:com.yxixia.utile.Utiles.GlobalUtile.GetColorFromString(System.String)">
             <summary>
             字符串获取颜色
             </summary>
             <param name="argbhex">格式（#rrggbbaa）</param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GlobalUtile.ColorToHex(UnityEngine.Color)">
+            <summary>
+            转变颜色为字符串
+            </summary>
+            <param name="color"></param>
             <returns></returns>
         </member>
         <member name="M:com.yxixia.utile.Utiles.GlobalUtile.GetUrlWithNoCache(System.String)">
@@ -314,6 +688,20 @@
             是否url
             </summary>
             <param name="url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GlobalUtile.CaptureScreenshot">
+            <summary>
+            截屏
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GlobalUtile.GetAnimationClip(UnityEngine.Animator,System.String)">
+            <summary>
+            获得动画
+            </summary>
+            <param name="animator"></param>
+            <param name="clipName"></param>
             <returns></returns>
         </member>
         <member name="M:com.yxixia.utile.Utiles.GlobalUtile.ReduceNumber(System.Double,System.Boolean)">
@@ -344,6 +732,130 @@
             win平台
             </summary>
         </member>
+        <member name="T:com.yxixia.utile.Utiles.GuiUtile">
+            <summary>
+            gui 工具
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.Utiles.GuiUtile.GuiWidth">
+            <summary>
+            gui默认宽度
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.Utiles.GuiUtile.GuiHeight">
+            <summary>
+            gui默认高度
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GuiUtile.BeginUiResizing(System.Single,System.Single)">
+            <summary>
+            开始缩放Gui
+            </summary>
+            <param name="width"></param>
+            <param name="height"></param>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GuiUtile.EndUiResizing">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.GuiUtile.ResizeGUIMatrix(System.Single,System.Single)">
+            <summary>
+            Gui缩放
+            </summary>
+        </member>
+        <member name="T:com.yxixia.utile.Utiles.ListHelper">
+            <summary>
+            list助手
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.ListHelper.ForListAction``1(System.Collections.Generic.IList{``0},System.Func{System.Int32,``0,System.Boolean},System.Int32)">
+            <summary>
+            循环遍历list，并执行指定action
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="list"></param>
+            <param name="action"></param>
+            <param name="maxLen"></param>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.ListHelper.ForListAction``1(System.Collections.Generic.IList{``0},System.Action{System.Int32,``0})">
+            <summary>
+            循环遍历list，并执行指定action
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="list"></param>
+            <param name="action"></param>
+            <param name="maxLen"></param>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.ListHelper.ForArrayAction(System.Collections.IList,System.Func{System.Int32,System.Object,System.Boolean},System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="list"></param>
+            <param name="action"></param>
+            <param name="maxLen"></param>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.ListHelper.ForArrayAction(System.Collections.IList,System.Action{System.Int32,System.Object})">
+            <summary>
+            
+            </summary>
+            <param name="list"></param>
+            <param name="action"></param>
+        </member>
+        <member name="T:com.yxixia.utile.Utiles.PathHelper">
+            <summary>
+            路径工具
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.PathHelper.Combine(System.String,System.String)">
+            <summary>
+            拼接路径
+            path1接path2
+            </summary>
+            <param name="path1"></param>
+            <param name="path2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.PathHelper.CombinePath(System.String,System.String,System.String)">
+            <summary>
+            拼接路径
+            path1接path2
+            </summary>
+            <param name="path1"></param>
+            <param name="path2"></param>
+            <param name="extension">扩展名</param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.PathHelper.SamePath(System.String,System.String)">
+            <summary>
+            路径是否相同
+            </summary>
+            <param name="path1"></param>
+            <param name="path2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.PathHelper.GetUrlRoot(System.String,System.Int32)">
+            <summary>
+            获取url
+            </summary>
+            <param name="path"></param>
+            <param name="backIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="T:com.yxixia.utile.Utiles.StringHelper">
+            <summary>
+            字符串处理
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.StringHelper.FindBetweenSign(System.String,System.String,System.String)">
+            <summary>
+            获取begin 和 end 符号之间的内容
+            </summary>
+            <param name="content"></param>
+            <param name="begin"></param>
+            <param name="end"></param>
+            <returns></returns>
+        </member>
         <member name="T:com.yxixia.utile.Utiles.YxWindowUtils">
             <summary>
             窗口辅助类
@@ -359,6 +871,23 @@
             <param name="localPos">相对父容器的位置</param>
             <returns></returns>
         </member>
+        <member name="M:com.yxixia.utile.Utiles.YxWindowUtils.CreateItem``1(``0,UnityEngine.Transform)">
+            <summary>
+            创建Grid Item
+            </summary>
+            <typeparam name="T">要克隆的预制体的脚本类型</typeparam>
+            <param name="itemPrefab">要克隆的预制体</param>
+            <param name="pts">父容器</param>
+            <returns></returns>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.YxWindowUtils.CreateGameObject(UnityEngine.GameObject,UnityEngine.Transform)">
+            <summary>
+            创建GameObject
+            </summary>
+            <param name="gobj">要克隆的预制体</param>
+            <param name="pts">父容器</param>
+            <returns></returns>
+        </member>
         <member name="M:com.yxixia.utile.Utiles.YxWindowUtils.CreateGameObject(UnityEngine.GameObject,UnityEngine.Transform,UnityEngine.Vector3)">
             <summary>
             创建GameObject
@@ -369,6 +898,15 @@
             <returns></returns>
         </member>
         <member name="M:com.yxixia.utile.Utiles.YxWindowUtils.CreateItemParent(UnityEngine.Transform,UnityEngine.Transform@,UnityEngine.Transform,System.String)">
+            <summary>
+            创建item容器实例
+            </summary>
+            <param name="parentPerfab"></param>
+            <param name="parentAttribute"></param>
+            <param name="tsParent"></param>
+            <param name="conName"></param>
+        </member>
+        <member name="M:com.yxixia.utile.Utiles.YxWindowUtils.CreateMonoParent``1(``0,``0@,UnityEngine.Transform,System.String)">
             <summary>
             创建item容器实例
             </summary>
@@ -397,20 +935,23 @@
             作者
             </summary>
         </member>
-        <member name="M:com.yxixia.utile.YxDebug.YxDebug.LogWarning(System.Object,UnityEngine.Object)">
+        <member name="F:com.yxixia.utile.YxDebug.YxDebug.Server">
+            <summary>
+            服务器
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebug.CurrentSceneName">
+            <summary>
+            当前的场景
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebug.LogWarning(System.Object,System.String,UnityEngine.Object,System.Object[])">
             <summary>
             警告
             A variant of Debug.Log that logs a warning message to the console.
             </summary>
             <param name="msg">内容</param>
-            <param name="context">发生错误的对象</param> 
-        </member>
-        <member name="M:com.yxixia.utile.YxDebug.YxDebug.LogWarning(System.String,UnityEngine.Object,System.Object[])">
-            <summary>
-            警告
-            A variant of Debug.Log that logs a warning message to the console.
-            </summary>
-            <param name="format">内容</param>
+            <param name="type"></param>
             <param name="conetext">发生错误的对象</param>
             <param name="args">对应{}的值</param> 
         </member>
@@ -544,6 +1085,11 @@
             
             </summary>
         </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugManager.YxDebugState.None">
+            <summary>
+            无
+            </summary>
+        </member>
         <member name="F:com.yxixia.utile.YxDebug.YxDebugManager.YxDebugState.Fps">
             <summary>
             打印fps
@@ -599,9 +1145,14 @@
             log 服务器
             </summary>
         </member>
-        <member name="F:com.yxixia.utile.YxDebug.YxDebugManager.ResourceInfo">
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugManager.YxEvents">
             <summary>
-            资源状态
+            事件
+            </summary>
+        </member>
+        <member name="P:com.yxixia.utile.YxDebug.YxDebugManager.Fps">
+            <summary>
+            fps
             </summary>
         </member>
         <member name="P:com.yxixia.utile.YxDebug.YxDebugManager.Instance">
@@ -611,8 +1162,27 @@
         </member>
         <member name="M:com.yxixia.utile.YxDebug.YxDebugManager.Init(com.yxixia.utile.YxDebug.YxDebugManager.YxDebugState)">
             <summary>
+            是否要gui
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebugManager.DrawLog(UnityEngine.Rect)">
+            <summary>
             
             </summary>
+            <param name="rect"></param>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebugManager.DrawEvent(UnityEngine.Rect)">
+            <summary>
+            
+            </summary>
+            <param name="rect"></param>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDebugManager.CheckLogShow(com.yxixia.utile.YxDebug.YxDebugInfo)">
+            <summary>
+            
+            </summary>
+            <param name="info"></param>
+            <returns></returns>
         </member>
         <member name="M:com.yxixia.utile.YxDebug.YxDebugManager.Clear">
             <summary>
@@ -667,6 +1237,88 @@
         <member name="F:com.yxixia.utile.YxDebug.YxDebugInfo.Time">
             <summary>
             时间
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugInfo.CustomType">
+            <summary>
+            自定义类型
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugInfo.ShowStacktrace">
+            <summary>
+            这是否显示堆栈
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDebugInfo.SceneName">
+            <summary>
+            场景名称
+            </summary>
+        </member>
+        <member name="T:com.yxixia.utile.YxDebug.YxDevelopGuiManager">
+            <summary>
+            开发辅助gui绘图管理
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDevelopGuiManager.GuiValues">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDevelopGuiManager.GuiWidth">
+            <summary>
+            原宽度
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDevelopGuiManager.GuiHeight">
+            <summary>
+            原高度
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDevelopGuiManager.ViewX">
+            <summary>
+            视图x
+            </summary>
+        </member>
+        <member name="F:com.yxixia.utile.YxDebug.YxDevelopGuiManager.ViewY">
+            <summary>
+            视图y
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDevelopGuiManager.AddGui(System.String,System.Action{UnityEngine.Rect})">
+            <summary>
+            添加gui项
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDevelopGuiManager.RemoveGui(System.String)">
+            <summary>
+            移除gui项
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDevelopGuiManager.OnGUI">
+            <summary>
+            绘制
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDevelopGuiManager.DrawHeadTab">
+            <summary>
+            绘制标签头
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDevelopGuiManager.DrawView">
+            <summary>
+            绘制视图
+            </summary>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDevelopGuiManager.AddGuiView(System.String,System.Action{UnityEngine.Rect})">
+            <summary>
+            添加guiView
+            </summary>
+            <param name="key"></param>
+            <param name="drawAction"></param>
+        </member>
+        <member name="M:com.yxixia.utile.YxDebug.YxDevelopGuiManager.Remove(System.String)">
+            <summary>
+            
             </summary>
         </member>
     </members>

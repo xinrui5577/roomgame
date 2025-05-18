@@ -2,7 +2,9 @@
 using Assets.Scripts.Common.Adapters;
 using Assets.Scripts.Common.Utils;
 using UnityEngine;
+using YxFramwork.Common.Adapters;
 using YxFramwork.Framework;
+using YxFramwork.Tool;
 
 namespace Assets.Scripts.Hall.View.TaskWindows
 {
@@ -75,6 +77,10 @@ namespace Assets.Scripts.Hall.View.TaskWindows
         /// </summary>
         [Tooltip("没有签到的时候是否需要隐藏")]
         public bool NoSignHideBtn = false;
+        [Tooltip("签到样式")]
+        public TaskSignStyle SignStyle;
+
+
         protected override void OnFreshView()
         {
             base.OnFreshView();
@@ -96,11 +102,52 @@ namespace Assets.Scripts.Hall.View.TaskWindows
                 SignStateSprite.MakePixelPerfect();
             }
             else if (SignStateLabel != null) SignStateLabel.text = data.SignState;
-            YxTools.TrySetComponentValue(RewardLabel, data.Reward.ToString());
-            YxTools.TrySetComponentValue(RewardLabelAdapter, data.Reward,"1");
+            RewardLabel.TrySetComponentValue(YxUtiles.GetShowNumberForm(data.Reward));
+            RewardLabelAdapter.TrySetComponentValue(data.Reward,"1","{0}",YxBaseLabelAdapter.YxELabelType.NumberWithUnit);
             if (RewardType != null) RewardType.spriteName = string.Format("{0}{1}",RewardTypePrefix,data.RewardType);
+            SignStyle.SetStyle(data.Type);
         }
-    }
+
+        [Serializable]
+        public class TaskSignStyle
+        {
+            public GameObject CanSignStyle;
+            public GameObject NotSignStyle;
+            public GameObject HasSignStyle;
+
+            public void SetStyle(SignItemData.YxESignType type)
+            {
+                switch (type)
+                {
+                    case SignItemData.YxESignType.CanSign:
+                        SetStyle(true);
+                        break; 
+                    case SignItemData.YxESignType.HasSign:
+                        SetStyle(false, false, true);
+                        break;
+                    default:
+                        SetStyle(false, true);
+                        break;
+                }
+            }
+
+            private void SetStyle(bool isCanSign = false,bool isNotSign = false, bool hasSign = false)
+            {
+                if (CanSignStyle != null)
+                {
+                    CanSignStyle.SetActive(isCanSign);
+                }
+                if (NotSignStyle != null)
+                {
+                    NotSignStyle.SetActive(isNotSign);
+                }
+                if (HasSignStyle != null)
+                {
+                    HasSignStyle.SetActive(hasSign);
+                }
+            }
+        }                     
+    }                         
 
     [Serializable] 
     public class SignItemData
@@ -132,5 +179,14 @@ namespace Assets.Scripts.Hall.View.TaskWindows
         /// </summary>
         [NonSerialized]
         public bool CanSign;
+        [NonSerialized,Tooltip("签到状态")]
+        public YxESignType Type;
+
+        public enum YxESignType
+        {
+            CanSign,
+            NotSign,
+            HasSign
+        }
     }
 }

@@ -204,6 +204,7 @@ public class UIFontMaker : EditorWindow
 							if (System.IO.Path.GetFileName(path) == filename)
 							{
 								NGUISettings.currentPath = System.IO.Path.GetDirectoryName(path);
+                                Debug.Log(NGUISettings.currentPath);
 								NGUISettings.pathToFreeType = path;
 							}
 							else Debug.LogError("The library must be named '" + filename + "'");

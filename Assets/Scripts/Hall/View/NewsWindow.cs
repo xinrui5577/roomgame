@@ -11,7 +11,7 @@ namespace Assets.Scripts.Hall.View
         public UILabel NewsLabel;
         protected override void OnAwake()
         {
-            Facade.Instance<TwManger>().SendAction("simpleMessage", new Dictionary<string, object>(), UpdateView);
+            Facade.Instance<TwManager>().SendAction("simpleMessage", new Dictionary<string, object>(), UpdateView);
         }
 
         protected override void OnFreshView()

@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using YxFramwork.Framework;
+using YxFramwork.Common.Adapters;
+using YxFramwork.Enums;
 
 namespace Assets.Scripts.Common.Adapters
 {
@@ -10,21 +11,31 @@ namespace Assets.Scripts.Common.Adapters
     [RequireComponent(typeof(GraphicRaycaster))]
     public class UguiPanelAdapter : YxBasePanelAdapter
     {
-        private Canvas _panel;
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsMainPanel;
 
-        protected void Awake()
+        /// <summary>
+        /// 是否需要覆盖
+        /// </summary>
+        public bool OverrideSorting = true;
+        private Canvas _panel;
+        protected Canvas Panel
         {
-            InitPanel();
+            get { return _panel == null ? _panel = GetComponent<Canvas>() : _panel; }
         }
 
-        private IEnumerator Start()
+        protected override void Awake()
         {
-            InitPanel();
-            while (!_panel.overrideSorting)
+            base.Awake(); 
+            var panel = Panel;
+            if (panel == null) return;
+            if (OverrideSorting)
             {
-                _panel.overrideSorting = true;
-                yield return null;
+                panel.overrideSorting = true;
             }
+            if (!IsMainPanel) return;
             var rectTs = GetComponent<RectTransform>();
             rectTs.anchorMax = new Vector2(1f, 1f);
             rectTs.anchorMin = Vector2.zero;
@@ -35,14 +46,53 @@ namespace Assets.Scripts.Common.Adapters
             rectTs.offsetMin = Vector2.zero;
         }
 
-        protected override void OnSortingOrder(int order)
+        private IEnumerator Start()
         {
-            _panel.sortingOrder = order + Order;
+            var panel = Panel;
+            if (OverrideSorting)
+            {
+                while (!panel.overrideSorting)
+                {
+                    panel.overrideSorting = true; 
+                    yield return null;
+                }
+            } 
+            if (!IsMainPanel) yield break; 
+            var rectTs = GetComponent<RectTransform>();
+            while (!(transform.parent is RectTransform))
+            { 
+                yield return null;
+            }
+            rectTs.anchorMax = new Vector2(1f, 1f);
+            rectTs.anchorMin = Vector2.zero;
+            rectTs.anchoredPosition = Vector2.zero;
+            rectTs.pivot = new Vector2(0.5f, 0.5f);
+            rectTs.sizeDelta = Vector2.zero;
+            rectTs.offsetMax = Vector2.zero;
+            rectTs.offsetMin = Vector2.zero;
+            rectTs.localPosition = Vector3.zero;
         }
 
-        private void InitPanel()
+        void OnEnable()
         {
-            if(_panel==null)_panel = GetComponent<Canvas>();
+            transform.localPosition = Vector3.zero;
+        }
+
+        protected override void OnSortingOrder(int order)
+        {
+            Panel.sortingOrder = order + Order;
+        }
+
+        public override Vector4 GetBound()
+        {
+            return Vector4.zero;
+        }
+
+        public override int Depth { get; set; }
+
+        public override YxEUIType UIType
+        {
+            get { return YxEUIType.Ugui; }
         }
     }
 }

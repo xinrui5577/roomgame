@@ -14,8 +14,6 @@ using Assets.Scripts.Common.Utils;
 using Assets.Scripts.Hall.View.PageListWindow;
 using com.yxixia.utile.YxDebug;
 using UnityEngine;
-using YxFramwork.Framework;
-using YxFramwork.Manager;
 
 namespace Assets.Scripts.Hall.View.RecordWindows
 {
@@ -49,15 +47,20 @@ namespace Assets.Scripts.Hall.View.RecordWindows
         #endregion
         #region Life Cycle
 
+        public string CurGameKey
+        {
+            get { return _curGamekey; }
+        }
+
         protected override Type GetItemType()
         {
-            return typeof (RecordDetialItemData);
+            return typeof(RecordDetialItemData);
         }
 
         #endregion
         #region Function
 
-        public void SendFirstAction(string gamekey,string roomId,bool playBack)
+        public void SendFirstAction(string gamekey, string roomId, bool playBack)
         {
             _curRoomId = roomId;
             _curGamekey = gamekey;
@@ -67,9 +70,9 @@ namespace Assets.Scripts.Hall.View.RecordWindows
         }
 
         protected override void SetActionDic()
-        {        
+        {
             base.SetActionDic();
-            ActionParam[_keyGameKey]= _curGamekey;
+            ActionParam[_keyGameKey] = _curGamekey;
             ActionParam[_keyRoomId] = _curRoomId;
         }
 
@@ -87,17 +90,7 @@ namespace Assets.Scripts.Hall.View.RecordWindows
         /// <param name="url"></param>
         public void ShowUrlByWebView(string openWindowName, string url)
         {
-            YxDebug.Log(string.Format("Url is: {0}", url));
-            YxWindow window = YxWindowManager.OpenWindow(openWindowName, true);
-            if (window)
-            {
-                window.UpdateView(url);   
-            }
-            else
-            {
-                YxDebug.LogError(string.Format("There is not exist such window,window name is：{0}", openWindowName));
-            }
-
+            MainYxView.OpenWindowWithData(openWindowName, url);
         }
 
         public void OpenUrl(string url)
@@ -105,7 +98,6 @@ namespace Assets.Scripts.Hall.View.RecordWindows
             YxDebug.Log(string.Format("Url is: {0}", url));
             Application.OpenURL(url);
         }
-
         #endregion
 
     }
@@ -156,8 +148,8 @@ namespace Assets.Scripts.Hall.View.RecordWindows
         protected override void ParseData(Dictionary<string, object> dic)
         {
             base.ParseData(dic);
-            YxTools.TryGetValueWitheKey(dic, out _roomId, _keyRoomId);
-            YxTools.TryGetValueWitheKey(dic, out _webHost, _keyWebHost);
+            dic.TryGetValueWitheKey(out _roomId, _keyRoomId);
+            dic.TryGetValueWitheKey(out _webHost, _keyWebHost);
         }
 
         protected override void TryGetList(Dictionary<string, object> dic)
@@ -166,7 +158,7 @@ namespace Assets.Scripts.Hall.View.RecordWindows
             if (dic.ContainsKey(_keyDetail))
             {
                 List<object> list;
-                YxTools.TryGetValueWitheKey(dic, out list, _keyDetail);
+                dic.TryGetValueWitheKey(out list, _keyDetail);
                 Items = GetDatas(list);
             }
         }

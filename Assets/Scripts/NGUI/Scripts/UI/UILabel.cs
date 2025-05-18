@@ -1792,8 +1792,9 @@ public class UILabel : UIWidget
 		if (!isValid) return;
 
 		int offset = verts.size;
-		Color col = color;
-		col.a = finalAlpha;
+		//Color col = color;
+		Color col = FinalColorType == EColorType.Gray ? Color.gray : color;
+        col.a = finalAlpha;
 		
 		if (mFont != null && mFont.premultipliedAlphaShader) col = NGUITools.ApplyPMA(col);
 

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Assets.Scripts.Common.Utils;
 using Assets.Scripts.Common.Windows;
+using com.yxixia.utile.Utiles;
 using YxFramwork.Controller;
 
 namespace Assets.Scripts.Hall.View.CombatGains
@@ -26,9 +26,8 @@ namespace Assets.Scripts.Hall.View.CombatGains
 
         private void UpdateViewData(object msg)
         {
-            YxWindowUtils.CreateItemGrid(ItemGridPrefab, ref _itemGrid);
-            if (msg == null) return;
-            var dict = msg as Dictionary<string,object>;
+            YxWindowUtils.CreateMonoParent(ItemGridPrefab, ref _itemGrid);
+            var dict = msg as Dictionary<string, object>;
             if (dict == null) return;
             if (dict.ContainsKey("detail"))
             {
@@ -45,7 +44,6 @@ namespace Assets.Scripts.Hall.View.CombatGains
                     for (var i = 0; i < count;i++ )
                     {
                         var obj = list[i];
-                        if (obj == null) continue;
                         if (!(obj is Dictionary<string, object>)) continue;
                         var cgdDict = obj as Dictionary<string, object>;
                         var item = YxWindowUtils.CreateItem(ItemPrefab, _itemGrid.transform);

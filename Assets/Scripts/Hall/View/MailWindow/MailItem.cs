@@ -98,8 +98,8 @@ namespace Assets.Scripts.Hall.View.MailWindow
 
         public void RefreshView()
         {
-            YxTools.TrySetComponentValue(TimeLabel, _curData.Time);
-            YxTools.TrySetComponentValue(TitleLabel, _curData.Title);
+            TimeLabel.TrySetComponentValue(_curData.Time);
+            TitleLabel.TrySetComponentValue(_curData.Title);
             var state = _curData.Status;
             if (ReadState != null)
             {
@@ -184,10 +184,10 @@ namespace Assets.Scripts.Hall.View.MailWindow
 
         protected override void ParseData(Dictionary<string, object> dic)
         {
-            YxTools.TryGetValueWitheKey(dic,out _title,KeyTitle);
-            YxTools.TryGetValueWitheKey(dic, out _time, KeyTime);
-            YxTools.TryGetValueWitheKey(dic, out _mailId,KeyId);
-            YxTools.TryGetValueWitheKey(dic,out _status, KeyStatus);
+            dic.TryGetValueWitheKey(out _title, KeyTitle);
+            dic.TryGetValueWitheKey(out _time, KeyTime);
+            dic.TryGetValueWitheKey(out _mailId, KeyId);
+            dic.TryGetValueWitheKey(out _status, KeyStatus);
         }
 
         public MailItemData(object data) : base(data)

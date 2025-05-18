@@ -128,7 +128,8 @@ namespace MMT
             {
                 m_path = value;
             }
-        }
+        } 
+
 
         /// <summary>
         /// Whether the path is absolute or in the streaming assets directory
@@ -507,19 +508,25 @@ namespace MMT
 
         public void Play()
         {
-            m_elapsedTime = 0.0;
-            if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
-                DoOpen();
-            else
-                StartCoroutine(Open());
-
             m_hasFinished = false;
-
             //Create a manager if we don't have one
-            if ( MobileMovieManager.Instance == null )
+            var mgr = GetComponent<MobileMovieManager>();
+            if (mgr != null)
             {
-                gameObject.AddComponent<MobileMovieManager>();
+                Destroy(mgr);
             }
+            gameObject.AddComponent<MobileMovieManager>();
+            m_elapsedTime = 0.0;
+//            if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+//            {
+//                DoOpen();
+//            }
+//            else
+//            {
+//                StartCoroutine(Open());
+//            }
+            DoOpen();
+
         }
 
         public void Stop()
@@ -585,7 +592,7 @@ namespace MMT
             }
             else
             {
-                Debug.Log("Unable to open movie " + m_nativeContext);
+                Debug.LogError("Unable to open movie " + m_nativeContext);
             }
         }
 

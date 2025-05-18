@@ -104,8 +104,8 @@ public class UIWidget : UIRect
 		BasedOnWidth,
 		BasedOnHeight,
 	}
-
-	/// <summary>
+     
+    /// <summary>
 	/// Whether the rectangle will attempt to maintain a specific aspect ratio.
 	/// </summary>
 
@@ -149,7 +149,7 @@ public class UIWidget : UIRect
 	[System.NonSerialized] bool mIsVisibleByAlpha = true;
 	[System.NonSerialized] bool mIsVisibleByPanel = true;
 	[System.NonSerialized] bool mIsInFront = true;
-	[System.NonSerialized] float mLastAlpha = 0f;
+	[System.NonSerialized] float mLastAlpha = 0f; 
 	[System.NonSerialized] bool mMoved = false;
 
 	/// <summary>
@@ -303,12 +303,12 @@ public class UIWidget : UIRect
 			}
 		}
 	}
+     
+    /// <summary>
+    /// Widget's alpha -- a convenience method.
+    /// </summary>
 
-	/// <summary>
-	/// Widget's alpha -- a convenience method.
-	/// </summary>
-
-	public override float alpha
+    public override float alpha
 	{
 		get
 		{
@@ -718,15 +718,15 @@ public class UIWidget : UIRect
 		else
 		{
 			UIRect pt = parent;
-			finalAlpha = (pt != null) ? pt.CalculateFinalAlpha(frameID) * mColor.a : mColor.a;
+		    finalAlpha = (pt != null) ? pt.CalculateFinalAlpha(frameID) * mColor.a : mColor.a;
 		}
 	}
 
-	/// <summary>
-	/// Update the widget's visibility and final alpha.
-	/// </summary>
+    /// <summary>
+    /// Update the widget's visibility and final alpha.
+    /// </summary>
 
-	public override void Invalidate (bool includeChildren)
+    public override void Invalidate (bool includeChildren)
 	{
 		mChanged = true;
 		mAlphaFrameID = -1;
@@ -1005,7 +1005,7 @@ public class UIWidget : UIRect
 		if (panel != null && panel.gameObject.layer != gameObject.layer)
 		{
 			Debug.LogWarning("You can't place widgets on a layer different than the UIPanel that manages them.\n" +
-				"If you want to move widgets to a different layer, parent them to a new panel instead.", this);
+				"If you want to move widgets to a different layer, parent them to a new panel instead." + name, this);
 			gameObject.layer = panel.gameObject.layer;
 		}
 	}
@@ -1428,10 +1428,12 @@ public class UIWidget : UIRect
 	{
 		// Has the alpha changed?
 		float finalAlpha = CalculateFinalAlpha(frame);
-		if (mIsVisibleByAlpha && mLastAlpha != finalAlpha) mChanged = true;
+	    var ctype = CalculateFinalColorType();
+	    
+        if (mIsVisibleByAlpha && (mLastAlpha != finalAlpha || FinalColorType != ctype)) { mChanged = true;}
 		mLastAlpha = finalAlpha;
-
-		if (mChanged)
+	    FinalColorType = ctype;
+        if (mChanged)
 		{
 			if (mIsVisibleByAlpha && finalAlpha > 0.001f && shader != null)
 			{
@@ -1496,7 +1498,7 @@ public class UIWidget : UIRect
 
 	public void WriteToBuffers (BetterList<Vector3> v, BetterList<Vector2> u, BetterList<Color> c, BetterList<Vector3> n, BetterList<Vector4> t)
 	{
-		geometry.WriteToBuffers(v, u, c, n, t);
+	    geometry.WriteToBuffers(v, u, c, n, t);
 	}
 
 	/// <summary>

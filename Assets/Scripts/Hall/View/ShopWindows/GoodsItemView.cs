@@ -7,6 +7,7 @@ using YxFramwork.View;
 
 namespace Assets.Scripts.Hall.View.ShopWindows
 {
+    [Obsolete("Use Assets.Scripts.Hall.View.ShopWindows.YxAffirmGoodsMessageBox")]
     public class GoodsItemView : YxMessageBox
     {
         /// <summary>
@@ -38,23 +39,24 @@ namespace Assets.Scripts.Hall.View.ShopWindows
             var iconName = ShopItemView.GetCostTypeName(data.CurrencyType);
             GoodsNameLabel.text = data.Name;
             GoodsdescLabel.text = data.Description;
+            var currency= data.CurrencyType=="1"|| data.CurrencyType=="coin_a"? YxUtiles.GetShowNumber((long)data.Currency): data.Currency;
             if (data.SaleDiscount > 0)
             {
-                var old = data.Currency / ((float)data.SaleDiscount/100);
-                SetCostData(iconName, old.ToString("F2"), CurCostData, 30);
+                var old = currency / ((float)data.SaleDiscount/100);
+                SetCostData(iconName, old.ToString(), CurCostData, 30);
             }
             else if (data.SaleDiscount < 0)
             {
-                var old = data.Currency - data.SaleDiscount;
-                SetCostData(iconName, old.ToString("F2"), CurCostData, 30);
+                var old = currency - YxUtiles.GetShowNumber(data.SaleDiscount);
+                SetCostData(iconName, old.ToString(), CurCostData, 30);
             }
             else
             {
                 CurCostData.Action(false);
             }
-            var currency = data.Currency.ToString("F2");
-            SetCostData(iconName, currency, NewCostData, 30);
-            SetCostData(iconName, currency, CostData, 40);
+            var currencyStr = currency.ToString();
+            SetCostData(iconName, currencyStr, NewCostData, 30);
+            SetCostData(iconName, currencyStr, CostData, 40);
             var url = data.IconUrl;
             if (!string.IsNullOrEmpty(url)) Facade.Instance<AsyncImage>().GetAsyncImage(url, FreshIcon);
         }
@@ -72,7 +74,7 @@ namespace Assets.Scripts.Hall.View.ShopWindows
             ts.localScale = new Vector3(offh, offh, offh);
         }
 
-        private void FreshIcon(Texture2D obj)
+        private void FreshIcon(Texture2D obj,int hashCode)
         {
             GoodsIcon.mainTexture = obj;
         }

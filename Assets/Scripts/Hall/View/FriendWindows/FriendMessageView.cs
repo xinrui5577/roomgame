@@ -18,7 +18,7 @@ namespace Assets.Scripts.Hall.View.FriendWindows
         private bool _hasSend;
         private UIGrid _curItemParent;
         private readonly List<FriendMessageItemView> _items = new List<FriendMessageItemView>(); 
-        protected override void OnEnableEx()
+        protected override void OnEnable()
         {
             FreshView();
         }

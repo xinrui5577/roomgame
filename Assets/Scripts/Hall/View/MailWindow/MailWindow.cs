@@ -76,6 +76,7 @@ namespace Assets.Scripts.Hall.View.MailWindow
                     selectItem.Status = _detailInfo.Status;
                     selectItem.RefreshView();
                 }
+                DetailPanel.Show();
                 DetailPanel.UpdateView(_detailInfo);
             }
         }

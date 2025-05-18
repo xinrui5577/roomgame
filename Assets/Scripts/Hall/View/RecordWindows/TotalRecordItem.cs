@@ -11,6 +11,7 @@
 using System.Collections.Generic;
 using Assets.Scripts.Common.Utils;
 using Assets.Scripts.Hall.View.PageListWindow;
+using com.yxixia.utile.Utiles;
 using com.yxixia.utile.YxDebug;
 using UnityEngine;
 using YxFramwork.Common;
@@ -26,6 +27,8 @@ namespace Assets.Scripts.Hall.View.RecordWindows
         public UILabel RoomId;
         [Tooltip("对战时间")]
         public UILabel Time;
+        [Tooltip("对战更新时间")]
+        public UILabel UpdateTime;
         [Tooltip("头像Grid")]
         public UIGrid HeadGrid;
         [Tooltip("背景图")]
@@ -35,18 +38,25 @@ namespace Assets.Scripts.Hall.View.RecordWindows
         [Tooltip("头像预设")]
         public HeadItem HeadItemPrefab;
         [Tooltip("默认背景高度")]
-        public int BaseHeight=220;
+        public int BaseHeight = 220;
         [Tooltip("局数格式")]
-        public string RoundFormat= "第{0}局";
+        public string RoundFormat = "第{0}局";
+        [Tooltip("行区分标志")]
+        public GameObject InterlacedBgSprite;
+        [Tooltip("用于标签")]
+        public TotalRecordItem DetaileView;
+
         /// <summary>
         /// 回放开关
         /// </summary>
         public static bool PlayBack;
+
+        public bool SelfSpecialColorl;
         public string CurGameKey
         {
             get
             {
-                if(_curItemData!=null)
+                if (_curItemData != null)
                 {
                     return _curItemData.GameKey;
                 }
@@ -82,7 +92,7 @@ namespace Assets.Scripts.Hall.View.RecordWindows
         {
             get
             {
-                if(_curItemData!=null)
+                if (_curItemData != null)
                 {
                     return PlayBack && PlayBack == _curItemData.PlayBack;
                 }
@@ -93,39 +103,67 @@ namespace Assets.Scripts.Hall.View.RecordWindows
         /// <summary>
         /// 本条数据
         /// </summary>
-        private TotalRecordItemData _curItemData;
-        public void ShowItem(string roundNum,string selfId)
+        protected TotalRecordItemData _curItemData;
+        public virtual void ShowItem(string roundNum, string selfId)
         {
             _curItemData.ShowRoundNum = roundNum;
             SetItemInfo(_curItemData);
             SetHeads(_curItemData.HeadDatas);
-            YxTools.TrySetComponentValue(GameName, _curItemData.GameName);
-            float moveY = HeadGrid.cellHeight*((HeadGrid.GetChildList().Count-1)/HeadGrid.maxPerLine);
+            GameName.TrySetComponentValue(_curItemData.GameName);
             if (BgSprite)
             {
-                BgSprite.height = (int) moveY+ BaseHeight;
+                float moveY = HeadGrid.cellHeight * ((HeadGrid.GetChildList().Count - 1) / HeadGrid.maxPerLine);
+                BgSprite.height = (int)moveY + BaseHeight;
             }
+
+            //交错背景的控制显示
+            SetInterlacedBg(roundNum);
         }
+
+        /// <summary>
+        /// 设置交错背景的显示
+        /// </summary>
+        /// <param name="roundNumStr"></param>
+        public void SetInterlacedBg(string roundNumStr)        //别忘提交到SVN
+        {
+            if (InterlacedBgSprite == null) return;
+            int roundNum;
+            if (!int.TryParse(roundNumStr, out roundNum)) return;
+            InterlacedBgSprite.SetActive(roundNum % 2 != 0);
+        }
+
+
         /// <summary>
         /// 设置时间，房卡号，局数相关信息
         /// </summary>
         /// <param name="itemData"></param>
-        private void SetItemInfo(TotalRecordItemData itemData)
+        protected virtual void SetItemInfo(TotalRecordItemData itemData)
         {
-            Time.text = itemData.Time;
+            if (Time != null) Time.text = itemData.Time;
+            SelfSpecialColorldata();
+            if (UpdateTime != null)
+            {
+                var updateTime = itemData.UpdateTime;
+                if (string.IsNullOrEmpty(updateTime))
+                {
+                    updateTime = itemData.Time;
+                }
+                UpdateTime.text = updateTime;
+            }
             RoomId.text = itemData.ShowRoomId;
-            RoundNum.text = string.Format(RoundFormat,Id);
+            RoundNum.text = string.Format(RoundFormat, Id);
         }
 
         /// <summary>
         /// 设置头像相关信息
         /// </summary>
         /// <param name="heads"></param>
-        private void SetHeads(List<object> heads)
+        protected void SetHeads(List<object> heads)
         {
-            for (int i = 0,lenth= heads.Count; i < lenth; i++)
+            if (!HeadItemPrefab) { return;}
+            for (int i = 0, lenth = heads.Count; i < lenth; i++)
             {
-               var view= YxTools.GetChildView(i,HeadItemPrefab ,HeadGrid.transform);
+                var view = HeadGrid.transform.GetChildView(i, HeadItemPrefab);
                 view.UpdateView(heads[i]);
             }
             HeadGrid.repositionNow = true;
@@ -133,7 +171,26 @@ namespace Assets.Scripts.Hall.View.RecordWindows
 
         protected override void OnFreshView()
         {
-            CheckItemData();
+            if (CheckItemData())
+            {
+                if (DetaileView != null)
+                {
+                    DetaileView.UpdateView(Data);
+                    DetaileView.SetActive(true);
+                }
+                var recordWin = MainYxView as TotalRecordWindow;
+                if (recordWin != null)
+                {
+                    recordWin.ShowDetailWindow(this);
+                }
+            }
+            else
+            {
+                if (DetaileView != null)
+                {
+                    DetaileView.SetActive(false);
+                }
+            }
         }
 
         protected bool CheckItemData()
@@ -148,12 +205,50 @@ namespace Assets.Scripts.Hall.View.RecordWindows
             return false;
         }
 
+        protected void SelfSpecialColorldata()
+        {
+            var data = _curItemData;
+            if (SelfSpecialColorl)
+            {
+                for (int i = 0; i < data.HeadDatas.Count; i++)
+                {
+                    Dictionary<string, object> _data = new Dictionary<string, object>();
+                    _data = data.HeadDatas[i] as Dictionary<string, object>;
+                    if (int.Parse(_data["id"].ToString())== int.Parse(App.UserId))
+                    {
+                        if (_data != null)
+                        {
+                            if (int.Parse(_data["gold"].ToString()) > 0)
+                            {
+                                Time.text += "贏";
+                                Time.color = new Color32(180, 16, 16, 255);
+                            }
+                            else if (int.Parse(_data["gold"].ToString()) == 0)
+                            {
+                                Time.text += "平";
+                                Time.color = new Color32(128, 85, 54, 255);
+                            }
+                            else if (int.Parse(_data["gold"].ToString()) < 0)
+                            {
+                                Time.text += "输";
+                                Time.color = new Color32(128, 85, 54, 255);
+                            }
+                        }
+                    }
+                }
+                
+            }
+        }
         protected override void OnHide()
         {
             var list = HeadGrid.GetChildList();
             foreach (var item in list)
             {
                 item.gameObject.SetActive(false);
+            }
+            if (BgSprite)
+            {
+                BgSprite.height = BaseHeight;
             }
         }
 
@@ -164,7 +259,7 @@ namespace Assets.Scripts.Hall.View.RecordWindows
         }
     }
 
-    public class TotalRecordItemData:YxData
+    public class TotalRecordItemData : YxData
     {
         /// <summary>
         /// Key游戏gamekey
@@ -177,7 +272,7 @@ namespace Assets.Scripts.Hall.View.RecordWindows
         /// <summary>
         /// Key请求接口
         /// </summary>
-        private const string KeyFunction= "function";
+        private const string KeyFunction = "function";
         /// <summary>
         /// Key房间ID
         /// </summary>
@@ -190,6 +285,10 @@ namespace Assets.Scripts.Hall.View.RecordWindows
         /// Key创建时间
         /// </summary>
         private const string KeyCreateTime = "create_dt";
+        /// <summary>
+        /// Key更新时间
+        /// </summary>
+        private const string KeyUpdateTime = "update_dt";
         /// <summary>
         /// Key回放标识
         /// </summary>
@@ -206,6 +305,10 @@ namespace Assets.Scripts.Hall.View.RecordWindows
         /// 对战时间
         /// </summary>
         private string _createTime;
+        /// <summary>
+        /// 对战时间
+        /// </summary>
+        private string _updateTime;
         /// <summary>
         /// 请求方法名称
         /// </summary>
@@ -233,7 +336,7 @@ namespace Assets.Scripts.Hall.View.RecordWindows
         /// <summary>
         /// 头像数据
         /// </summary>
-        private List<object> _headDatas=new List<object>();
+        private List<object> _headDatas = new List<object>();
 
         public string ShowRoomId
         {
@@ -253,6 +356,11 @@ namespace Assets.Scripts.Hall.View.RecordWindows
             get { return _createTime; }
         }
 
+        public string UpdateTime
+        {
+            get { return _updateTime; }
+        }
+
         public List<object> HeadDatas
         {
             get
@@ -265,7 +373,7 @@ namespace Assets.Scripts.Hall.View.RecordWindows
         {
             get
             {
-                return _showRound;   
+                return _showRound;
             }
             set
             {
@@ -286,7 +394,7 @@ namespace Assets.Scripts.Hall.View.RecordWindows
         {
             get
             {
-                return _playBack==1;
+                return _playBack == 1;
             }
         }
 
@@ -316,17 +424,18 @@ namespace Assets.Scripts.Hall.View.RecordWindows
 
         protected override void ParseData(Dictionary<string, object> dic)
         {
-            YxTools.TryGetValueWitheKey(dic, out _roomId, KeyRoomId);
-            YxTools.TryGetValueWitheKey(dic, out _createTime, KeyCreateTime);
-            YxTools.TryGetValueWitheKey(dic, out _headDatas, KeyOverInfo);
-            YxTools.TryGetValueWitheKey(dic, out _detailRoundNum, KeyRound);
-            YxTools.TryGetValueWitheKey(dic, out _functionName, KeyFunction);
-            YxTools.TryGetValueWitheKey(dic, out _gamekey,KeyGameKey);
-            YxTools.TryGetValueWitheKey(dic, out _gameName, KeyGameName);
+            dic.TryGetValueWitheKey(out _roomId, KeyRoomId);
+            dic.TryGetValueWitheKey(out _createTime, KeyCreateTime);
+            dic.TryGetValueWitheKey(out _updateTime, KeyUpdateTime);
+            dic.TryGetValueWitheKey(out _headDatas, KeyOverInfo);
+            dic.TryGetValueWitheKey(out _detailRoundNum, KeyRound);
+            dic.TryGetValueWitheKey(out _functionName, KeyFunction);
+            dic.TryGetValueWitheKey(out _gamekey, KeyGameKey);
+            dic.TryGetValueWitheKey(out _gameName, KeyGameName);
             if (dic.ContainsKey(KeyPlayBack))
             {
                 YxDebug.LogError("存在回放标识");
-                var success= int.TryParse(dic[KeyPlayBack].ToString(), out _playBack);
+                var success = int.TryParse(dic[KeyPlayBack].ToString(), out _playBack);
                 if (!success)
                 {
                     _playBack = 1;
@@ -336,12 +445,11 @@ namespace Assets.Scripts.Hall.View.RecordWindows
             {
                 _playBack = 1;
             }
-            
-        }
 
+        }
         public TotalRecordItemData(object data) : base(data)
         {
-            
+
         }
     }
 }

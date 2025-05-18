@@ -64,7 +64,18 @@ Shader "Unlit/Transparent Masked"
 				
 			fixed4 frag (v2f IN) : SV_Target
 			{
-				half4 col = tex2D(_MainTex, IN.texcoord) * IN.color;
+				half4 inCol = IN.color;
+				fixed ctype = inCol;
+				fixed4 col = tex2D(_MainTex, IN.texcoord);
+				if (ctype == -1)//÷√ª“
+				{
+					float grey = dot(col.rgb, float3(0.299, 0.587, 0.114));
+					col.rgb = float4(grey, grey, grey, inCol.a);
+				}
+				else
+				{
+					col = col * inCol;
+				} 
 				col.a *= tex2D(_Mask, IN.texcoord1).a;
 				return col;
 			}

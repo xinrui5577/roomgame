@@ -57,7 +57,13 @@ void SaveClipText(const char* content)
 const char* GetClipText()
 {
     UIPasteboard* pasteboard = [UIPasteboard generalPasteboard];
+    if (pasteboard==NULL) {
+        return strdup("");
+    }
     const char * saveInfo=[pasteboard.string UTF8String];
+    if (saveInfo==NULL) {
+        return strdup("");
+    }
     return strdup(saveInfo);
 }
 

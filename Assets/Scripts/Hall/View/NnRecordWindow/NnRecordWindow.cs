@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Assets.Scripts.Common.Utils;
 using Assets.Scripts.Common.Windows.TabPages;
+using com.yxixia.utile.Utiles;
 using UnityEngine;
 using YxFramwork.Common.Model;
 using YxFramwork.Controller;
@@ -31,11 +31,11 @@ namespace Assets.Scripts.Hall.View.NnRecordWindow
                 var dic = new Dictionary<string, object>();
                 dic["game_key"] = "";
                 dic["p"] = _curPageNum;
-                Facade.Instance<TwManger>().SendAction("historyrequest", dic, UpdateViewData);
+                Facade.Instance<TwManager>().SendAction("historyrequest", dic, UpdateViewData);
             }
             if (ScrollView != null)
             {
-                ScrollView.onMomentumMove = OnDragFinished;
+                ScrollView.onStoppedMoving = OnDragFinished;
             }
         }
 
@@ -48,13 +48,17 @@ namespace Assets.Scripts.Hall.View.NnRecordWindow
                 var dic = new Dictionary<string, object>();
                 dic["game_key"] = "";
                 dic["p"] = ++_curPageNum;
-                Facade.Instance<TwManger>().SendAction("historyrequest", dic, AddItems);
+                Facade.Instance<TwManager>().SendAction("historyrequest", dic, AddItems);
+
             }
         }
 
         private void AddItems(object msg)
         {
-            var list = msg as List<object>;
+            var info = msg as Dictionary<string, object>;
+            if (info == null) return;
+            var data = info.ContainsKey("data") ? info["data"] : null;
+            var list = data as List<object>;
             if (list == null) return;
             OnSetItems(list, _itemGrid, _curIndex);
         }
@@ -92,7 +96,7 @@ namespace Assets.Scripts.Hall.View.NnRecordWindow
 
         private void UpdateViewData(object msg)
         {
-            YxWindowUtils.CreateItemGrid(ItemGridPrefab, ref _itemGrid);
+            YxWindowUtils.CreateMonoParent(ItemGridPrefab, ref _itemGrid);
             var info = msg as Dictionary<string, object>;
             if(info==null)return;
             var data = info.ContainsKey("data") ? info["data"] : null;

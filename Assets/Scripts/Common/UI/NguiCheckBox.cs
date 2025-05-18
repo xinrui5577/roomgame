@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Common.Models.CreateRoomRules;
+using UnityEngine;
 
 namespace Assets.Scripts.Common.UI
 {
@@ -9,18 +10,27 @@ namespace Assets.Scripts.Common.UI
         public UISprite IconSprite;
         public UILabel NumLabel;
 
-        protected override void OnAwake()
-        {
-            base.OnStart();
-            InitStateTotal = 2;
-        }
+//        protected override void OnStart()
+//        {
+//            base.OnStart();
+            //            Toggle.onChange.Add(new EventDelegate(ChangeValue));
+//        }
+//
+//        private void ChangeValue()
+//        {
+//            var n = GetData<ItemData>().Name;
+//        }
 
         protected override void OnFreshCRCView(ItemData itemData)
         {
-            if (itemData == null) return;
             Label.text = itemData.Name;
             Toggle.value = itemData.State;
             Toggle.group = itemData.Group;
+            if (itemData.Size > 0)
+            {
+                SetLabel(Label,itemData.Size);
+                SetLabel(NumLabel, itemData.Size, UILabel.Overflow.ResizeFreely);
+            }
             if (itemData.UseNum > 0)
             {
                 if (NumLabel != null)
@@ -46,8 +56,16 @@ namespace Assets.Scripts.Common.UI
                     IconSprite.gameObject.SetActive(false);
                     IconSprite.transform.localScale = new Vector3(0,1,1);
                 }
-            } 
-            UpdateWidget(itemData.Width, itemData.Height);
+            }
+            UpdateWidget(itemData.Width, itemData.Height); 
+        }
+
+        private void SetLabel(UILabel label,int size,UILabel.Overflow overflowMethod = UILabel.Overflow.ClampContent)
+        {
+            if (label == null) { return;}
+            label.overflowMethod = overflowMethod;
+            label.alignment = NGUIText.Alignment.Left;
+            label.fontSize = size;
         }
 
         public override bool IsValid()
@@ -55,25 +73,18 @@ namespace Assets.Scripts.Common.UI
             return Toggle!=null&&Toggle.value;
         }
 
-        public override Vector2 UpdateWidget(int width = 0, int height = 0)
-        {
-            var size = base.UpdateWidget(width, height);
-            UpdateBox(size);
-            return size;
-        }
-
-        private void UpdateBox(Vector2 size)
+        public override void UpdateBoxCollider()
         {
             var box = Toggle.GetComponent<BoxCollider>();
             if (box == null) return;
             var bound = Bounds;
-            box.size = size;
+            var size = bound.size;
             var center = bound.extents;
-            var local = transform.position;
-            local = box.transform.InverseTransformPoint(local);
-            center.x = local.x + size.x / 2;
-            center.y = Mathf.Abs(local.y) - center.y;
+            var local = Toggle.transform.localPosition;
+            center.x = -local.x + size.x / 2 ;
+            center.y = -local.y  - size.y / 2;
             box.center = center;
-        } 
+            box.size = size;
+        }
     } 
 }

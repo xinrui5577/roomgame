@@ -2,6 +2,7 @@
 using System.Text;
 using UnityEngine;
 using YxFramwork.Common;
+using YxFramwork.Enums;
 using YxFramwork.Framework;
 using YxFramwork.Framework.Core;
 
@@ -18,14 +19,18 @@ namespace Assets.Scripts.Hall.View.AboutRoomWindows
         }
 
         protected override void OnFreshView()
-        { 
-            if (!(Data is string)) return;
+        {
             var url = Data as string;
             if (string.IsNullOrEmpty(url)) return;
-            Facade.Instance<DownLoadTool>().LoadFile(url,CallBack);
+            Facade.Instance<DownLoadTool>().LoadFile(url, OnCallBack);
         }
 
-        private void CallBack(byte[] obj)
+        public override YxEUIType UIType
+        {
+            get { return YxEUIType.Nguid; }
+        }
+
+        private void OnCallBack(byte[] obj)
         {
             var content = Encoding.UTF8.GetString(obj);
             ContentLabel.text = content;//todo 真奇怪

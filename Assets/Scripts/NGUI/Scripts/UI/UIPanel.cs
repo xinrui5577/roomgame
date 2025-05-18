@@ -581,7 +581,8 @@ public class UIPanel : UIRect
 	// Temporary variable to avoid GC allocation
 	static Vector3[] mCorners = new Vector3[4];
 
-	/// <summary>
+
+    /// <summary>
 	/// Local-space corners of the panel's clipping rectangle. The order is bottom-left, top-left, top-right, bottom-right.
 	/// </summary>
 
@@ -747,11 +748,12 @@ public class UIPanel : UIRect
 		return finalAlpha;
 	}
 
-	/// <summary>
-	/// Set the panel's rectangle.
-	/// </summary>
 
-	public override void SetRect (float x, float y, float width, float height)
+    /// <summary>
+    /// Set the panel's rectangle.
+    /// </summary>
+
+    public override void SetRect (float x, float y, float width, float height)
 	{
 		int finalWidth = Mathf.FloorToInt(width + 0.5f);
 		int finalHeight = Mathf.FloorToInt(height + 0.5f);
@@ -1644,6 +1646,7 @@ public class UIPanel : UIRect
 						else FindDrawCall(w);
 					}
 				}
+
 			}
 		}
 

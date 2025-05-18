@@ -1,179 +1,276 @@
-﻿using System.Collections.Generic;
+﻿using Assets.Scripts.Common.Adapters;
+using Assets.Scripts.Common.Models.CreateRoomRules;
 using Assets.Scripts.Common.UI;
-using Assets.Scripts.Common.Utils;
+using com.yxixia.utile.Utiles;
+using com.yxixia.utile.YxDebug;
 using UnityEngine;
+using YxFramwork.Framework;
 
 namespace Assets.Scripts.Hall.View.AboutRoomWindows
 {
-    public class RuleRowView : NguiView
+    public class RuleRowView : FreshLayoutBaseView
     {
         /// <summary>
         /// 多选预制
         /// </summary>
-        [Tooltip("多选预制")]
+        [Tooltip("多选预制，如果不设置，将使用RadioPerfab")]
         public NguiCheckBox CheckBoxPerfab;
         /// <summary>
         /// 单选预制
         /// </summary>
-        [Tooltip("单选预制")]
+        [Tooltip("单选预制，如果不设置，将使用CheckBoxPerfab")]
         public NguiCheckBox RadioPerfab;
         /// <summary>
         /// 按钮预制
         /// </summary>
-        [Tooltip("按钮预制")]
+        [Tooltip("按钮预制，如果不设置，将使用CheckBoxPerfab")]
         public NguiCheckBox ButtonPerfab;
+        /// <summary>
+        /// 标签页预制
+        /// </summary>
+        [Tooltip("标签页预制，如果不设置，将使用ButtonPerfab")]
+        public NguiCheckBox TabPerfab;
         /// <summary>
         /// label预制
         /// </summary>
         [Tooltip("label预制")]
         public NguiCRLabel LabelPerfab;
         /// <summary>
+        /// input预制
+        /// </summary>
+        [Tooltip("input预制")]
+        public NguiCRInput InputPerfab;
+        /// <summary>
+        /// pop预制
+        /// </summary>
+        [Tooltip("pop预制")]
+        public NguiCRPop PopPerfab;
+        /// <summary>
         /// 范围预制
         /// </summary>
         [Tooltip("范围预制")]
-        public NguiRange RangePerfab;
+        public NguiCRSlider SliderPerfab;
 
         [Tooltip("行容器")]
         public Transform RowContainer;
-
-        private List<NguiCRComponent> _curViewList;
-        private int _curMaxViewCount;
-        private int _viewFreshCount;
+        [Tooltip("行间的线")]
+        public GameObject Line;
         private Transform _rowContainer;
 
         protected override void OnAwake()
         {
             InitStateTotal = 2;
-        }
-
-        protected override void OnFreshView()
-        {
-            var rowDatas = GetData<RowData>();
-            if (rowDatas == null) return;
-            YxWindowUtils.CreateItemParent(RowContainer, ref _rowContainer,transform);
-            var rowItems = rowDatas.Items;
-            var count = rowItems.Count;
-            ReadyRepaint(count);
-            for (var i = 0; i < count; i++)
+            CheckIsStart = true;
+            var defaultBox = RadioPerfab;
+            if (RadioPerfab == null)
             {
-                var rowInfo = rowItems[i]; 
-                var key = rowInfo.Key;
-                if (NeedHide(rowInfo))
-                {
-                    FreshRowView(null);
-                    continue;
-                }
-                bool state;
-                var view = CreateRuleItemView(rowInfo,out state);
-
-                if (view == null) return; 
-                view.name = key;
-                _curViewList.Add(view);
-                view.gameObject.SetActive(false);
-                var ts = view.transform;
-                ts.parent = _rowContainer;
-                view.UpdateViewWithCallBack(rowInfo, FreshRowView);
+                defaultBox = RadioPerfab = CheckBoxPerfab;
+            }else if (CheckBoxPerfab == null)
+            {
+                defaultBox = CheckBoxPerfab = RadioPerfab;
+            } 
+            if (ButtonPerfab == null)
+            {
+                ButtonPerfab = defaultBox;
+            }
+            if (TabPerfab == null)
+            {
+                TabPerfab = ButtonPerfab;
             }
         }
 
-        protected NguiCRComponent CreateRuleItemView(ItemData rowInfo,out bool state)
+        protected override void OnStart()
         {
-            NguiCRComponent view = null;
-            state = false;
-            var ruleInfo = rowInfo.Parent;
-            var id = rowInfo.Id;
-            switch (rowInfo.Type)
+            var widgetAdapter = GetWidgetAdapter();
+            if (widgetAdapter == null)
             {
-                case RuleItemType.checkbox:
-                    {
-                        view = Instantiate(CheckBoxPerfab);
-                        rowInfo.View = view;
-                        view.Id = id;
-                        rowInfo.State = RuleInfo.GetItemState(ruleInfo.CurTabItemId, rowInfo.Id, rowInfo.State);
-                    }
-                    break;
-                case RuleItemType.radio:
-                    {
-                        view = Instantiate(RadioPerfab);
-                        rowInfo.View = view;
-                        view.Id = id;
-                        rowInfo.State = RuleInfo.GetItemState(ruleInfo.CurTabItemId, rowInfo.Id, rowInfo.State);
-                    }
-                    break;
-                case RuleItemType.button:
-                    {
-                        view = Instantiate(ButtonPerfab);
-                        rowInfo.View = view;
-                        view.Id = id;
-                        rowInfo.State = ruleInfo.CurTabItemId == id;//ruleInfo.TabDefaultIndex>-1 ? i == ruleInfo.TabDefaultIndex: 
-                    }
-                    break;
-                case RuleItemType.range:
-                    view = Instantiate(RangePerfab);
-                    rowInfo.View = view;
-                    view.Id = id;
-                    break; 
-                case RuleItemType.label:
-                    view = Instantiate(LabelPerfab);
-                    rowInfo.View = view;
-                    view.Id = id;
-                    break; 
-            } 
+                gameObject.AddComponent<NguiWidgetAdapter>();
+            }
+            base.OnStart();
+        }
+
+        protected override void InitViews()
+        {
+            ClearBufferView();
+            var rowData = GetData<ItemRowData>();
+            if (rowData == null || rowData.Parent.ViewIsHide(rowData.Id))
+            {
+                CallBack(IdCode);
+                return;
+            }
+            YxWindowUtils.CreateItemParent(RowContainer, ref _rowContainer,transform);
+            var rowX = rowData.X;
+            var rowY = rowData.Y;
+            var containerPos = _rowContainer.localPosition;
+            if (!float.IsNaN(rowX))
+            {
+                containerPos.x = rowX;
+            }
+            if (!float.IsNaN(rowY))
+            {
+                containerPos.y = rowY;
+            }
+            _rowContainer.localPosition = containerPos;
+            var rowItems = rowData.Items;
+            var dataCount = rowItems.Count;
+            CreateNewView(0,dataCount, rowItems, _rowContainer);
+            if (BufferViewCount < 1)
+            {
+                OnFreshLayout(); 
+            }
+        }
+
+        protected override YxView CreateView<T>(T data, Transform pts, Vector3 pos = default(Vector3))
+        {
+            var itemData = data as ItemData;
+            if (itemData == null) return null;
+            var ruleInfo = itemData.Parent; 
+            if (ruleInfo.ViewIsHide(itemData.Id))
+            { 
+                return null;
+            }
+            var view = CreateRuleItemView(itemData);
+            if (view == null) return null;
+            GameObjectUtile.ResetTransformInfo(view.transform, pts);
             return view;
         }
 
-        private static bool NeedHide(ItemData itemData)
+        public bool HasChildView()
         {
-            var parent = itemData.Parent;
-            if (parent == null) return false;
-            var itemId = itemData.Id;
-            var tabs = parent.Tabs;
-            if (tabs == null) return false;
-            var tabId = parent.CurTabItemId;
-            if (!tabs.ContainsKey(tabId)) return false;
-            var hides = parent.Tabs[tabId];
-            foreach (var hideId in hides)
+            return BufferViewCount > 0;
+        }
+
+        protected NguiCRComponent CreateRuleItemView(ItemData rowItemInfo)
+        {
+            NguiCRComponent view = null;
+            switch (rowItemInfo.Type)
             {
-                if (itemId == hideId)
-                {
-                    return true;
-                }
+                case RuleItemType.checkbox:
+                    view = CreateBoxComponent(CheckBoxPerfab,rowItemInfo, rowItemInfo.Parent.CurTabId);
+                    break;
+                case RuleItemType.radio:
+                    view = CreateBoxComponent(RadioPerfab, rowItemInfo, rowItemInfo.Parent.CurTabId);
+                    break;
+                case RuleItemType.button:
+                    view = CreateBoxComponent(ButtonPerfab, rowItemInfo, rowItemInfo.Parent.CurTabId);
+                    if (rowItemInfo.State)
+                    {
+                        rowItemInfo.Parent.SetButtonId(rowItemInfo.Group, rowItemInfo.Id);
+                    }
+                    break;
+                case RuleItemType.tab:
+                    view = CreateBoxComponent(TabPerfab, rowItemInfo);
+                    break;
+                case RuleItemType.slider:
+                    view = CreateValueComponent(SliderPerfab, rowItemInfo);
+                    break; 
+                case RuleItemType.label:
+                    view = CreateValueComponent(LabelPerfab, rowItemInfo);
+                    break; 
+                case RuleItemType.input:
+                    view = CreateValueComponent(InputPerfab, rowItemInfo);
+                    break; 
+                case RuleItemType.pop:
+                    view = CreateValueComponent(PopPerfab, rowItemInfo);
+                    break; 
             }
-            return false;
+            if (view == null)
+            {
+                YxDebug.LogError("View类型：{0}不存在","RuleRowView",null, rowItemInfo.Type);
+            }
+            return view;
         }
 
-        private void ReadyRepaint(int maxCount)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private static NguiCRComponent CreateBoxComponent(NguiCRComponent prefab, ItemData rowItemInfo,string tabId=null)
         {
-            _curViewList = new List<NguiCRComponent>();
-            _curMaxViewCount = maxCount;
-            _viewFreshCount = 0;
+            var view = CreateNguiCrComponent(prefab,rowItemInfo);
+            if (view == null)
+            {
+                rowItemInfo.State = false;
+                return null;
+            }
+            var rowInfo = rowItemInfo.Parent;
+            rowItemInfo.State = CreateRoomRuleInfo.GetItemState(tabId, rowItemInfo.Id, rowItemInfo.Group, rowInfo.GameKey, rowItemInfo.DefaultState);
+            return view;
         }
 
-        private void FreshRowView(object obj)
+        private static NguiCRComponent CreateValueComponent(NguiCRComponent prefab, ItemData rowItemInfo)
         {
-            _viewFreshCount++;
-            if (_viewFreshCount < _curMaxViewCount) return;
-            var rowDatas = GetData<RowData>();
-            if (rowDatas == null) return;
-            var count = _curViewList.Count;
-            var curlpos = Vector3.zero; 
+            var view = CreateNguiCrComponent(prefab, rowItemInfo);
+            if (view == null)
+            {
+                return null;
+            }
+            var rowInfo = rowItemInfo.Parent;
+            rowItemInfo.Value = CreateRoomRuleInfo.GetItemValue(rowInfo.CurTabId, rowItemInfo.Id, rowInfo.GameKey, rowItemInfo.Value);
+            return view;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private static NguiCRComponent CreateNguiCrComponent(NguiCRComponent prefab, ItemData rowItemInfo)
+        {
+            if (prefab == null) { return null; }
+            var view = Instantiate(prefab);
+            rowItemInfo.View = view;
+            view.Id = rowItemInfo.Id; 
+            return view;
+        }
+
+        protected override void OnFreshLayout()
+        {
+            var rowDatas = GetData<ItemRowData>();
+            if (rowDatas == null)
+            {
+                CallBack(IdCode);
+                return;
+            }
+            var count = BufferViewCount;
+            var curlpos = Vector3.zero;
+            var bound = Vector2.zero;
             for (var i = 0; i < count; i++)
             {
-                var view = _curViewList[i];
-                if(view==null)continue;
+                var view = GetBufferView(i) as NguiCRComponent;
+                if (view == null)
+                {
+                    continue;
+                }
                 var ts = view.transform;
-                view.gameObject.SetActive(true);
                 ts.localScale = Vector3.one;
                 ts.localPosition = curlpos;
-                var size = view.BoundSize;
-                curlpos.x = curlpos.x + size.x + rowDatas.Spacing; 
+                view.UpdateBoxCollider();
+                var size = view.Bounds.size;
+                curlpos.x = curlpos.x + size.x + rowDatas.Spacing;
+                bound.x = curlpos.x;
+//                Debug.LogError("2x: "+curlpos.x);
+                if (size.y > bound.y) bound.y = size.y;
             }
-            var ngui = RowContainer.GetComponent<NguiView>();
-            if (ngui != null)
-            {
-                ngui.UpdateWidget();
-            }
-            if (CallBack != null) CallBack(null);
+            if(bound.x>0) { bound.x -= rowDatas.Spacing;}
+            var lineY = rowDatas.Height;
+            if (lineY > 0) { bound.y = lineY;}
+            lineY = lineY > 0 ? bound.y = lineY : bound.y;
+            UpdateWidget(bound.x, lineY);
+//            DrawLine(lineY);
+            CallBack(IdCode);
+        }
+        public void DrawLine(float y)
+        {
+            if (Line == null) { return; }
+            Line.SetActive(true);
+            var pos = new Vector3(0, -y, 0);
+            Line.transform.localPosition = pos;
+        }
+
+        public void HideLine()
+        {
+            if (Line == null) { return; }
+            Line.SetActive(false);
         }
     }
 }

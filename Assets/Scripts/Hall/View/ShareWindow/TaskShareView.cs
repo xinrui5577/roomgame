@@ -26,6 +26,9 @@ namespace Assets.Scripts.Hall.View.ShareWindow
                 YxMessageBox.Show("非移动设备暂时不支持分享！");
                 return false;
             }
+            if (!api.InitWechat())
+            {
+            }
             if (!api.IsInstalledWechat())
             {
                 YxMessageBox.Show("您的设备没有安装微信，请安装后再分享！");
@@ -56,14 +59,13 @@ namespace Assets.Scripts.Hall.View.ShareWindow
         protected void OnShareSuccess(object msg)
         {
             //发送分享成功
-            YxWindowManager.ShowWaitFor();
             var parm = new Dictionary<string, object>
                 {
                 {"option", 2},
                 {"bundle_id", Application.bundleIdentifier},
                 {"share_plat", ((int)SharePlat.WxSenceTimeLine).ToString(CultureInfo.InvariantCulture)},
             };
-            Facade.Instance<TwManger>().SendAction("shareAwards", parm, str => YxWindowManager.HideWaitFor());
+            Facade.Instance<TwManager>().SendAction("shareAwards", parm,null);
         }
 
         #region 朋友圈分享

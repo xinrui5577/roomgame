@@ -483,8 +483,8 @@ public class UIDrawCall : MonoBehaviour
 					mMesh.vertices = verts.ToArray();
 					mMesh.uv = uvs.ToArray();
 					mMesh.colors = cols.ToArray();
-
-					if (norms != null) mMesh.normals = norms.ToArray();
+				   
+                    if (norms != null) mMesh.normals = norms.ToArray();
 					if (tans != null) mMesh.tangents = tans.ToArray();
 				}
 				else
@@ -498,8 +498,8 @@ public class UIDrawCall : MonoBehaviour
 					mMesh.vertices = verts.buffer;
 					mMesh.uv = uvs.buffer;
 					mMesh.colors = cols.buffer;
-
-					if (norms != null) mMesh.normals = norms.buffer;
+				    
+                    if (norms != null) mMesh.normals = norms.buffer;
 					if (tans != null) mMesh.tangents = tans.buffer;
 				}
 #else

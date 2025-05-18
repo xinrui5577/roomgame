@@ -14,10 +14,10 @@ using System.Collections.Generic;
 [AddComponentMenu("NGUI/Interaction/Toggled Objects")]
 public class UIToggledObjects : MonoBehaviour
 {
+    public bool CompatibilityMode = true;
 	public List<GameObject> activate;
 	public List<GameObject> deactivate;
-
-	[HideInInspector][SerializeField] GameObject target;
+    [HideInInspector][SerializeField] GameObject target;
 	[HideInInspector][SerializeField] bool inverse = false;
 
 	void Awake ()
@@ -62,7 +62,7 @@ public class UIToggledObjects : MonoBehaviour
 	{
 		if (go != null)
 		{
-			NGUITools.SetActive(go, state);
+			NGUITools.SetActive(go, state, CompatibilityMode);
 			//UIPanel panel = NGUITools.FindInParents<UIPanel>(target);
 			//if (panel != null) panel.Refresh();
 		}

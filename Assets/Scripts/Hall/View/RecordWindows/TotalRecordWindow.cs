@@ -107,6 +107,11 @@ namespace Assets.Scripts.Hall.View.RecordWindows
                 
             }
         }
+
+        public void Test()
+        {
+            Debug.LogError("--------");
+        }
     }
 
     public class TotalRecordData : PageRequestData

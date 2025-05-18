@@ -1,9 +1,11 @@
-﻿using UnityEngine;
-using YxFramwork.View;
+﻿using System;
+using UnityEngine;
 using com.yxixia.utile.Utiles;
+using YxFramwork.View;
 
 namespace Assets.Scripts.Common.Components
 {
+    [Obsolete("Use YxFramwork.View.YxListViews.YxListItem")]
     public class NguiListItem : YxListItem {
 
 //        public override void SetOrder(int order)

@@ -91,7 +91,7 @@ namespace Assets.Scripts.Hall.View.TaskWindows
         {
             base.OnStart();
             if (BtnSign != null) BtnSign.isEnabled = false;
-            Facade.Instance<TwManger>().SendAction("signInDays", new Dictionary<string, object>(), OnGetInitData);
+            Facade.Instance<TwManager>().SendAction("signInDays", new Dictionary<string, object>(), OnGetInitData);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Assets.Scripts.Hall.View.TaskWindows
         /// </summary>
         public void OnSignBtn()
         {
-            Facade.Instance<TwManger>().SendAction("signIn", new Dictionary<string, object>(), OnSignSuccess);
+            Facade.Instance<TwManager>().SendAction("signIn", new Dictionary<string, object>(), OnSignSuccess);
         }
 
         /// <summary>
@@ -156,6 +156,7 @@ namespace Assets.Scripts.Hall.View.TaskWindows
                 var item = CreateItem();
                 var data = ItemDatas[index];
                 data.BgName = Sequent ? string.Format("{0}{1}", HasSignBgName, index) : HasSignBgName;
+                data.Type = SignItemData.YxESignType.HasSign;
                 data.SignState = HasSignState;
                 data.CanSign = false;
                 item.UpdateView(data);
@@ -168,6 +169,7 @@ namespace Assets.Scripts.Hall.View.TaskWindows
                 var itemSelf = CreateItem();
                 var dataSelf = ItemDatas[index];
                 dataSelf.BgName = Sequent ? string.Format("{0}{1}", SignBgName, index) : SignBgName;
+                dataSelf.Type = SignItemData.YxESignType.CanSign;
                 dataSelf.SignState = SignState;
                 dataSelf.CanSign = true;
                 itemSelf.UpdateView(dataSelf);
@@ -189,6 +191,7 @@ namespace Assets.Scripts.Hall.View.TaskWindows
                 data.BgName = NoSignBgName;
                 data.CanSign = false;
                 data.BgName = Sequent ? string.Format("{0}{1}", NoSignBgName, index) : NoSignBgName;
+                data.Type = SignItemData.YxESignType.NotSign;
                 data.SignState = NoSignState;
                 item.UpdateView(data);
                 _items.Add(item);

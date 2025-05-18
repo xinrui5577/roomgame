@@ -1,0 +1,73 @@
+﻿namespace Assets.Scripts.Game.Mahjong3D.Standard
+{
+    /// <summary>
+    /// UI事件协议
+    /// </summary>
+    public enum EventKeys
+    {
+        OnTing,
+        SetBanker,
+        PlayerOut,
+        PlayerJoin,
+        PlayerReady,
+        PlayAddScore,
+        UpdateCurrOpPlayer,
+        UpdateRound,
+        UpdateMahCount,
+        ReadyBtnCtrl,
+        OperateMenuCtrl,
+        OnShowHandUp,
+        OnEventHandUp,
+        OnRejoinEventHandUp,
+        ShowTotalResult,
+        ShowResult,
+        ShowChooseOperate,
+        ShowTitleMessage,
+        HideTitleMessage,
+        SetPlayerFlagState,
+        ShowDingqueFlag,
+        SetSingleHuFlag,
+        PanelGmCtrl,
+        ScoreDoubleCtrl,
+        ShowMahFriendsPanel,
+        QueryHuCard,
+        QueryBtnCtrl,
+        ShowGameExplain,
+        HideChangeTitleBtn,
+        TipBankerPutCard,
+        ChangeCardTip,
+        OnCreateNewGame,
+        ShowChooseXjfd,
+        ShowXjfdList,
+        ShowGameRule,
+        AgencyAiCtrl,
+        HideChangeCardTip,
+        ChangeErrorTip,
+        SetGangdi,
+        ShowExhibtionMahjong_hzmj,
+        HuangzhuangTip,  
+        ShowOtherHutip,
+        HideTitleAni,
+        HideHuFlag,
+        ShowPlaneShare,
+
+        ReplayRestart,
+        AiAgency,//托管
+
+        //C2S
+        C2SPlayerReady,
+        C2SDismissRoom,
+        C2SThrowoutCard,
+        C2SOpHu,
+        C2SOpGuo,
+        C2SOpPeng,
+        C2SOpChi,
+        C2OpGang,
+        C2SOpJueGnag,
+        C2SOpLaiZiGang,
+        C2SOpXJFD,
+        C2STing,
+        C2SNiuting,
+        C2SLiangdaoTing,
+    }
+}

@@ -70,9 +70,8 @@ namespace Assets.Scripts.Hall.View
         protected override void OnStart()
         {
             base.OnStart();
-            Facade.Instance<TwManger>().SendAction(ActionName, Param, UpdateView);
+            SendAction();
         }
-
 
         protected override void OnFreshView()
         {
@@ -81,7 +80,11 @@ namespace Assets.Scripts.Hall.View
             {
                 return;
             }
+        }
 
+        public void SendAction()
+        {
+            Facade.Instance<TwManager>().SendAction(ActionName, Param, UpdateView);
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets.Scripts.Common.components;
+using YxFramwork.Common.Adapters;
+using YxFramwork.Common.DataBundles;
 
 namespace Assets.Scripts.Hall_01.Item
 {
@@ -13,7 +15,7 @@ namespace Assets.Scripts.Hall_01.Item
         [SerializeField]
         private UILabel _playerID;
         [SerializeField]
-        private UITexture _playerIcon;
+        private YxBaseTextureAdapter _playerIcon;
 
         public void SetData(DbsmjPlayerRecordData data, bool roomType)
         {
@@ -29,7 +31,7 @@ namespace Assets.Scripts.Hall_01.Item
             if (!string.IsNullOrEmpty(data.Icon))
             {
                 int sex = data.Sex >= 0 ? data.Sex : 0;
-                PortraitRes.SetPortrait(data.Icon, _playerIcon, sex);
+                PortraitDb.SetPortrait(data.Icon, _playerIcon, sex);
             }
         }
     }

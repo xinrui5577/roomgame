@@ -10,8 +10,12 @@
  *              3.复制按钮，用来将对应联系内容复制到当前系统的剪切板
  *历史记录: 
 */
+
+using System.Collections.Generic;
 using UnityEngine;
+using YxFramwork.Framework;
 using YxFramwork.Framework.Core;
+using YxFramwork.Manager;
 using YxFramwork.Tool;
 using YxFramwork.View;
 
@@ -23,9 +27,17 @@ namespace Assets.Scripts.Hall.View.Agency
         public UILabel ContactType;
         [Tooltip("具体联系内容")]
         public UILabel ContactContent;
+        [HideInInspector]
+        public string Key;
+        [HideInInspector]
+        public string Value;
+        [Tooltip("复制后显示通用提示")]
+        public bool CopyWithMessage=true;
 
         public void Refresh(string key,string value)
         {
+            Key = key;
+            Value = value;
             if (ContactType&&!string.IsNullOrEmpty(key))
             {
                 ContactType.text = key;
@@ -40,9 +52,21 @@ namespace Assets.Scripts.Hall.View.Agency
         {
 
             Facade.Instance<YxGameTools>().PasteBoard = value;
-            YxMessageBox.Show(new YxMessageBoxData
+            if (CopyWithMessage)
             {
-                Msg = "成功复制到剪切板",
+                YxMessageBox.Show(new YxMessageBoxData
+                {
+                    Msg = "成功复制到剪切板",
+                });
+            }
+        }
+
+        public void OpenDetailWindow(string windowName= "AgencyDetail")
+        {
+            var window=YxWindowManager.OpenWindow(windowName);
+            window.UpdateView(new Dictionary<string,object>()
+            {
+                {"key",Key }, { "value",Value}
             });
         }
     }

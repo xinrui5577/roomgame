@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Common.components;
+﻿using YxFramwork.Common.Adapters;
+using YxFramwork.Common.DataBundles;
 using YxFramwork.Common.Model;
 using YxFramwork.Framework;
 
@@ -6,7 +7,7 @@ namespace Assets.Scripts.Hall.View.FriendWindows
 {
     public class FriendItemView : YxView
     {
-        public UITexture Protrail;
+        public YxBaseTextureAdapter Protrail;
         public UILabel NickLabel;
         public UILabel StatusLabel;
         public UILabel UserIdLabel;
@@ -24,7 +25,7 @@ namespace Assets.Scripts.Hall.View.FriendWindows
             var avatar = info.AvatarX;
             int sex;
             int.TryParse(info.SexI.ToString(), out sex);
-            PortraitRes.SetPortrait(avatar, Protrail, sex);
+            PortraitDb.SetPortrait(avatar, Protrail, sex);
         }
 
         public void OnChatClick(string nickName)

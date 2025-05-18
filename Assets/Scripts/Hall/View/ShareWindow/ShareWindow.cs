@@ -66,16 +66,14 @@ namespace Assets.Scripts.Hall.View.ShareWindow
         /// </summary>
         public void GetReward()
         {
-            YxWindowManager.ShowWaitFor();
             var parm = new Dictionary<string, object>()
                         {
                             {"option",3},
                             {"bundle_id",Application.bundleIdentifier},
                             {"share_plat",((int)SharePlat.WxSenceTimeLine).ToString() },
                         };
-            Facade.Instance<TwManger>().SendAction("shareAwards", parm, str =>
+            Facade.Instance<TwManager>().SendAction("shareAwards", parm, str =>
             {
-                YxWindowManager.HideWaitFor();
                 UpdateView(str);
                 var data = (Dictionary<string, object>)str;
                 YxMessageBox.Show(data["awardInfo"].ToString());

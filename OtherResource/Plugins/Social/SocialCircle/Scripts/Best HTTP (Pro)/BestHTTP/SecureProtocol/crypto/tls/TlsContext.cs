@@ -1,0 +1,63 @@
+/*
+http://www.cgsoso.com/forum-211-1.html
+
+CG搜搜 Unity3d 每日Unity3d插件免费更新 更有VIP资源！
+
+CGSOSO 主打游戏开发，影视设计等CG资源素材。
+
+插件如若商用，请务必官网购买！
+
+daily assets update for try.
+
+U should buy the asset from home store if u use it in your project!
+*/
+
+#if !BESTHTTP_DISABLE_ALTERNATE_SSL && (!UNITY_WEBGL || UNITY_EDITOR)
+
+using System;
+
+using Org.BouncyCastle.Crypto.Prng;
+using Org.BouncyCastle.Security;
+
+namespace Org.BouncyCastle.Crypto.Tls
+{
+    public interface TlsContext
+    {
+        IRandomGenerator NonceRandomGenerator { get; }
+
+        SecureRandom SecureRandom { get; }
+
+        SecurityParameters SecurityParameters { get; }
+
+        bool IsServer { get; }
+
+        ProtocolVersion ClientVersion { get; }
+
+        ProtocolVersion ServerVersion { get; }
+
+        /**
+         * Used to get the resumable session, if any, used by this connection. Only available after the
+         * handshake has successfully completed.
+         * 
+         * @return A {@link TlsSession} representing the resumable session used by this connection, or
+         *         null if no resumable session available.
+         * @see TlsPeer#NotifyHandshakeComplete()
+         */
+        TlsSession ResumableSession { get; }
+
+        object UserObject { get; set; }
+
+        /**
+         * Export keying material according to RFC 5705: "Keying Material Exporters for TLS".
+         *
+         * @param asciiLabel    indicates which application will use the exported keys.
+         * @param context_value allows the application using the exporter to mix its own data with the TLS PRF for
+         *                      the exporter output.
+         * @param length        the number of bytes to generate
+         * @return a pseudorandom bit string of 'length' bytes generated from the master_secret.
+         */
+        byte[] ExportKeyingMaterial(string asciiLabel, byte[] context_value, int length);
+    }
+}
+
+#endif

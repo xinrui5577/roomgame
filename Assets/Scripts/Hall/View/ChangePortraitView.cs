@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Common.UI;
 using Assets.Scripts.Common.Utils;
-using Assets.Scripts.Common.components;
+using com.yxixia.utile.Utiles;
 using UnityEngine;
+using YxFramwork.Common.DataBundles;
 using YxFramwork.Common.Model;
 using YxFramwork.Framework;
 using YxFramwork.Framework.Core;
@@ -23,8 +24,8 @@ namespace Assets.Scripts.Hall.View
         protected override void OnFreshView()
         {
             base.OnFreshView();
-            var names = PortraitRes.HeadNames;
-            var count = names.size;
+            var names = PortraitDb.HeadNames;
+            var count = names.Length;
             var pts = ItemGrid.transform;
             for (var i = 0; i < count; i++)
             {
@@ -39,6 +40,7 @@ namespace Assets.Scripts.Hall.View
         }
 
         private UIToggle _curToggle;
+
         public void OnToggleChange()
         {
             _curToggle = UIToggle.current;
@@ -49,7 +51,7 @@ namespace Assets.Scripts.Hall.View
             if (_curToggle == null) return;
             var parm = new Dictionary<string, object>();
             parm["avatar_x"] = _curToggle.name;
-            Facade.Instance<TwManger>().SendAction("changeAvatar", parm, OnChangeFinish);
+            Facade.Instance<TwManager>().SendAction("changeAvatar", parm, OnChangeFinish);
         }
 
         private void OnChangeFinish(object msg)

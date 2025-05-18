@@ -1,11 +1,11 @@
 ﻿using System.Globalization;
-using com.yxixia.utile.YxDebug;
+using Assets.Scripts.Common.Utils;
 using UnityEngine;
+using YxFramwork.Common.Adapters;
 using YxFramwork.Common.Model;
 using YxFramwork.Controller;
 using YxFramwork.Framework;
 using YxFramwork.Framework.Core;
-using YxFramwork.Manager;
 using YxFramwork.Tool;
 using YxFramwork.View;
 
@@ -42,30 +42,25 @@ namespace Assets.Scripts.Hall.View.ShopWindows
         [Tooltip("商品图片")]
         public UITexture GoodsIcon;
         /// <summary>
-        /// 数据刷新
+        /// 商品图片背景 用来让图片按这个比例所缩放
         /// </summary>
-        [Tooltip("数据刷新")]
-        public TwCallBack OnDataUpdate;
+        [Tooltip("商品图片背景，用来让图片按这个比例所缩放")]
+        public UIWidget GoodsIconWidget;
         [Tooltip("消耗格式")]
-        public string CostFormat = "x{0}"; 
-
-        protected override void OnStart()
-        {
-            InitStateTotal = 2;
-        }
+        public string CostFormat = "x{0}";
 
         protected override void OnFreshView()
         {
             var data = Data as ShopModelUnit;
             if (data == null) return;
-            if (LabelDesc!=null)LabelDesc.Text(data.Description);
+            if (LabelDesc != null) LabelDesc.Text(data.Description);
             LabelName.Text(data.Name);
-            YxDebug.LogError(string.Format("type is{0},currency is {1},CurrencyType is{2}", data.Type,data.Currency, data.CurrencyType));
-            
+            //YxDebug.LogError("type is{0},currency is {1},CurrencyType is{2}", "ShopItemView", null, data.Type, data.Currency, data.CurrencyType);
+
             if (data.Currency >= 0)
             {
                 var currency = data.CurrencyType == "5" ? data.Currency.ToString(CultureInfo.InvariantCulture) : string.Format(CostFormat, data.Currency);
-                if (data.CurrencyType=="1"|| data.CurrencyType=="coin_a")
+                if (data.CurrencyType == "1" || data.CurrencyType == "coin_a")
                 {
                     currency = string.Format(CostFormat, YxUtiles.ReduceNumber((long)data.Currency));
                 }
@@ -102,17 +97,33 @@ namespace Assets.Scripts.Hall.View.ShopWindows
                 case "4":
                     return "item2_q";
                 case "5":
-                    return "rmb_p"; 
+                    return "rmb_p";
                 default:
                     return type;
             }
         }
 
-        private void FreshIcon(Texture2D obj)
+        private void FreshIcon(Texture2D obj, int hashCode)
         {
             GoodsIcon.mainTexture = obj;
+            if (GoodsIconWidget != null)
+            {
+                GoodsIcon.MakePixelPerfect();
+                var w = GoodsIconWidget.width;
+                var h = GoodsIconWidget.height;
+                if (w > h)
+                {
+                    GoodsIcon.keepAspectRatio = UIWidget.AspectRatioSource.BasedOnHeight;
+                    GoodsIcon.height = h;
+                }
+                else
+                {
+                    GoodsIcon.keepAspectRatio = UIWidget.AspectRatioSource.BasedOnWidth;
+                    GoodsIcon.width = w;
+                }
+            }
         }
- 
+
         public void OnBuyGoods(GameObject obj)
         {
             var data = Data as ShopModelUnit;
@@ -121,17 +132,13 @@ namespace Assets.Scripts.Hall.View.ShopWindows
 
             if (string.IsNullOrEmpty(clickUrl))
             {
-                var box = YxMessageBox.Show(null, "DefGoodsItemMsgBox", "", null, (mesBox, btnName) =>
+                var box = YxMessageBox.Show(null, "GoodsItemMsgBox", "", null, (mesBox, btnName) =>
+                {
+                    if (btnName == YxMessageBox.BtnLeft)
                     {
-                        if (btnName == YxMessageBox.BtnLeft)
-                        {
-                            UserController.Instance.Buy(obj.name, msg =>
-                                {
-                                    YxMessageBox.Show("购买成功！");
-                                    OnDataUpdate(msg);
-                                });
-                        }
-                    }, true, YxMessageBox.LeftBtnStyle | YxMessageBox.RightBtnStyle);
+                        UserController.Instance.Buy(obj.name);
+                    }
+                }, true, YxMessageBox.LeftBtnStyle | YxMessageBox.RightBtnStyle);
                 box.UpdateView(Data);
                 return;
             }
@@ -142,7 +149,7 @@ namespace Assets.Scripts.Hall.View.ShopWindows
                     return;
                 case "pay"://支付
                     OnPay(data);
-                    return; 
+                    return;
                 default://网页跳转
                     {
                         _hasFresh = true;
@@ -168,12 +175,11 @@ namespace Assets.Scripts.Hall.View.ShopWindows
                 CostNum = data.Currency,
                 Describe = data.Description
             };
-            var win = CreateOtherWindow("DefPayChangeWindow");
-            if (win == null) return;
-            win.UpdateView(payInfo);
+            MainYxView.OpenWindowWithData("PayChangeWindow", payInfo);
         }
 
         private bool _hasFresh;
+
         private void OnApplicationFocus()
         {
             if (!_hasFresh) return;

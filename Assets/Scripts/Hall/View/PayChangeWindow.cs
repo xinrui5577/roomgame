@@ -15,21 +15,26 @@ namespace Assets.Scripts.Hall.View
     /// <summary>
     /// 支付界面
     /// </summary>
+    [Obsolete("Use Assets.Scripts.Hall.View.ShopWindows.YxPayChangeWindow")]
     public class PayChangeWindow : YxNguiWindow
     {
-        [Tooltip("金币")]
+        [Tooltip("商品名称")]
         public UILabel GoldNameLabel;
-        [Tooltip("元宝")]
+        [Tooltip("消耗数量")]
         public UILabel CostNumLabel;
         [Tooltip("支付类型")]
         public UIButton PrefabPayItem;
         [Tooltip("grid")]
         public UIGrid PayItemGrid;
+        [Tooltip("弹框的样式")]
+        public string MessageBoxSuccessStyle = "MessageBox";
+        public string MessageBoxFailStyle = "MessageBox";
+        public string MessageBoxCancelStyle = "MessageBox";
+        public string MessageBoxWaitStyle = "MessageBox";
         private UIButton _payItem;
 
         protected override void OnFreshView()
         {
-            if (Data == null) return;
             var payInfo = Data as PayInfo;
             if (payInfo == null) return;
             if (GoldNameLabel != null) GoldNameLabel.text = payInfo.GoldsName;
@@ -38,7 +43,7 @@ namespace Assets.Scripts.Hall.View
                 CostNumLabel.text = string.Format("¥ {0}", payInfo.CostNum);
             }
             var parm = new Dictionary<string, object>();
-            Facade.Instance<TwManger>().SendAction("payChannelList", parm, UpdateListView);
+            Facade.Instance<TwManager>().SendAction("payChannelList", parm, UpdateListView);
         }
 
         private void UpdateListView(object msg)
@@ -64,19 +69,17 @@ namespace Assets.Scripts.Hall.View
             PayItemGrid.repositionNow = true;
             PayItemGrid.Reposition();
             if (list.Count != 1) return;
-            if (Data == null) return;
-            var payInfo = Data as PayInfo;
+            var payInfo = GetData<PayInfo>();
             if (payInfo == null) return;
             OnPayClick(payType);
         }
 
         public void OnPayClick(string channel)
         {
-            if (Data == null) return;
             var payInfo = Data as PayInfo;
             if (payInfo == null) return;
             var userCtr = PayController.Instance;
-            var eChannel = (PayPlatForm)Enum.Parse(typeof(PayPlatForm), channel);
+            var eChannel = (YxEPayPlatForm)Enum.Parse(typeof(YxEPayPlatForm), channel);
             userCtr.GetPayInfo(payInfo.GetCents(), payInfo.Describe, payInfo.Id, eChannel,
                 OnPaySuccess,
                 OnPayCancel,
@@ -112,7 +115,7 @@ namespace Assets.Scripts.Hall.View
             if (_waitBox != null) _waitBox.Close();
             var result = obj as Dictionary<string, object>;
             var info = result != null && result.ContainsKey("info") ? result["info"].ToString() : "支付成功！！！";
-            YxMessageBox.Show(info);
+            YxMessageBox.Show(null, MessageBoxSuccessStyle, info);
             UserController.Instance.SendSimpleUserData();
             Close();
         }
@@ -122,7 +125,7 @@ namespace Assets.Scripts.Hall.View
             if (_waitBox != null) _waitBox.Close();
             var result = obj as Dictionary<string, object>;
             var info = result != null && result.ContainsKey("info") ? result["info"].ToString() : "支付失败！！！" ;
-            YxMessageBox.Show(info);
+            YxMessageBox.Show(null, MessageBoxFailStyle, info);
         }
 
         private void OnPayCancel(object obj)
@@ -130,7 +133,7 @@ namespace Assets.Scripts.Hall.View
             if(_waitBox!=null) _waitBox.Close();
              var result = obj as Dictionary<string, object>;
             var info = result != null && result.ContainsKey("info") ? result["info"].ToString() : "支付取消！！！";
-            YxMessageBox.Show(info);
+            YxMessageBox.Show(null, MessageBoxCancelStyle, info);
         }
 
         private YxWindow _waitBox;
@@ -138,11 +141,17 @@ namespace Assets.Scripts.Hall.View
         {
             if (_waitBox != null) _waitBox.Close();
             var result = obj as Dictionary<string, object>;
-            var info = result != null && result.ContainsKey("info") ? result["info"].ToString() : "支付中，请稍后！！！";
+            var info = result != null && result.ContainsKey("info") ? result["info"].ToString() : "支付中，请稍后...";
+            var createInfo = new YxMessageBoxCreateData
+            {
+                WinName = MessageBoxWaitStyle
+            };
+
             var boxData = new YxMessageBoxData
                 {
                     Msg = info,
-                    DelayedShowBtn = 3
+                    DelayedShowBtn = 3,
+                    CreateInfo = createInfo
                 };
             _waitBox = YxMessageBox.Show(boxData);
         }

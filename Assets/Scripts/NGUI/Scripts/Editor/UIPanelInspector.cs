@@ -407,7 +407,13 @@ public class UIPanelInspector : UIRectEditor
 
 	protected override bool ShouldDrawProperties ()
 	{
-		float alpha = EditorGUILayout.Slider("Alpha", mPanel.alpha, 0f, 1f);
+	    var colorType = (UIRect.EColorType)EditorGUILayout.EnumPopup("Color Type", mPanel.ColorType);
+	    if (colorType !=mPanel.ColorType)
+	    {
+	        NGUIEditorTools.RegisterUndo("Color Type", mPanel);
+            mPanel.ColorType = colorType;
+	    }
+	    float alpha = EditorGUILayout.Slider("Alpha", mPanel.alpha, 0f, 1f);
 
 		if (alpha != mPanel.alpha)
 		{
@@ -452,7 +458,7 @@ public class UIPanelInspector : UIRectEditor
 			EditorGUILayout.HelpBox(matchingDepths + " panels are sharing the depth value of " + mPanel.depth, MessageType.Warning);
 		}
 
-		UIDrawCall.Clipping clipping = (UIDrawCall.Clipping)EditorGUILayout.EnumPopup("Clipping", mPanel.clipping);
+        UIDrawCall.Clipping clipping = (UIDrawCall.Clipping)EditorGUILayout.EnumPopup("Clipping", mPanel.clipping);
 
 		if (mPanel.clipping != clipping)
 		{

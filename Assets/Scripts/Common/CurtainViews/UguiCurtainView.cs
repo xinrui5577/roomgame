@@ -5,6 +5,7 @@ using YxFramwork.Common.Utils;
 using YxFramwork.Manager;
 using YxFramwork.View;
 using com.yxixia.utile.YxDebug;
+using YxFramwork.Enums;
 
 namespace Assets.Scripts.Common.CurtainViews
 {
@@ -15,16 +16,16 @@ namespace Assets.Scripts.Common.CurtainViews
     {
         public Slider ProSlider;
         public Text Label;
-        public RawImage Background;
+        public CanvasGroup Background;
         public Text TipLabel;
-
+        public float HideSpeed = 0.05f;
         public override void FreshCamera()
         {
             var curCamera = Util.GetMainCamera("Untagged");
             if (curCamera == null) return;
             var curCanvas = GetComponent<Canvas>(); 
             curCanvas.renderMode = RenderMode.ScreenSpaceCamera;
-            curCanvas.worldCamera = curCamera;
+            curCanvas.worldCamera = YxWindowManager.GetCamera();
             curCanvas.sortingOrder = (int)YxWindowManager.YxWinLayer.LoadingLayer;
             curCanvas.planeDistance = curCamera.nearClipPlane+1;
             YxDebug.Log(string.Format("loading设置在:{0}", curCanvas.planeDistance));
@@ -40,13 +41,11 @@ namespace Assets.Scripts.Common.CurtainViews
         {
             if (Background == null) yield break;
             if (ProSlider!=null) ProSlider.gameObject.SetActive(false);
-            var color = Background.color;
-            var alpha = color.a;
+            var alpha = Background.alpha;
             while (alpha>0f)
             {
-                alpha -= 0.01f;
-                color.a = alpha;
-                Background.color = color;
+                alpha -= HideSpeed;
+                Background.alpha = alpha;
                 yield return new WaitForFixedUpdate();
             }
         }

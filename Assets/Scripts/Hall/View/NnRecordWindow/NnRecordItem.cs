@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using Assets.Scripts.Common.components;
+using YxFramwork.Common.Adapters;
+using YxFramwork.Common.DataBundles;
 using YxFramwork.Framework;
 
 namespace Assets.Scripts.Hall.View.NnRecordWindow
@@ -12,18 +13,17 @@ namespace Assets.Scripts.Hall.View.NnRecordWindow
         public UISprite RoomOwner;
         public UISprite BigWinner;
         public UISprite Kuang;
-        public UITexture UserHead;
+        public YxBaseTextureAdapter UserHead;
 
         protected override void OnFreshView()
         {
-            if (Data == null) return;
             if (!(Data is Dictionary<string, object>)) return;
             var userData = Data as Dictionary<string, object>;
             if (UserId != null) UserId.text = userData.ContainsKey("id") ? userData["id"].ToString() : "";
             if (UserName != null) UserName.text = userData.ContainsKey("name") ? userData["name"].ToString() : "";
             var avatar = userData.ContainsKey("avatar_x") ? userData["avatar_x"].ToString() : "";
             var sex = userData.ContainsKey("sex_i") ? int.Parse(userData["sex_i"].ToString()) : 1;
-            if (UserHead != null) PortraitRes.SetPortrait(avatar, UserHead, sex);
+            if (UserHead != null) PortraitDb.SetPortrait(avatar, UserHead, sex);
             var glod = userData.ContainsKey("gold") ? int.Parse(userData["gold"].ToString()) : 0;
             if (UserGold != null) UserGold.text = glod >= 0 ? "[BA412DFF]+" + glod : "[599239FF]" + glod;
             var bigWin = userData.ContainsKey("dayingjia") && bool.Parse(userData["dayingjia"].ToString());

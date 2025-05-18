@@ -36,6 +36,10 @@
  *          修改六
  *          时间：2018-02-10 17:46:41
  *          描述：处理网页缓存，支持后台配置清除网页缓存
+ *          
+ *          修改七
+ *          时间：2018-04-30 23:37:55
+ *          描述：处理网页内嵌Pc端跳转：跳转浏览器网页并关闭当前窗口
  *
  */
 
@@ -43,6 +47,7 @@ using System.Collections.Generic;
 using Assets.Scripts.Common.Utils;
 using Assets.Scripts.Common.WebView;
 using Assets.Scripts.Common.Windows.TabPages;
+using com.yxixia.utile.Utiles;
 using com.yxixia.utile.YxDebug;
 using UnityEngine;
 using YxFramwork.Framework.Core;
@@ -51,7 +56,7 @@ using YxFramwork.View;
 
 namespace Assets.Scripts.Hall.View.SysNoticeWindows
 {
-#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_EDITOR
+#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_EDITOR||UNITY_STANDALONE
     public class WebViewWindow : YxTabPageWindow
     {
         #region UI Param
@@ -87,9 +92,13 @@ namespace Assets.Scripts.Hall.View.SysNoticeWindows
         [Tooltip("响应协议操作，需要与名称对齐")]
         public List<EventDelegate> Actions=new List<EventDelegate>();
         [Tooltip("是否全屏")]
-        public bool FullScreen = false;
+        public bool FullScreen;
         [Tooltip("页面加载失败提示")]
         public string NoticeWhenLoadFailed = "页面加载失败，请尝试重新加载";
+        /// <summary>
+        /// js调用安卓接口用的接口名称
+        /// </summary>
+        public string JsInterFaceName = "android";
         #endregion
 
         #region Local Data
@@ -108,7 +117,7 @@ namespace Assets.Scripts.Hall.View.SysNoticeWindows
         /// <summary>
         /// 交互提示标识
         /// </summary>
-        private const string _keyGameNotice= "gamenotice";
+        private const string KeyGameNotice= "gamenotice";
         /// <summary>
         /// 缓存数据，用于校验是否为旧数据
         /// </summary>
@@ -116,13 +125,15 @@ namespace Assets.Scripts.Hall.View.SysNoticeWindows
         /// <summary>
         /// 是否需要清除缓存
         /// </summary>
-        private bool _needCleanCache = false;
+        private bool _needCleanCache;
         #endregion
 
         #region Life Cycle
 
         protected override void OnAwake()
         {
+            Debug.LogError(JsInterFaceName);
+            UniWebViewHelper.JsInterFaceName = JsInterFaceName;
 #if UNITY_EDITOR || UNITY_EDITOR_WIN
             if (CloseButtonForPc)
             {
@@ -136,7 +147,7 @@ namespace Assets.Scripts.Hall.View.SysNoticeWindows
 #endif
             if (!NoAction)
             {
-                Facade.Instance<TwManger>().SendAction(TabActionName,
+                Facade.Instance<TwManager>().SendAction(TabActionName,
                     new Dictionary<string, object>()
                    {
                        {ParamKey,ParamValue}
@@ -145,8 +156,8 @@ namespace Assets.Scripts.Hall.View.SysNoticeWindows
             }
         }
 
-#endregion
-         #region Function
+        #endregion
+        #region Function
 
         protected override void ActionCallBack()
         {
@@ -174,8 +185,7 @@ namespace Assets.Scripts.Hall.View.SysNoticeWindows
                 {
                     if (!string.IsNullOrEmpty(Data.ToString()))
                     {
-                        FullScreen = true;
-                        YxDebug.Log("ActionCallBack is string,value is:"+Data.ToString());
+                        YxDebug.Log("ActionCallBack is string,value is:"+Data);
                         _url = Data.ToString();
                         InitWebview();
                         ShowView();
@@ -233,6 +243,12 @@ namespace Assets.Scripts.Hall.View.SysNoticeWindows
         /// </summary>
         private void LoadWebView()
         {
+#if UNITY_EDITOR||UNITY_STANDALONE_WIN
+            Application.OpenURL(_url);
+            Close();
+            return;
+#endif
+            YxWindowManager.ShowWaitFor();
             _curWebView.Url = _url;
             _curWebView.OnWebViewShouldClose += OnWebViewShouldClose;
             _curWebView.ZoomEnable = ZoomEnable;
@@ -264,7 +280,7 @@ namespace Assets.Scripts.Hall.View.SysNoticeWindows
                         YxDebug.LogError(string.Format("响应指定协议，协议名称是:{0}", message.scheme));
                         switch (message.scheme)
                         {
-                            case _keyGameNotice:     
+                            case KeyGameNotice:     
                                 var action = message.path;
                                 YxDebug.LogError(string.Format("协议操作是:{0}", action));
                                 int index = ActionName.IndexOf(action);
@@ -273,7 +289,7 @@ namespace Assets.Scripts.Hall.View.SysNoticeWindows
                                 {
                                     if (Actions.Count>index)
                                     {
-                                        YxDebug.LogError(string.Format("执行动作"));
+                                        YxDebug.LogError("执行动作");
                                         Actions[index].Execute();
                                     }     
                                 }
@@ -357,6 +373,7 @@ namespace Assets.Scripts.Hall.View.SysNoticeWindows
         /// <param name="errorMessage"></param>
         private void OnLoadWebViewFinished(UniWebView webView, bool success, string errorMessage)
         {
+            YxWindowManager.HideWaitFor();
             if (success)
             {
                 if (_curWebView)
@@ -379,17 +396,8 @@ namespace Assets.Scripts.Hall.View.SysNoticeWindows
 
         private bool OnWebViewShouldClose(UniWebView view)
         {
-            bool state = true;
-            if (FullScreen)
-            {
-                Close();
-                
-            }
-            else
-            {
-                state = false;
-            }
-            return state;
+            Close();
+            return true;
         }
 
         /// <summary>
@@ -414,7 +422,7 @@ namespace Assets.Scripts.Hall.View.SysNoticeWindows
         /// <summary>
         /// 销毁
         /// </summary>
-        protected override void OnDestroy()
+        public override void OnDestroy()
         {
             if (_curWebView)
             {
@@ -467,8 +475,8 @@ namespace Assets.Scripts.Hall.View.SysNoticeWindows
         private string _keyName="Name";
         private string _keyUrl ="Url";
         private List<TabData> _datas=new List<TabData>();
-        private bool _fullScreen = false;
-        private bool _cleanCache = false;
+        private bool _fullScreen;
+        private bool _cleanCache;
 
         public List<TabData> Datas
         {
@@ -503,9 +511,9 @@ namespace Assets.Scripts.Hall.View.SysNoticeWindows
         {
             var dic = (Dictionary<string, object>)mes;
             List<object> datas;
-            YxTools.TryGetValueWitheKey(dic,out datas, _keyData);
-            YxTools.TryGetValueWitheKey(dic, out _fullScreen, _keyFullScreen);
-            YxTools.TryGetValueWitheKey(dic, out _cleanCache, _keyCleanCache);
+            dic.TryGetValueWitheKey(out datas, _keyData);
+            dic.TryGetValueWitheKey( out _fullScreen, _keyFullScreen);
+            dic.TryGetValueWitheKey( out _cleanCache, _keyCleanCache);
             foreach (var item in datas)
             {
                 var itemData = (Dictionary<string, object>) item;

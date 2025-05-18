@@ -1,9 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Assets.Scripts.Common.Utils;
+﻿using System;
+using System.Collections;
+using com.yxixia.utile.Utiles;
 using UnityEngine;
 using YxFramwork.Common.Model;
 using YxFramwork.Controller;
+using YxFramwork.Enums;
 using YxFramwork.Framework;
 using YxFramwork.Manager;
 using YxFramwork.View;
@@ -13,13 +14,9 @@ namespace Assets.Scripts.Hall.View
     /// <summary>
     /// 游戏列表面板
     /// </summary>
+    [Obsolete("Use Assets.Scripts.Hall.View.HallWindows.GameListWindow")]
     public class GameListPanel : YxBaseWindow
-    { 
-        /// <summary>
-        /// 背景
-        /// </summary>
-        [Tooltip("背景")]
-        public HallBackground HallBg; 
+    {  
         /// <summary>
         /// 更多列表视图
         /// </summary>
@@ -41,23 +38,17 @@ namespace Assets.Scripts.Hall.View
             get { return GameListModel.Instance; }
         }
 
-        public override WindowName WindowName
+        public override YxEWindowName WindowName
         {
-            get { return WindowName.GameList; }
-        }
-          
-        protected override void OnShow(object o)
-        {
-            base.OnShow(o);
-            HallBg.Change(HallState.Gamelist);
+            get { return YxEWindowName.GameList; }
         }
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
             YxWindowUtils.DisplayUI(HideUIs, false);
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
             YxWindowUtils.DisplayUI(HideUIs);
         }
@@ -67,16 +58,23 @@ namespace Assets.Scripts.Hall.View
             OnShowAllListItem();
             CurtainManager.CloseCurtain();
         }
-         
+
+        private int _curGroup = -1;
         private void OnShowAllListItem()
         {
-            if (ListView == null) return;
+            if (ListView == null) return; 
             var gm = GameListModel.Instance;
-            var gGroup = gm.GetGroup(gm.CurGroup);
-            if (gGroup == null) return;
-            if (FindRoomBtn != null) FindRoomBtn.SetActive(gGroup.Type < 0);
-            //            ListView.SetItemDatas(new List<IList>());
-            ListView.UpdateView(gGroup.GetGameList());
+            var group = gm.CurGroup;
+            if (group == _curGroup) return;
+            _curGroup = group;
+            var gGroup = gm.GetGroup(group);
+            IList list = null;
+            if (gGroup != null)
+            {
+                if (FindRoomBtn != null) FindRoomBtn.SetActive(gGroup.Type < 0);
+                list = gGroup.GameListModels;
+            }
+            ListView.UpdateView(list);
         }
 
         protected override void OnClose()

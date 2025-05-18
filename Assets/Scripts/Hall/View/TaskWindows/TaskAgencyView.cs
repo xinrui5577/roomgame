@@ -11,6 +11,7 @@
 */
 
 using System.Collections.Generic;
+using Assets.Scripts.Common.Utils;
 using Assets.Scripts.Hall.View.Agency;
 using UnityEngine;
 
@@ -22,27 +23,71 @@ namespace Assets.Scripts.Hall.View.TaskWindows
         public UIGrid ShowGrid;
         [Tooltip("代理")]
         public AgencyItem Item;
+        [Tooltip("可见性操作")]
+        public List<EventDelegate> OnVisibleAction;
+        [Tooltip("Tab名称设置回调")]
+        public List<EventDelegate> OnTabNameSetAction;
         /// <summary>
-        /// 数据
+        /// Key数据
         /// </summary>
-        private string _keyData = "data";
+        private const string KeyData = "data";
+        /// <summary>
+        /// key 是否可见
+        /// </summary>
+        private const string KeyVisible = "Visible";
+        /// <summary>
+        ///  key Tab名称
+        /// </summary>
+        private const string KeyTabName = "TabName";
+        /// <summary>
+        /// 是否可见
+        /// </summary>
+        private bool _visible;
+
+        public bool Visible
+        {
+            set { _visible = value; }
+            get { return _visible; }
+        }
+
+        /// <summary>
+        /// 标签名称
+        /// </summary>
+        public string TabName
+        {
+            private set; get;
+        }
 
         protected override void DealShowData()
         {
             if(Data is Dictionary<string,object>)
             {
                 Dictionary<string, object> dic = (Dictionary<string, object>) Data;
-                if(dic.ContainsKey(_keyData))
+
+                dic.TryGetValueWitheKey(out _visible, KeyVisible);
+                if (gameObject.activeInHierarchy)
                 {
-                    List<object> agencys = (List<object>)dic[_keyData];
+                    StartCoroutine(OnVisibleAction.WaitExcuteCalls());
+                }
+                if (dic.ContainsKey(KeyData))
+                {
+                    List<object> agencys = (List<object>)dic[KeyData];
+                    if (dic.ContainsKey(KeyTabName))
+                    {
+                        TabName = dic[KeyTabName].ToString();
+                        if (gameObject.activeInHierarchy)
+                        {
+                            StartCoroutine(OnTabNameSetAction.WaitExcuteCalls());
+                        }
+                    }
                     if (ShowGrid)
                     {
-                        ClearTrans(ShowGrid.transform);
+                        ShowGrid.transform.DestroyChildren();
                         if (Item)
                         {
                             for (int i = 0, count = agencys.Count; i < count; i++)
                             {
-                                var obj = NGUITools.AddChild(ShowGrid.gameObject,Item.gameObject);
+                                var obj = ShowGrid.gameObject.AddChild(Item.gameObject);
                                 if (obj)
                                 {
                                     AgencyItem item = obj.GetComponent<AgencyItem>();

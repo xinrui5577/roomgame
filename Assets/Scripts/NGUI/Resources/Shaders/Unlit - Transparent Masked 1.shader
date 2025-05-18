@@ -72,10 +72,22 @@ Shader "Hidden/Unlit/Transparent Masked 1"
 				// Softness factor
 				float2 factor = (float2(1.0, 1.0) - abs(IN.worldPos)) * _ClipArgs0;
 			
-				// Sample the texture
-				half4 col = tex2D(_MainTex, IN.texcoord) * IN.color;
-				col.a *= clamp( min(factor.x, factor.y), 0.0, 1.0);
+				// Sample the texture 
+				half4 inCol = IN.color;
+				fixed ctype = inCol;
+				fixed4 col = tex2D(_MainTex, IN.texcoord);
+				if (ctype == -1)//÷√ª“
+				{
+					float grey = dot(col.rgb, float3(0.299, 0.587, 0.114));
+					col.rgb = float4(grey, grey, grey, inCol.a);
+				}
+				else
+				{
+					col = col * inCol;
+				}
+				col.a *= clamp(min(factor.x, factor.y), 0.0, 1.0);
 				col.a *= tex2D(_Mask, IN.texcoord1).a;
+
 				return col;
 			}
 			ENDCG

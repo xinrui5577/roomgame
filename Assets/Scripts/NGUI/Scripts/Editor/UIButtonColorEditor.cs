@@ -70,9 +70,12 @@ public class UIButtonColorEditor : UIWidgetContainerEditor
 
 			NGUIEditorTools.DrawProperty("Hover", serializedObject, "hover");
 			NGUIEditorTools.DrawProperty("Pressed", serializedObject, "pressed");
+		    GUILayout.BeginHorizontal();
 			NGUIEditorTools.DrawProperty("Disabled", serializedObject, "disabledColor");
-			if (Application.isPlaying) EditorGUILayout.ColorField("Default", (target as UIButtonColor).defaultColor);
-			NGUIEditorTools.EndContents();
+            NGUIEditorTools.DrawProperty("HasGray", serializedObject, "HasGray");
+		    GUILayout.EndHorizontal();
+            if (Application.isPlaying) EditorGUILayout.ColorField("Default", (target as UIButtonColor).defaultColor);
+            NGUIEditorTools.EndContents();
 		}
 	}
 

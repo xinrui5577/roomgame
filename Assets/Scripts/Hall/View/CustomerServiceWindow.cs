@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Assets.Scripts.Common.Windows;
 using com.yxixia.utile.YxDebug;
 using UnityEngine;
 using YxFramwork.Framework.Core;
 using YxFramwork.Manager;
+using YxFramwork.Tool;
+using YxFramwork.View;
 
 namespace Assets.Scripts.Hall.View
 {
@@ -37,15 +40,19 @@ namespace Assets.Scripts.Hall.View
         /// </summary>
         [Tooltip("起始位置X")]
         public Vector2 StartPos = new Vector2(20,-50);
+        /// <summary>
+        /// 打开的网页
+        /// </summary>
+        [Tooltip("打开的网页")]
+        public string WebUrl;
 
         protected override void OnAwake()
         {
-            Facade.Instance<TwManger>().SendAction(ActionName, new Dictionary<string, object>(), UpdateView);
+            Facade.Instance<TwManager>().SendAction(ActionName, new Dictionary<string, object>(), UpdateView);
         }
 
         protected override void OnFreshView()
         {
-            YxWindowManager.HideWaitFor();
             if (Data==null)
             {
                 YxDebug.Log("信息没有配置");
@@ -53,11 +60,11 @@ namespace Assets.Scripts.Hall.View
             }
             if (ShowParent == null) ShowParent = gameObject;
             var dict = Data as Dictionary<string, object>;
-            if (dict == null) return;
+            if (dict == null) { return;}
             var height = StartPos.y;
             foreach (var pair in dict)
             {
-                var item = NGUITools.AddChild(ShowParent, KeyValueItemPrefab.gameObject).GetComponent<KeyValueView>();
+                var item = ShowParent.AddChild(KeyValueItemPrefab.gameObject).GetComponent<KeyValueView>();
                 item.gameObject.SetActive(true);
                 var key = pair.Key;
                 var value = pair.Value.ToString();
@@ -66,15 +73,20 @@ namespace Assets.Scripts.Hall.View
                     value = Application.version;
                 }
                 var data = new KeyValueData
-                    {
-                        KeyString = key,
-                        ValueString = value
-                    };
-                
+                {
+                    KeyString = key,
+                    ValueString = value
+                };
+
                 item.UpdateView(data);
                 item.transform.localPosition = new Vector3(StartPos.x, height);
-                height -= (item.ItemHeight + CellHeight);           
+                height -= (item.ItemHeight + CellHeight);
             }
+        }
+
+        public void OpenUrl()
+        {
+            Application.OpenURL(WebUrl);
         }
     }
 }

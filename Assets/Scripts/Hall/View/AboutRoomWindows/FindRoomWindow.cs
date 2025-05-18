@@ -38,7 +38,7 @@ namespace Assets.Scripts.Hall.View.AboutRoomWindows
         [Tooltip("输入键")]
         public UIButton[] Keyboards;
         /// <summary>
-        /// 标签默认索引
+        /// 标签默认索引\
         /// </summary>
         [Tooltip("默认标签选择")]
         public int TabDefaultIndex = -1;
@@ -68,6 +68,11 @@ namespace Assets.Scripts.Hall.View.AboutRoomWindows
         public void OnClick(GameObject go)
         {
             OnClickWithName(go.name);
+        }
+
+        public void OnCLick(int roomId)
+        {
+            FindRoomById(roomId);
         }
 
         public void OnClickWithName(string btnName)
@@ -107,7 +112,7 @@ namespace Assets.Scripts.Hall.View.AboutRoomWindows
             RoomIdLabel.text = cur.Remove(cur.Length - 1);
         }
 
-        private void Clear()
+        protected void Clear()
         {
             if (RoomIdMoreLabel.Length > 0)
             {
@@ -137,8 +142,11 @@ namespace Assets.Scripts.Hall.View.AboutRoomWindows
             RoomIdLabel.text = roomId;
             return RoomIdLabel.text.Length >= MaxIdCount;
         }
-
-        private string GetCurRoomId()
+        /// <summary>
+        /// 处理RoomId
+        /// </summary>
+        /// <returns></returns>
+        protected string GetCurRoomId()
         {
             if (RoomIdMoreLabel.Length > 0)
             {
@@ -159,58 +167,58 @@ namespace Assets.Scripts.Hall.View.AboutRoomWindows
             OnFindRoom();
         }
 
-        private void OnFindRoom()
-        {
-            YxWindowManager.ShowWaitFor(); 
+        protected virtual void OnFindRoom()
+        { 
             int roomType;
             var roomCId = GetCurRoomId();
             if (!int.TryParse(roomCId, out roomType)) return;
+            FindRoomById(roomType);
+        }
+
+        protected void FindRoomById(int roomType)
+        {
             RoomListController.Instance.FindRoom(roomType, obj =>
+            {
+                Clear();
+                var data = obj as IDictionary<string, object>;
+                if (data == null)
                 {
-                    Clear();
-                    YxWindowManager.HideWaitFor();
-                    var data = obj as  IDictionary<string, object>;
-                    if (data == null)
+                    YxMessageBox.Show("没有找到房间！！");
+                    return;
+                }
+                var str = data.ContainsKey(RequestKey.KeyMessage) ? data[RequestKey.KeyMessage] : null;
+                if (str != null)
+                {
+                    YxMessageBox.Show(str.ToString());
+                    return;
+                }
+                var rid = data["roomId"];
+                var roomId = int.Parse(rid.ToString());
+                YxDebug.LogError("加入房间的真实ID是" + roomId);
+                if (roomId < 1)
+                {
+                    YxMessageBox.Show("查找异常！");
+                    return;
+                }
+                if (NeedRoomInfo && data.ContainsKey("users"))
+                {
+                    var win = RoominfoWindow ?? CreateOtherWindow("RoomInfoWindow");
+                    if (win != null)
                     {
-                        YxMessageBox.Show("没有找到房间！！");
-                        return;
-                    }
-                    var str = data.ContainsKey(RequestKey.KeyMessage)?data[RequestKey.KeyMessage]:null;
-                    if (str!=null)
-                    {
-                        YxMessageBox.Show(str.ToString());
-                        return;
-                    }
-                    var rid = data["roomId"];
-                    Debug.Log(rid);
-                    Debug.Log(rid.GetType());
-                    if (rid is string)
-                    {
-                        rid = int.Parse(rid.ToString());
-                    }
-                    int roomId = int.Parse(rid.ToString());
-                    YxDebug.LogError("加入房间的真实ID是" + roomId);
-                    if (roomId < 1)
-                    {
-                        YxMessageBox.Show("查找异常！"); 
-                        return;
-                    }
-                    if (NeedRoomInfo && data.ContainsKey("users"))
-                    {
-                        var win = RoominfoWindow ?? CreateOtherWindow("DefRoomInfoWindow");
-                        data["_roomShowId"]= roomType;
+                        data["_roomShowId"] = roomType;
                         win.UpdateView(data);
                         return;
                     }
-                    var gameKey = (string) (data.ContainsKey("gameKey") ? data["gameKey"]: App.GameKey);
-                    RoomListController.Instance.JoinFindRoom(roomId, gameKey);
-                });
+                }
+                var gameKey = (string)(data.ContainsKey("gameKey") ? data["gameKey"] : App.GameKey);
+                RoomListController.Instance.JoinFindRoom(roomId, gameKey);
+            });
         }
 
 
         public void OnOpenCreateWindow()
         {
-            var win = YxWindowManager.OpenWindow("DefCreateRoomWindow", true);
+            var win = YxWindowManager.OpenWindow("CreateRoomWindow", true);
             var createWin = (CreateRoomWindow)win;
             if (createWin == null) return;
             createWin.TabDefaultIndex = TabDefaultIndex;

@@ -19,7 +19,7 @@ namespace Assets.Scripts.Hall.View.ShopWindows
 
         public void OnRechargeRecord()
         {
-            Facade.Instance<TwManger>().SendAction("buyRecord", new Dictionary<string, object>(), OnFreshBuyReCord);
+            Facade.Instance<TwManager>().SendAction("buyRecord", new Dictionary<string, object>(), OnFreshBuyReCord);
         }
 
         private void OnFreshBuyReCord(object data)

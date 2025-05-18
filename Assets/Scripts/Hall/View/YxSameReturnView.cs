@@ -8,7 +8,7 @@
  *历史记录: 
 */
 
-using com.yxixia.utile.YxDebug;
+using Assets.Scripts.Common.Utils;
 using UnityEngine;
 
 namespace Assets.Scripts.Hall.View
@@ -30,18 +30,7 @@ namespace Assets.Scripts.Hall.View
 
         protected virtual void DealShowData()
         {
-            if (ShowLabel)
-            {
-                ShowLabel.text = Data.ToString();
-            }
-        }
-
-        protected void ClearTrans(Transform trans)
-        {
-            while (trans.childCount>0)
-            {
-                DestroyImmediate(trans.GetChild(0).gameObject);
-            }
+            ShowLabel.TrySetComponentValue(Data.ToString());
         }
     }
 }

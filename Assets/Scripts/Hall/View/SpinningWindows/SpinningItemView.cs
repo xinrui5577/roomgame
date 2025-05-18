@@ -28,12 +28,11 @@ namespace Assets.Scripts.Hall.View.SpinningWindows
          
         protected override void OnFreshView()
         {
-            if (Data == null) return;
             var sData = Data as SpinningItemData;
             if (sData == null) return;
             RewardName.text = sData.Name;
             RewardCount.text = sData.Count.ToString();
-            AsyncImage.Instance.GetAsyncImage(sData.ImgUrl, texture =>
+            AsyncImage.Instance.GetAsyncImage(sData.ImgUrl,( texture,hashCode) =>
             {
                 RewardIcon.mainTexture = texture;
             });
@@ -47,6 +46,7 @@ namespace Assets.Scripts.Hall.View.SpinningWindows
         public string Name = "";
         public string ImgUrl = "";
         public int Index = -1;
+        public string Msg = "";
         /* {"id": "1",
          "name": "\u73b0\u91d1\u5927\u5956",
          "img": null,
@@ -78,6 +78,11 @@ namespace Assets.Scripts.Hall.View.SpinningWindows
             {
                 var temp = dict["img"];
                 if (temp != null) ImgUrl = temp.ToString();
+            }
+            if (dict.ContainsKey("good_info"))
+            {
+                var temp = dict["good_info"];
+                if (temp != null) Msg = temp.ToString();
             }
         }
     }

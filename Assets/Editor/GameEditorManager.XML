@@ -1,0 +1,4435 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GameEditorManager</name>
+    </assembly>
+    <members>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfig">
+            <summary>
+            自动打包配置
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfig.ProductName">
+            <summary>
+            自动打包的指定产品名“大木桶”(Damutong)
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfig.Build">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfig.ReSetReplace(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent)">
+            <summary>
+            替换内容
+            </summary>
+            <param name="cfg"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfig.ReSetGameSkin(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent)">
+            <summary>
+            游戏部分
+            </summary>
+            <param name="cfg"></param>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfigInfo">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfigInfo.ProductName">
+            <summary>
+            产品名称
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfigInfo.BuildPath">
+            <summary>
+            导出路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfigInfo.SaveName">
+            <summary>
+            导出名称
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfigInfo.BundleIdentifier">
+            <summary>
+            程序包标识
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfigInfo.Version">
+            <summary>
+            版本
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfigInfo.ConfigName">
+            <summary>
+            平台,就是对应的configcontent的名称
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfigInfo.HallSkin">
+            <summary>
+            大厅皮肤Skin_00000
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfigInfo.SplashImagePath">
+            <summary>
+            闪屏路径，默认为空（黑色）
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfigInfo.SplashFImagePath">
+            <summary>
+            闪屏路径，默认为空（黑色）
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfigInfo.IconPath">
+            <summary>
+            应用图标路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfigInfo.ServerUrl">
+            <summary>
+            服务器
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfigInfo.HasWechatLogin">
+            <summary>
+            是否有微信登录
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfigInfo.WxAppId">
+            <summary>
+            微信appid
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfigInfo.HasQqLogin">
+            <summary>
+            是否有qq登录
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfigInfo.QqAppId">
+            <summary>
+            qqAppId
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfigInfo.NetSelectCfg">
+            <summary>
+            是否有负载均衡
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfigInfo.LoginType">
+            <summary>
+            登录样式
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfigInfo.GameListInfo">
+            <summary>
+            游戏清单,   gamekey=skinId(规定的皮肤id)
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.AutoBuildConfigInfo.#ctor(System.String)">
+            <summary>
+            一键打包 配置适配
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.BaseBuildSettingChildView">
+            <summary>
+            BaseBuildSetting的子视图
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.BaseBuildSettingChildView.ParentWin">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.BaseBuildSettingChildView.CurBuildConfig">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.BaseBuildSettingChildView.CurProductData">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.BaseBuildSettingChildView.CurConfig">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BaseBuildSettingChildView.Invalid">
+            <summary>
+            有效性
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BaseBuildSettingChildView.Init(UnityEditor.EditorWindow)">
+            <inheritdoc />
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BaseBuildSettingChildView.OnChangeConfig">
+            <summary>
+            切换事件
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BaseBuildSettingChildView.OnInit">
+            <summary>
+            每次Enabel走一次
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BaseBuildSettingChildView.OnSave">
+            <summary>
+            保存时触发
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BaseBuildSettingChildView.OnEnable(Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig)">
+            <summary>
+            
+            </summary>
+            <param name="buildConfig"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BaseBuildSettingChildView.OnEnableEx">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BaseBuildSettingChildView.OnDisable">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BaseBuildSettingChildView.OnDisableEx">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BaseBuildSettingChildView.Show">
+            <inheritdoc />
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BaseBuildSettingChildView.Show(Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData,Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent)">
+            <summary>
+            
+            </summary>
+            <param name="buildData"></param>
+            <param name="config"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BaseBuildSettingChildView.OnDrawBtns">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BaseBuildSettingChildView.OnShow">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BaseBuildSettingChildView.Hide">
+            <inheritdoc />
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BaseBuildSettingChildView.OnDestroy">
+            <inheritdoc />
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.BatchBuildConfig">
+            <summary>
+            批量打包配置文件
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BatchBuildConfig.Add(Assets.Editor.YxEditor.BuildSetting.BatchBuildConfigInfo)">
+            <summary>
+            添加
+            </summary>
+            <param name="info"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BatchBuildConfig.Remove(System.String,System.String,System.String)">
+            <summary>
+            移除
+            </summary>
+            <param name="skinName"></param>
+            <param name="productName"></param>
+            <param name="productConfigName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BatchBuildConfig.Save">
+            <summary>
+            保存
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.BuildAssetBundleWindow._resCfg">
+            <summary>
+            定制信息
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.BuildAssetBundleWindow._curSkinCfg">
+            <summary>
+            项目索引
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildAssetBundleWindow.DrawSkinList">
+            <summary>
+            皮肤列表
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildAssetBundleWindow.DeleteSkinGroup">
+            <summary>
+            删除皮肤组
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildAssetBundleWindow.AddSkinGroup(UnityEngine.Rect)">
+            <summary>
+            增加皮肤组
+            </summary>
+            <param name="rect"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildAssetBundleWindow.OnSelectedType(Assets.Editor.YxEditor.Models.KeyTypeCfg)">
+            <summary>
+            选择种类
+            </summary>
+            <param name="keyTypeCfg"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildAssetBundleWindow.Init">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildAssetBundleWindow.DeleteKeyType">
+            <summary>
+            删除key配置
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildAssetBundleWindow.AddKeyType">
+            <summary>
+            添加key配置
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildAssetBundleWindow.AddCustom">
+            <summary>
+            添加皮肤
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildAssetBundleWindow.DeleteSkin">
+            <summary>
+            删除皮肤
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildAssetBundleWindow.DrawSettingView">
+            <summary>
+            回执设置内容
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildAssetBundleWindow.DrawSettingInfo">
+            <summary>
+            绘制设置信息
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildAssetBundleWindow.DrawNormalCustomInfo">
+            <summary>
+            绘制大厅的定制信息
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildAssetBundleWindow.DrawCustomList">
+            <summary>
+            绘制定制列表
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildAssetBundleWindow.DrawSceneInfo">
+            <summary>
+            绘制场景信息
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildAssetBundleWindow.DrawAssetsInfo">
+            <summary>
+            绘制资源信息
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.I18NView">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.I18NView.OnEnableEx">
+            <inheritdoc />
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.I18NView.OnShow">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.I18NView.DrawContent">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.I18NView.OnDisableEx">
+            <inheritdoc />
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.SettingConfigPath">
+            <summary>
+            项目管理配置文件路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.ConfigPath">
+            <summary>
+            当前项目配置文件路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.SkinsPath">
+            <summary>
+            当前项目所有皮肤文件夹路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.OtherResourcePath">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.ProductInfoCfgName">
+            <summary>
+            属性配置文件名
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.AssetNamesCfgName">
+            <summary>
+            todo 待删
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.AutoFilePath">
+            <summary>
+            自定创建的文件夹
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.ResLoadImagePath">
+            <summary>
+            图片路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.ResourcesPath">
+            <summary>
+            Resources路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.ResourcesImagesPath">
+            <summary>
+            Resources下的Images路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.EditorsPath">
+            <summary>
+            Editor文件夹
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.EditorsConfigsPath">
+            <summary>
+            Editor中configs文件夹
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.SplashImageName">
+            <summary>
+            闪屏路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.SplashFImageName">
+            <summary>
+            闪屏路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.DefualtIconName">
+            <summary>
+            默认图标
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.DefualtLoadingName">
+            <summary>
+            Loading
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.DefualtLogoName">
+            <summary>
+            Logo
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.DefualtTitleLogoName">
+            <summary>
+            Logo
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.IconsFolder">
+            <summary>
+            图标文件夹
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.AssetNamesClassName">
+            <summary>
+            资源名称
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.AssetNamesClassPath">
+            <summary>
+            AppInfo的路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.PrefabReplaceSources">
+            <summary>
+            要替换的预制体集合
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.FileReplaceSources">
+            <summary>
+            要替换文件的集合
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.FolderReplaceSources">
+            <summary>
+            要替换的文件夹的集合
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.FailCount">
+            <summary>
+            失败个数
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.ProductDatas">
+            <summary>
+            appinfo数据
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.GamesInfo">
+            <summary>
+            游戏信息
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.SkinKeys">
+            <summary>
+            皮肤集合
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.GetProjectKey(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="projectPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.LoadSkins">
+            <summary>
+            加载所有皮肤
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.GetSkinFilesFromFtp(System.Collections.Generic.List{System.String})">
+            <summary>
+            从ftp加载文件
+            </summary>
+            <param name="outlist"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.GetSkinFiles(System.Collections.Generic.List{System.String})">
+            <summary>
+            
+            </summary>
+            <param name="outlist"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.LoadCurProductList(System.String)">
+            <summary>
+            加载当前皮肤下的所有产品
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.LoadProductConfig(Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData)">
+            <summary>
+            加载当前分类的配置
+            </summary>
+            <param name="buildProductData"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.ReadSkinConfig(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent,System.String)">
+            <summary>
+            设置
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.OnSave(Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData,System.Boolean)">
+            <summary>
+            保存
+            </summary> 
+            <param name="buildProductData"></param>
+            <param name="isNewVersion"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.OnBackups(Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData)">
+            <summary>
+            备份
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.BuildSingle(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent,System.Boolean)">
+            <summary>
+            单个打包
+            </summary>
+            <param name="config"></param>
+            <param name="isDeve">是否为调试模式</param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.Simulate(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent)">
+            <summary>
+            模拟
+            </summary>
+            <param name="config"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.UpdateDefaultRes(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent)">
+            <summary>
+            拷贝default资源到项目中
+            </summary>
+            <param name="config"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.FreshPlugins(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent)">
+            <summary>
+            刷新插件
+            </summary>
+            <param name="config"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.SubstituteLogoImage(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent)">
+            <summary>
+            替换Logo
+            </summary>
+            <param name="config"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.SubstituteTitleLogoImage(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent)">
+            <summary>
+            替换Logo
+            </summary>
+            <param name="config"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.SubstituteLoadingImage(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent)">
+            <summary>
+            替换Loading
+            </summary>
+            <param name="config"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.CopyFile(System.String,System.String)">
+            <summary>
+            拷贝
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.BatchBuild(Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig)">
+            <summary>
+            批量打包
+            </summary>
+            <returns>失败个数</returns>
+            /// <summary>
+            批量打包
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.CopyWxApi(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent)">
+            <summary>
+            微信登陆，todo 插件化
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.UpdateProductInfoClass(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent)">
+            <summary>
+            刷新属性类
+            </summary>
+            <param name="config"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.FreshSkinInfo(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent)">
+            <summary>
+            刷新皮肤信息 格式：    gamekey=skin#版本|skin_1#版本
+            注：版本可有可无
+            </summary>
+            <param name="config"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.CreateIconSolidColorImage(UnityEngine.Color,System.String)">
+            <summary>
+            创建纯色图片
+            </summary>
+            <param name="color"></param>
+            <param name="sourcePath"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.SettingExtend(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent)">
+            <summary>
+            设置扩展内容
+            </summary>
+            <param name="config"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.AddExtendTask(System.String,Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.ExtendTask)">
+            <summary>
+            添加任务
+            </summary>
+            <param name="tag"></param>
+            <param name="task"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.ReplaceFiles(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent)">
+            <summary>
+            替换文件
+            </summary>
+            <param name="config"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.ReplaceFolders(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent)">
+            <summary>
+            替换文件夹
+            </summary>
+            <param name="config"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig.GetProduct(System.String)">
+            <summary>
+            获取产品数据
+            </summary>
+            <param name="productName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.Entitys.SkinInfoData">
+            <summary>
+            皮肤数据
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.SkinInfoData.GameKey">
+            <summary>
+            游戏GameKey
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.SkinInfoData.SkinId">
+            <summary>
+            皮肤映射
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.SkinInfoData.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.SkinInfoData.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="gameKey"></param>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData">
+            <summary>
+            项目打包数据
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.TimeFormat">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.CreateDate">
+            <summary>
+            日期
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.BuildCfg">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.Name">
+            <summary>
+            平台名称
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.SkinName">
+            <summary>
+            当前皮肤名称
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.ConfigList">
+            <summary>
+            不同设备平台配置
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.IsSelected">
+            <summary>
+            选择
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.IsDeploy">
+            <summary>
+            是否展开状态
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.#ctor(System.String,System.String,Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig)">
+            <summary>
+            通过文件名创建
+            </summary>
+            <param name="skinName"></param>
+            <param name="fileName"></param>
+            <param name="bconfig"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.#ctor(Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig,System.String,System.String)">
+            <summary>
+            直接创建
+            </summary>
+            <param name="skinName"></param>
+            <param name="productName"></param>
+            <param name="bconfig"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.GetCreateDateTime">
+            <summary>
+            获取日期
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.FilePath">
+            <summary>
+            文件路径
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.#ctor(Assets.Editor.YxEditor.BuildSetting.Entitys.BuildConfig,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="bconfig"></param>
+            <param name="skinName"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.Clear">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.Add(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent)">
+            <summary>
+            
+            </summary>
+            <param name="curItem"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.Get(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.GetIdentifier">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.LoadConfig">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.Save(System.Boolean)">
+            <summary>
+            保存
+            </summary>
+            <param name="isNewVersion"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.GetConfig(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="productCfgName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.Compare(Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData,Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData)">
+            <summary>
+            比较方法
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData.GetResSkinName">
+            <summary>
+            规则：
+            资源皮肤的名字结构    小于2位,补0，否则只显示序号  ， 例如:skin_00; skin_36; skin_188
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent">
+            <summary>
+            产品配置数据
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.IsDeve">
+            <summary>
+            开发模式
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.Name">
+            <summary>
+            配置名称，用来区别不同的配置
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.SavePath">
+            <summary>
+            保存路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.AssetBundleDatas">
+            <summary>
+            资源
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.PropertyInfo">
+            <summary>
+            strat配置
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.ProductInfo">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.PrefabReplaceDatas">
+            <summary>
+            替换预制体
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.FileReplaceDatas">
+            <summary>
+            替换文件
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.FolderReplaceDatas">
+            <summary>
+            替换文件夹
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.SkinInfo">
+            <summary>
+            皮肤数据 gamekey = 皮肤索引
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.Games">
+            <summary>
+            游戏    游戏Id=指定版本号
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.PluginDatas">
+            <summary>
+            插件信息
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.I18NDatas">
+            <summary>
+            i18n
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.IsBeBuild">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.SplashImageB">
+            <summary>
+            闪屏
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.SplashImageF">
+            <summary>
+            闪屏
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.LoadingImage">
+            <summary>
+            切换场景图片
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.LogoImage">
+            <summary>
+            商标图片
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.TitleLogoImage">
+            <summary>
+            标题商标图片
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.DefaultIcon">
+            <summary>
+            默认图片
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.Scenes">
+            <summary>
+            场景
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.SaveName">
+            <summary>
+            保存名称
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.WithVersion">
+            <summary>
+            是否携带版本
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.WithTimeStamp">
+            <summary>
+            是否携带时间戳
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.ProductName">
+            <summary>
+            项目名称
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.BundleIdentifier">
+            <summary>
+            标识符
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.Version">
+            <summary>
+            版本
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.VersionCode">
+            <summary>
+            版本码
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.IsAutoVersion">
+            <summary>
+            自动加版本
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.Target">
+            <summary>
+            发布目标
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.Defined">
+            <summary>
+            宏定义
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.KeyStorePath">
+            <summary>
+            android 商店秘钥
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.KeyStorePwd">
+            <summary>
+            android 商店秘钥密码
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.Suffix">
+            <summary>
+            扩展名
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.IsIconFoldout">
+            <summary>
+            图标
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.ErrorMsseage">
+            <summary>
+            错误信息
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.GetServerExtendId">
+            <summary>
+            服务器推广id
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.GetStartCfgUrl(System.String)">
+            <summary>
+            获得startcfg路径
+            </summary>
+            <param name="skinName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.SetConfig(System.String[])">
+            <summary>
+            设置配置
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.SetPluginInfos(System.String)">
+            <summary>
+            插件信息 【插件类型#插件样式#key|value,key1|value1#;】
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.GetPluginInfos">
+            <summary>
+            插件信息 【插件类型#插件样式#key|value,key1|value1#;】
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.SetReplaceDatas(System.Collections.Generic.IDictionary{System.String,System.Boolean},System.Collections.Generic.IDictionary{System.String,Assets.Editor.YxEditor.BuildSetting.Entitys.ReplaceData},System.String,System.Func{System.String,System.String})">
+            <summary>
+            设置替换文件夹信息
+            </summary>
+            <param name="datas"></param>
+            <param name="content"></param>
+            <param name="sources"></param>
+            <param name="specialFun"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.SpecialPrefabKey(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.SetGames(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="gameData"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.SetSkinInfo(System.String)">
+            <summary>
+            旧版皮肤信息  格式： projectName#gamekey#skin1|skin2    
+            </summary>
+            <param name="skininfoStr"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.SetSkinInfos(System.String)">
+            <summary>
+            皮肤信息  格式： projectName#gamekey#skin1|skin2    
+            </summary>
+            <param name="skininfoStr"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.SetProductPropertys(System.String)">
+            <summary>
+            设置属性
+            </summary>
+            <param name="propertys"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.SetAssetsInfo(System.String)">
+            <summary>
+            设置资源
+            </summary>
+            <param name="assetInfo"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.SetScenes(System.String)">
+            <summary>
+            设置场景
+            </summary>
+            <param name="sceneNames"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.SetIcons(System.String)">
+            <summary>
+            设置图标
+            </summary>
+            <param name="s"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.ToConfig(System.Boolean)">
+            <summary>
+            转内容
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.GetAssetsInfo">
+            <summary>
+            获取资源保存数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.GetSkinInfo">
+            <summary>
+            获取
+            </summary> 
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.GetProductPropertys">
+            <summary>
+            获取属性保存数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.GetStartConfigName">
+            <summary>
+            startconfig名称
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.GetSceneNames">
+            <summary>
+            获取场景保存数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.GetReplaceDatas(System.Collections.Generic.Dictionary{System.String,System.Boolean},System.Collections.Generic.Dictionary{System.String,Assets.Editor.YxEditor.BuildSetting.Entitys.ReplaceData})">
+            <summary>
+            获取替换信息
+            </summary>
+            <param name="sourceDicts"></param>
+            <param name="datas"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.GetGameData(System.String)">
+            <summary>
+            获得游戏数据
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.AddGameData(System.String,System.Int64)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="version"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.GetPluginData(System.String)">
+            <summary>
+            获取插件数据
+            </summary>
+            <param name="type">插件类型</param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.SetPluginData(System.String,Assets.Editor.YxEditor.BuildSetting.Entitys.PluginConfig)">
+            <summary>
+            设置插件
+            </summary>
+            <param name="type"></param>
+            <param name="data"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.EditorProductInfo(System.String,System.String)">
+            <summary>
+            修改值
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent.GetProductInfo(System.String)">
+            <summary>
+            获得指定字段的信息
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.Entitys.ReplaceData">
+            <summary>
+            替换数据
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ReplaceData.SourcePath">
+            <summary>
+            源文件路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ReplaceData.AlternatePath">
+            <summary>
+            替换文件路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.ReplaceData.NeedDeleteSf">
+            <summary>
+            是否删除源文件
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.Entitys.GameData">
+            <summary>
+            游戏信息数据
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.GameData.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.GameData.IsSelected">
+            <summary>
+            是否选择
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.GameData.Version">
+            <summary>
+            版本
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.Entitys.YxPluginData">
+            <summary>
+            插件数据
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.YxPluginData.Type">
+            <summary>
+            插件
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.YxPluginData.Style">
+            <summary>
+            样式
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.YxPluginData.KeyValueData">
+            <summary>
+            数据
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.YxPluginData.Load(System.String)">
+            <summary>
+            加载
+            </summary>
+            <param name="content"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.YxPluginData.ToString">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.YxPluginData.GetValue(System.String)">
+            <summary>
+            获取值
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.YxPluginData.SetValue(System.String,System.String)">
+            <summary>
+            设置值
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.Entitys.PluginConfig">
+            <summary>
+            插件的配置文件
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.PluginConfig.StyleName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.PluginConfig.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.PluginConfig.Setting">
+            <summary>
+            独有设置
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.PluginConfig.Cmd">
+            <summary>
+            命令
+            </summary>
+        </member>
+        <member name="P:Assets.Editor.YxEditor.BuildSetting.Entitys.PluginConfig.CfgPath">
+            <summary>
+            路径
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.PluginConfig.#ctor(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="styleName"></param>
+            <param name="path"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.PluginConfig.LoadConfig(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="cfgPath"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.PluginConfig.GetCmds(UnityEditor.BuildTarget)">
+            <summary>
+            
+            </summary>
+            <param name="target"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.Entitys.YxPluginInfo">
+            <summary>
+            插件信息
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.YxPluginInfo.CurConfigContent">
+            <summary>
+            当前配置
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.YxPluginInfo.CmdInfos">
+            <summary>
+            命令
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.Entitys.YxPluginInfo.PluginData">
+            <summary>
+            数据
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.Entitys.YxPluginInfo.GetValue(System.String,System.String)">
+            <summary>
+            获得值
+            </summary>
+            <param name="type"></param>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.EditorBSW_BuildData">
+            <summary>
+            客户 选择记录
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.EditorBSW_SkinIndex">
+            <summary>
+            skin 选择记录
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.EditorBSW_ConfigContent">
+            <summary>
+            客户平台 选择记录
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow._curViewType">
+            <summary>
+            当前编辑模式
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow._curBuidProductData">
+            <summary>
+            当前皮肤选择的内容
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow._isSelecteProductConfigState">
+            <summary>
+            是否为选择产品配置状态
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.DrawConfigContent">
+            <summary>
+            绘制内容
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.DrawProjectList">
+            <summary>
+            绘制平台列表   
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow._hallPreviewImageLoader">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.DrawHallStyle">
+            <summary>
+            绘制大厅效果图
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.AddSkin(UnityEngine.Rect)">
+            <summary>
+            增加皮肤
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.SelectedSkin(System.Int32)">
+            <summary>
+            选择皮肤
+            </summary>
+        </member>
+        <member name="P:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.CurSkinName">
+            <summary>
+            当前皮肤的名称
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.DeleteSkin">
+            <summary>
+            删除皮肤
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.DrawSkinList">
+            <summary>
+            绘制当前皮肤列表
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.DrawProductList(System.Collections.Generic.ICollection{Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData})">
+            <summary>
+            绘制当前皮肤的产品
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.DrawProductConfigList(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent,Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData)">
+            <summary>
+            平台子列表
+            </summary> 
+            <param name="config"></param>
+            <param name="productData"></param> 
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.ProductHeadTabel(Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData,UnityEngine.Rect)">
+            <summary>
+            产品头列表
+            </summary>
+            <param name="productData"></param>
+            <param name="rect"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.AddConfig(Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData)">
+            <summary>
+            添加产品一个的配置
+            </summary>
+            <param name="build"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.CloneProduct(System.Object)">
+            <summary>
+            克隆产品
+            </summary>
+            <param name="userdata"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.GetNewProductName(System.String)">
+            <summary>
+            获取默认的新产品名
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.CloneConfig(System.Object)">
+            <summary>
+            克隆
+            </summary>
+            <param name="userdata"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.DeleteProductConfig(Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData)">
+            <summary>
+            删除产品配置
+            </summary>
+            <param name="productData"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.DeleteProductConfigs(Assets.Editor.YxEditor.BuildSetting.Entitys.BuildProductData)">
+            <summary>
+            删除产品配置
+            </summary>
+            <param name="productData"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.OnDestroy">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.OnSwitchProject">
+            <summary>
+            切换项目
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow._isBatchBuild">
+            <summary>
+            批量打包模式
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.OnBuildAll">
+            <summary>
+            打包所有
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.AddProduct">
+            <summary>
+            添加产品
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.DeleteProducts">
+            <summary>
+            删除产品
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.DeleteProduct">
+            <summary>
+            删除产品
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow._isSelecteProductState">
+            <summary>
+            是否为选择产品状态
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow._allProductToggleState">
+            <summary>
+            是否全选产品
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow._allProductConfigToggleState">
+            <summary>
+            是否全选产品配置
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildSettingWindow.OpenChildWindow``1(System.String,UnityEngine.Rect,System.Boolean)">
+            <summary>
+            是否有焦点
+            </summary>
+            <param name="titleName"></param>
+            <param name="postion"></param>
+            <param name="focus"></param>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.ViewType">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.ViewType.SkinInfo">
+            <summary>
+            皮肤设置
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.ViewType.ProductInfo">
+            <summary>
+            参数设置
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.ViewType.BuildManager">
+            <summary>
+            打包设置
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.ViewType.ReplaceManager">
+            <summary>
+            替换设置
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.ViewType.Plugins">
+            <summary>
+            插件
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.ViewType.I18N">
+            <summary>
+            语言
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.BuildView">
+            <inheritdoc />
+            <summary>
+            打包配置
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildView.OnInit">
+            <inheritdoc />
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildView.OnDrawBtns">
+            <inheritdoc />
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildView.OnSimulation">
+            <summary>
+            模拟环境
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildView.DrawLogoImage">
+            <summary>
+            绘制商标图片
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildView.DrawLodingImage">
+            <summary>
+            绘制loading图片
+            </summary> 
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildView.UpdateIconImage">
+            <summary>
+            设置图片
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildView.DrawImageArea(UnityEngine.Texture2D@,System.String@,System.Boolean,System.String)">
+            <summary>
+            绘制图片
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildView.DrawBilayerImageArea(UnityEngine.Texture2D@,UnityEngine.Texture2D@,System.String@,System.String@,System.String)">
+            <summary>
+            绘制双层图片
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildView.DrawDifferentPlatformInfo(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent)">
+            <summary>
+            平台相关
+            </summary>
+            <param name="config"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildView.ChangeTexture(System.String,System.String@,System.String)">
+            <summary>
+            更改图片
+            </summary>
+            <param name="newPath"></param>
+            <param name="refPath"></param>
+            <param name="defaultImagePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildView.DrawIcons">
+            <summary>
+            设置图片
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildView.DrawIconItem(System.String,System.String,System.String,System.Int32,System.Int32,UnityEngine.Texture2D@,System.String@)">
+            <summary>
+            绘制图片项
+            </summary>
+            <param name="labelName"></param>
+            <param name="name">标志名</param> 
+            <param name="newPath">新地址</param>
+            <param name="width">图片宽度</param>
+            <param name="height">图片高度</param>
+            <param name="refTexture">图片存储变量</param>
+            <param name="refPath">路径引用</param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildView.DrawScenes">
+            <summary>
+            刷新场景
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.BuildView.OnBuild">
+            <summary>
+            打包
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.PluginsView">
+            <inheritdoc />
+            <summary>
+            组件管理
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.PluginsView.OnInit">
+            <inheritdoc />
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.PluginsView.OnChangeConfig">
+            <inheritdoc />
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.PluginsView.OnShow">
+            <inheritdoc />
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.PluginsView.DrawLogo">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.PluginsView._currentPlugin">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.PluginsView.OnDisableEx">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo">
+            <summary>
+            获取类的信息
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.ClassPath">
+            <summary>
+            类路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.ClassName">
+            <summary>
+            类名
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.UsingList">
+            <summary>
+            包名数据
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.PropertysInfo">
+            <summary>
+            属性
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo._braceCount">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.#ctor(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="className"></param>
+            <param name="classPath"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.AddPropertys(Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.ProductData)">
+            <summary>
+            添加属性
+            </summary>
+            <param name="info"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.Generate(System.Collections.Generic.Dictionary{System.String,Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.ProductData})">
+            <summary>
+            生成
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.WriteUsingDatas(System.IO.StreamWriter)">
+            <summary>
+            写入包名
+            </summary>
+            <param name="sw"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.WriteClassDatas(System.IO.StreamWriter)">
+            <summary>
+            写入类
+            </summary>
+            <param name="sw"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.WritePropertys(System.IO.StreamWriter)">
+            <summary>
+            写入属性
+            </summary>
+            <param name="sw"></param>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.ProductData">
+            <summary>
+            属性数据
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.ProductData.Field">
+            <summary>
+            字段名
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.ProductData.Value">
+            <summary>
+            值
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.ProductData.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.ProductData.Note">
+            <summary>
+            注释
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.ProductData.AdornType">
+            <summary>
+            修饰
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.ProductData.IsSelected">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.ProductData.CustomData">
+            <summary>
+            自定义数据
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.StaticClassInfo.PropertyData">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.ProductInfoView">
+            <summary>
+            项目属性
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.ProductInfoView.OnChangeConfig">
+            <inheritdoc />
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.ProductInfoView.FreshHallCfgUrl">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.ProductInfoView.FreshHallResUrl">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.ProductInfoView.FreshGameCfgUrl">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.ProductInfoView.FreshGameResUrl">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.ProductInfoView.FreshShareCfgUrl">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.ProductInfoView.FreshShareResUrl">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.BuildSetting.GameManagerView">
+            <summary>
+            皮肤信息视图
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.BuildSetting.GameManagerView._hallHeads">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.GameManagerView.OnEnableEx">
+            <inheritdoc />
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.GameManagerView.OnShow">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.GameManagerView.DrawGamesSkinInfo">
+            <summary>
+            游戏皮肤
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.GameManagerView.DrawHallSkinInfo">
+            <summary>
+            大厅皮肤
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.GameManagerView.OnFreshAllScript">
+            <summary>
+            刷新游戏全部脚本
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.GameManagerView.ShowSvnManagerWindow(Assets.Editor.YxEditor.Models.ScriptInfoData)">
+            <summary>
+            打开svn管理界面
+            </summary>
+            <param name="scriptInfoData"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.ReplaceView.DrawFileTableList">
+            <summary>
+            文件面板
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.BuildSetting.ReplaceView.DrawFolderTableList">
+            <summary>
+            文件夹面板
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Constants.ConstantString">
+            <summary>
+            字符串长脸
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Constants.ConstantString.HallName">
+            <summary>
+            大厅
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Constants.ConstantString.ShareName">
+            <summary>
+            share名称
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Constants.ConstantString.SkinName">
+            <summary>
+            skin名称
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Constants.ConstantString.CustomName">
+            <summary>
+            客户名
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Constants.ConstantString.GameName">
+            <summary>
+            游戏资源默认分类
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Constants.ConstantString.DingzhiName">
+            <summary>
+            定制
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Constants.ConstantString.DefaultCustomName">
+            <summary>
+            默认客户名
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Enums.DrawCustomType">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Enums.DrawCustomType.None">
+            <summary>
+            无
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Enums.DrawCustomType.Game">
+            <summary>
+            游戏
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Enums.DrawCustomType.Normal">
+            <summary>
+            正常的
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Enums.DrawCustomType.HallWithCustom">
+            <summary>
+            大厅与客户
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Enums.DrawCustomType.CustomWithTime">
+            <summary>
+            客户与时间
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Enums.YxECfgTargetType">
+            <summary>
+            配置文件目标类型
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Enums.YxECfgTargetType.Normal">
+            <summary>
+            正常
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Enums.YxECfgTargetType.CustomMade">
+            <summary>
+            定制
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Managers.BuildManager.SetUnitySetting(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent,System.String,System.Int32)">
+            <summary>
+            设置unity属性
+            </summary>
+            <param name="curConfig"></param>
+            <param name="version"></param>
+            <param name="versionCode"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Managers.BuildManager.CheckVersion(System.String)">
+            <summary>
+            检查格式 
+            </summary>
+            <param name="version"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Managers.PluginManager">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Managers.PluginManager.OtherPluginPath">
+            <summary>
+            插件目录
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Managers.PluginManager.ConfigName">
+            <summary>
+            配置信息
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Managers.PluginManager.PluginList">
+            <summary>
+            组件列表
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Managers.PluginManager.PluginStyles">
+            <summary>
+            当前插件的样式
+            </summary>
+        </member>
+        <member name="P:Assets.Editor.YxEditor.Managers.PluginManager.CurentType">
+            <summary>
+            当前类型
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Managers.PluginManager.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Managers.PluginManager.LoadPluginTypes">
+            <summary>
+            加载已有的插件类型
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Managers.PluginManager.LoadPluginStyle(System.String)">
+            <summary>
+            加载插件样式
+            </summary>
+            <param name="pluginType">插件类型</param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Managers.PluginManager.LoadPluginConfig(System.String,System.String)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Managers.PluginManager.GetStyleIndex(System.String)">
+            <summary>
+            获取索引
+            </summary>
+            <param name="style"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Managers.PluginManager.GetStyle(System.Int32)">
+            <summary>
+            获得样式
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Managers.PluginManager.CopyLib(Assets.Editor.YxEditor.BuildSetting.Entitys.YxPluginData,UnityEditor.BuildTarget)">
+            <summary>
+            拷贝lib
+            </summary>
+            <param name="data"></param>
+            <param name="configTarget"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Managers.PluginManager.GetPlatFolder(UnityEditor.BuildTarget)">
+            <summary>
+            获得对应的目录
+            </summary>
+            <param name="configTarget"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Models.AndroidConfig">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.AndroidConfig.Xmlns">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.AndroidConfig.ManifestPath">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.AndroidConfig.Scheme">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.AndroidConfig.ScreenOrientation">
+            <summary>
+            xml配置旋转问题
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.AndroidConfig.ConfigContent">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.AndroidConfig.PluginsCmds">
+            <summary>
+            插件命令
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.AndroidConfig.#ctor(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent)">
+            <summary>
+            
+            </summary>
+            <param name="cfg"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.AndroidConfig.Save">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.AndroidConfig.EditorPlugins(System.Configuration.ConfigXmlDocument)">
+            <summary>
+            
+            
+            
+            Editor          格式：节点,索引,编辑节点,属性,属性值,指定节点,属性,属性值
+            InsertBefore    格式：节点,索引,编辑节点,属性,属性值,指定节点,属性,属性值
+            InsertAfter     格式：节点,索引,编辑节点,属性,属性值,指定节点,属性,属性值
+            AppendChild     格式：节点,索引,编辑节点,属性,属性值,指定节点,属性,属性值,指定属性,指定属性值
+            Remove          格式：节点,索引,删除节点,属性,属性值;
+            
+            </summary>
+            <param name="xmlDoc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.AndroidConfig.EditorContent(System.Xml.XmlNode,System.String,System.String)">
+            <summary>
+            编辑内容
+            </summary> 
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.AndroidConfig.InsertBeforeContent(System.Xml.XmlDocument,System.String,System.Int32,System.String,System.String,System.String,System.Xml.XmlNode)">
+            <summary>
+            插入之前内容
+            </summary> 
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.AndroidConfig.InsertAfterContent(System.Xml.XmlDocument,System.String,System.Int32,System.String,System.String,System.String,System.Xml.XmlNode)">
+            <summary>
+            插入之后内容
+            </summary> 
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.AndroidConfig.AppendChildContent(System.Xml.XmlDocument,System.String,System.Int32,System.String,System.String,System.String)">
+            <summary>
+            追加内容
+            </summary> 
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.AndroidConfig.GetNode(System.String,System.Xml.XmlNode,System.String,System.String)">
+            <summary>
+            节点是否存在
+            </summary>
+            <param name="path"></param>
+            <param name="xmlNode"></param>
+            <param name="attName"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.AndroidConfig.RemoveContent(System.Xml.XmlNode,System.String[])">
+            <summary>
+            删除内容
+            格式：节点,索引,删除节点,属性,属性值;
+            </summary>
+            <param name="rootNode"></param>
+            <param name="arr"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.AndroidConfig.EditorScheme(System.Configuration.ConfigXmlDocument)">
+            <summary>
+            修改该scheme
+            </summary>
+            <param name="xmlDoc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.AndroidConfig.BuildWxJar(System.String)">
+            <summary>
+            生成微信api的jar包
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.AndroidConfig.FreshAndroidScreenRotate(System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            修改该manifest
+            </summary>
+            <param name="isPortrait"></param>
+            <param name="isPortraitUpsideDown"></param>
+            <param name="isLandscapeRight"></param>
+            <param name="isLandscapeLeft"></param>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Models.AndroidConfig.EScreenOrientation">
+            <summary>
+            旋转类型
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Models.AssetBundleConfig">
+            <summary>
+            资源打包配置
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.AssetBundleConfig.SelectSkinGroupIndex">
+            <summary>
+            皮肤索引
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.AssetBundleConfig.SkinFileList">
+            <summary>
+            皮肤名称
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.AssetBundleConfig.SkinCfgDict">
+            <summary>
+            数据 [skinName:SkinCfg]
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.AssetBundleConfig.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.AssetBundleConfig.LoadCurSkinConfig(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="skinFileName"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.AssetBundleConfig.ReadConfig(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="skinFileName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.AssetBundleConfig.AnalyzeItem(System.Collections.Generic.ICollection{Assets.Editor.YxEditor.Models.AssetBundleInfo},System.String)">
+            <summary>
+            解析一条信息
+            </summary>
+            <param name="list"></param>
+            <param name="info"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.AssetBundleConfig.Save(System.String)">
+            <summary>
+            保存
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.AssetBundleConfig.DeleteSkinGroup">
+            <summary>
+            /
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.AssetBundleConfig.CurSkinGroupName">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Models.AssetBundleInfo">
+            <summary>
+            资源信息
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.AssetBundleInfo.AssetPath">
+            <summary>
+            资源
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.AssetBundleInfo.BundleName">
+            <summary>
+            资源包名
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.AssetBundleInfo.BundlePrefix">
+            <summary>
+            资源包名前缀
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.AssetBundleInfo.Zip">
+            <summary>
+            是否压缩
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.AssetBundleInfo.IsSelected">
+            <summary>
+            是否选择
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.AssetBundleConfigInfo.Name">
+            <summary>
+            属性名
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.AssetBundleConfigInfo.IsSelecte">
+            <summary>
+            是否选择
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.AssetBundleConfigInfo.Index">
+            <summary>
+            显示时用
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.BuildBatchAbConfig.Save(System.Boolean)">
+            <summary>
+            保存
+            </summary>
+            <param name="needBuild">准备打包</param>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Models.FtpConfig">
+            <summary>
+            ftp配置
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.FtpConfig.Read">
+            <summary>
+            解析数据
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.FtpConfig.LoadLocal(System.String)">
+            <summary>
+            加载本地
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.FtpConfig.LoadConfigByUrl(System.String)">
+            <summary>
+            通过url加载配置文件
+            </summary>
+            <param name="url"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.FtpConfig.GetFtpNameIndex(System.String)">
+            <summary>
+            获取索引
+            </summary>
+            <param name="url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.FtpConfig.GetFtpName(System.Int32)">
+            <summary>
+            获取指定索引的ftp名称
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.FtpConfig.GetFtpInfo(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="ftpName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.FtpConfig.GetFtpInfoWithFtpIndex(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Models.FtpInfo">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.FtpInfo.Name">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.FtpInfo.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.FtpInfo.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.FtpInfo.Port">
+            <summary>
+            端口
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.FtpInfo.Host">
+            <summary>
+            主机
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.FtpInfo.HallCfgPath">
+            <summary>
+            配置路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.FtpInfo.HallResPath">
+            <summary>
+            资源路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.FtpInfo.GameCfgPath">
+            <summary>
+            配置路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.FtpInfo.GameResPath">
+            <summary>
+            资源路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.FtpInfo.FontPath">
+            <summary>
+            字体路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.FtpInfo.DomainName">
+            <summary>
+            域名
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.FtpInfo.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Models.GameInfo">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.GameInfo.GameConfigPath">
+            <summary>
+            游戏配置目录
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.GameInfo.ScriptInfoDict">
+            <summary>
+            key:游戏编号, gamesConfig.ini中所有脚本路径集合
+            格式：检出路径=信息
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.GameInfo._gameInfoDict">
+            <summary>
+            格式： gameKey=皮肤Id
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.GameInfo.SkinInfoDict">
+            <summary>
+            皮肤信息 gamekey_id=皮肤信息
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.GameInfo.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.GameInfo.LoadConfig(System.String)">
+            <summary>
+            通过本地获取config
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.GameInfo.LoadConfigByUrl(System.String)">
+            <summary>
+            通过url获取config
+            </summary>
+            <param name="url"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.GameInfo.ReadConfig(System.String)">
+            <summary>
+            ::【编号】=【项目名称】
+            {
+                【svn地址】
+                【检出地址】
+                gamekey#游戏名称
+                {
+                    索引]别名[皮肤组合]
+                }
+            }
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.GameInfo.ReadConfig1">
+            <summary>
+            ::【编号】=【项目名称】;【gamekey1#游戏名称|gamekey2#游戏名称|】;【svn地址】;【检出地址】
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.GameInfo.GetScriptInfoData(System.String)">
+            <summary>
+            获取数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.GameInfo.GetSkinInfo(System.String,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="gameKey"></param>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.GameInfo.GetGameKeys(System.String)">
+            <summary>
+            通过路径 获取游戏列表
+            </summary>
+            <param name="folderPath"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Models.ScriptInfoData">
+            <summary>
+            脚本信息
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.ScriptInfoData.SvnProjectName">
+            <summary>
+            svn项目名称
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.ScriptInfoData.SvnUrl">
+            <summary>
+            Svn路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.ScriptInfoData.CheckPath">
+            <summary>
+            检出路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.ScriptInfoData.LastMender">
+            <summary>
+            最后修改者
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.ScriptInfoData.Finished">
+            <summary>
+            是否加载Svn完成信息
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.ScriptInfoData.HasCheck">
+            <summary>
+            是否已Svn检出
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.ScriptInfoData.SvnServerLastRev">
+            <summary>
+            svn服务器最新版本
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.ScriptInfoData.SvnLocalLastRev">
+            <summary>
+            svn本地当前版本
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.ScriptInfoData.GameInfoDict">
+            <summary>
+            游戏信息
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.ScriptInfoData.UpdateScript(System.Int64)">
+            <summary>
+            更新代码
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.ScriptInfoData.CheckScript(System.Int64)">
+            <summary>
+            检出代码
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.ScriptInfoData.GetGameConfigInfo">
+            <summary>
+            游戏配置新消息
+            格式：skin=版本
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Models.GameInfoData">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.GameInfoData.GameKey">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.GameInfoData.Name">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.GameInfoData.Skins">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.GameInfoData.GetSkin(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Models.SkinInfo">
+            <summary>
+            皮肤信息
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.SkinInfo.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.SkinInfo.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.SkinInfo.Info">
+            <summary>
+            信息
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.SkinInfo.PicturePath">
+            <summary>
+            预览图
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Models.KeyTypeCfg">
+            <summary>
+            皮肤配置
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.KeyTypeCfg.Name">
+            <summary>
+            皮肤名称
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.KeyTypeCfg.GameKey">
+            <summary>
+            资源相关
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.KeyTypeCfg.NeedCompress">
+            <summary>
+            是否需要压缩
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.KeyTypeCfg.NeedShareFont">
+            <summary>
+            是否需要共享字体
+            </summary>
+        </member>
+        <member name="P:Assets.Editor.YxEditor.Models.KeyTypeCfg.BundlePrefix">
+            <summary>
+            bundle前缀
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.KeyTypeCfg.NeedShare">
+            <summary>
+            是否共享资源
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.KeyTypeCfg.Version">
+            <summary>
+            版本
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.KeyTypeCfg.OldVersion">
+            <summary>
+            原版本
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.KeyTypeCfg.CfgTargetType">
+            <summary>
+            配置目标类型
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.KeyTypeCfg.SkinCfg">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.KeyTypeCfg.CustomInfoList">
+            <summary>
+            信息
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.KeyTypeCfg.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="skinName"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.KeyTypeCfg.#ctor(Assets.Editor.YxEditor.Models.SkinCfg)">
+            <summary>
+            
+            </summary>
+            <param name="skinCfg"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.KeyTypeCfg.GetVersion(System.Int32)">
+            <summary>
+            获取版本
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.KeyTypeCfg.AddCustomInfo(System.String,System.String)">
+            <summary>
+            添加
+            </summary>
+            <param name="skinGroupName"></param>
+            <param name="curCustomName"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.KeyTypeCfg.GetCustomInfoListToString">
+            <summary>
+            CustomInfoList字符串化
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.KeyTypeCfg.SetCustomInfoListInfo(System.String)">
+            <summary>
+            设置信息
+            </summary>
+            <param name="info"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.KeyTypeCfg.GetCfgFileName">
+            <summary>
+            获取配置名称
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.KeyTypeCfg.GetLocalCfgPath(System.String,System.String)">
+            <summary>
+            获取本地配置路径
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.KeyTypeCfg.GetLocalResPath(System.String,System.String)">
+            <summary>
+            获取本地资源路径
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.KeyTypeCfg.GetLocalFontPath(System.String)">
+            <summary>
+            获取本地字体路径
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Models.ResUrlConfig">
+            <summary>
+            资源地址配置
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.ResUrlConfig.GetSkinNames">
+            <summary>
+            获得大厅皮肤
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.ResUrlConfig.Read(System.String)">
+            <summary>
+            读取
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.ResUrlConfig.Write(System.String)">
+            <summary>
+            保存
+            </summary>
+            <param name="skinName"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.ResUrlConfig.GetCustoms">
+            <summary>
+            获得客户
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.ResUrlConfig.GetTimes(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="customeName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.ResUrlConfig.AddCustom(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="custom"></param>
+            <param name="time"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.ResUrlConfig.AddCustoms(System.String[])">
+            <summary>
+            
+            </summary>
+            <param name="temCustomNames"></param>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Models.SkinCfg">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.SkinCfg.Name">
+            <summary>
+            客户路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.SkinCfg.KeyTypeDict">
+            <summary>
+            数据
+            客户路径：内容
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.SkinCfg.ExportPath">
+            <summary>
+            导出路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.SkinCfg.BuildPath">
+            <summary>
+            打包路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.SkinCfg.CustomName">
+            <summary>
+            客户名称
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.SkinCfg.TimeStamp">
+            <summary>
+            时间戳
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.SkinCfg.FtpIndex">
+            <summary>
+            ftp站点选择
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.SkinCfg.AddKeyType(System.String)">
+            <summary>
+            添加key配置
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Models.XCodeConfig">
+            <summary>
+            Ios Xcode配置信息
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.XCodeConfig.TeamId">
+            <summary>
+            证书的用户Id
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.XCodeConfig.PluginsCmds">
+            <summary>
+            插件命令
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.XCodeConfig.AccessAuthoritys">
+            <summary>
+            权限
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.XCodeConfig.Frameworks">
+            <summary>
+            库
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Models.XCodeConfig.AccessAuthority">
+            <summary>
+            权限
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.XCodeConfig.AccessAuthority.MicrophoneUsageDescription">
+            <summary>
+            麦克风
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.XCodeConfig.AccessAuthority.ContactsUsageDescription">
+            <summary>
+            通讯录
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.XCodeConfig.AccessAuthority.CameraUsageDescription">
+            <summary>
+            相机    
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.XCodeConfig.AccessAuthority.PhotoLibraryAddUsageDescription">
+            <summary>
+            添加图片到相册
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.XCodeConfig.AccessAuthority.LocationAlwaysUsageDescription">
+            <summary>
+            持续获取地理位置
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.XCodeConfig.AccessAuthority.LocationWhenInUseUsageDescription">
+            <summary>
+            使用时获取地理位置
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.XCodeConfig.AccessAuthority.BluetoothPeripheralUsageDescription">
+            <summary>
+            蓝牙
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.XCodeConfig.AccessAuthority.SpeechRecognitionUsageDescription">
+            <summary>
+            语音转文字
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Models.XCodeConfig.AccessAuthority.CalendarsUsageDescription">
+            <summary>
+            日历
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.XCodeConfig.#ctor(Assets.Editor.YxEditor.BuildSetting.Entitys.ConfigContent)">
+            <summary>
+            
+            </summary>
+            <param name="cfg"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.XCodeConfig.Launch(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="pathToBuildProject"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.XCodeConfig.EditorFile(System.String)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.XCodeConfig.CopyFile(System.String)">
+            <summary>
+            拷贝文件
+            </summary>
+            <param name="pathToBuildProject"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.XCodeConfig.GetTeamNames">
+            <summary>
+            获取证书
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.XCodeConfig.InitTemplet">
+            <summary>
+            初始化模板
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Models.XCodeConfig.FreshIosScreenRotate(System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            ios
+            </summary>
+            <param name="isPortrait"></param>
+            <param name="isPortraitUpsideDown"></param>
+            <param name="isLandscapeRight"></param>
+            <param name="isLandscapeLeft"></param>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Processors.TexturePostprocessor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Utiles.Constants">
+            <summary>
+            常量
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.Constants.GameInfoName">
+            <summary>
+            游戏列表名称
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.Constants.DefaultBuildResPath">
+            <summary>
+            默认打包资源
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Utiles.FtpHelper">
+            <summary>
+            ftp助手
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.FtpHelper.Host">
+            <summary>
+            IP地址
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.FtpHelper.Port">
+            <summary>
+            端口号
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.FtpHelper.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.FtpHelper.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.FtpHelper.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.FtpHelper.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="ipAddr"></param>
+            <param name="port"></param>
+            <param name="userName"></param>
+            <param name="password"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.FtpHelper.DownLoad(System.String,System.String)">
+            <summary>
+            下载文件
+            </summary>
+            <param name="filePath"></param>
+            <param name="relatePath"></param>
+            <param name="isOk"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.FtpHelper.UpLoad(System.String,System.String,System.Boolean@)">
+            <summary>
+            上传
+            </summary>
+            <param name="file"></param>
+            <param name="relatePath"></param>
+            <param name="isOk"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.FtpHelper.DeleteFile(System.String)">
+            <summary>
+            删除文件
+            </summary>
+            <param name="relatePath"></param>
+            <param name="isOk"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.FtpHelper.ListDirectory(System.String)">
+            <summary>
+            展示目录
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.FtpHelper.ListFile(System.String)">
+            <summary>
+            展示文件
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.FtpHelper.SetPrePath(System.String)">
+            <summary>
+            设置上级目录
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.FtpHelper.ReadByLine(System.Net.FtpWebRequest,System.Net.FtpStatusCode)">
+            <summary>
+            按行读取
+            </summary>
+            <param name="ftpRequest"></param>
+            <param name="statusCode"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Utiles.FtpHelper.FtpContentType">
+            <summary>
+            Ftp内容类型枚举
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.FtpHelper.FtpContentType.Undefined">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.FtpHelper.FtpContentType.File">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.FtpHelper.FtpContentType.Folder">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.FtpHelper.UpLoadFolder(System.String,System.String,System.Boolean)">
+            <summary>
+            上传文件夹里的所有文件
+            </summary>
+            <param name="ftpPath"></param>
+            <param name="folderPath"></param>
+            <param name="info"></param>
+            <param name="isRoot"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.FtpHelper.UpLoadFile(System.String,System.String,System.String)">
+            <summary>
+            上传
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.FtpHelper.MakeDir(System.String,System.Boolean)">
+            <summary>
+            创建目录  
+            </summary>
+            <param name="dirName"></param>
+            <param name="needCreatAll"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.GlobalEditorUtile.IsHasLayer(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="layer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.GlobalEditorUtile.Xcopy(System.String,System.String)">
+            <summary>
+            使用批处理拷贝
+            </summary>
+            <param name="sourceFileName"></param>
+            <param name="destFileName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.GlobalEditorUtile.GetResSkinName(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="skinName"></param>
+            <param name="prefix"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.GlobalEditorUtile.GetPrefixWithIndex(System.String,System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="prefix"></param>
+            <param name="index"></param>
+            <param name="padLeft"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Utiles.HttpHelper">
+            <summary>
+            http助手
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.HttpHelper.HttpGet(System.String,System.Int32)">
+            <summary>
+            get
+            </summary>
+            <param name="url"></param>
+            <param name="timeOut"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.HttpHelper.CheckValidationResult(System.Object,System.Security.Cryptography.X509Certificates.X509Certificate,System.Security.Cryptography.X509Certificates.X509Chain,System.Net.Security.SslPolicyErrors)">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="certificate"></param>
+            <param name="chain"></param>
+            <param name="errors"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.HttpHelper.HttpPost(System.String,System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="url"></param>
+            <param name="body"></param>
+            <param name="contentType"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Utiles.ImageLoader">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Assets.Editor.YxEditor.Utiles.ImageLoader.Image">
+            <summary>
+            大厅预览图
+            </summary>
+        </member>
+        <member name="P:Assets.Editor.YxEditor.Utiles.ImageLoader.Width">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Assets.Editor.YxEditor.Utiles.ImageLoader.Height">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Assets.Editor.YxEditor.Utiles.ImageLoader.Name">
+            <summary>
+            名字
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.ImageLoader.#ctor(System.Int32,System.Int32,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+            <param name="width"></param>
+            <param name="height"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.ImageLoader.FreshImage">
+            <summary>
+            刷新image
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.ImageLoader.LoadImage">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.ImageLoader.LoadImageBytesAsynce(System.String,System.Action)">
+            <summary>
+            异步加载
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.ImageLoader.OnLoading(System.String)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.ImageLoader.LoadLocalImage(System.String,System.String)">
+            <summary>
+            加载本地图片 
+            </summary>
+            <param name="path"></param>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.ImageLoader.Clear">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Utiles.ProductDataAnalyzeHelper">
+            <summary>
+            配置解析器
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.OssHelper.UpLoad(System.String,System.String,System.Boolean,System.Int32)">
+            <summary>
+            上传
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Utiles.PathUtiles">
+            <summary>
+            路径相关
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.PathUtiles.OtherResourcePath">
+            <summary>
+            其他资源路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.PathUtiles.ConfigPath">
+            <summary>
+            当前项目配置文件路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.PathUtiles.TempPath">
+            <summary>
+            临时目录
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.PathUtiles.ProductInfoClassName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.PathUtiles.ProductInfoClassPath">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.PathUtiles.ResConfigPath">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.PathUtiles.OtherBuildSpaces">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Assets.Editor.YxEditor.Utiles.PathUtiles.BuildWechatJarBuildPath">
+            <summary>
+            微信jar包路径
+            </summary>
+        </member>
+        <member name="P:Assets.Editor.YxEditor.Utiles.PathUtiles.BatchBuildCfgPath">
+            <summary>
+            批量打包配置路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.PathUtiles.ResUrlCfgPath">
+            <summary>
+            当前项目配置文件路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.PathUtiles.EditorsConfigsPath">
+            <summary>
+            Editor中configs文件夹
+            </summary>
+        </member>
+        <member name="P:Assets.Editor.YxEditor.Utiles.PathUtiles.ProjectPath">
+            <summary>
+            返回项目的路径
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Assets.Editor.YxEditor.Utiles.PathUtiles.BuildSkinConfigPath">
+            <summary>
+            打包皮肤配置路径
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Assets.Editor.YxEditor.Utiles.PathUtiles.DefaultBuildRes">
+            <summary>
+            默认打包资源
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.PathUtiles.GetDefaultIcon(System.String)">
+            获取默认icon
+            <returns></returns>
+            <param name="projectSaveName">出包时保存的名字</param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.PathUtiles.GetDefaultSplash(System.String)">
+            <summary>
+            获取默认icon
+            </summary>
+            <returns></returns>
+            <param name="projectSaveName">出包时保存的名字</param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.PathUtiles.RelativePath(System.String,System.String,System.String)">
+            <summary>
+            相对路径
+            </summary>
+            <param name="newPath"></param>
+            <param name="defaultPath"></param>
+            <param name="projectPath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.PathUtiles.GetResUrlCfgPath(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="skinName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Utiles.SeleteStateHelper">
+            <summary>
+            选择状态助手
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.SeleteStateHelper._mainState">
+            <summary>
+            状态
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.SeleteStateHelper.ChangeMainState(System.Boolean)">
+            <summary>
+            是否全选
+            </summary>
+            <param name="newState"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.SeleteStateHelper.ElementToggleState(System.Boolean)">
+            <summary>
+            子元素的状态
+            </summary>
+            <param name="elementState"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.SeleteStateHelper.StartElementStatistics(System.Int32)">
+            <summary>
+            开始统计
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Utiles.SvnHelper">
+            <summary>
+            svn助手
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.SvnHelper.Update(System.String,System.Int64)">
+            <summary>
+            更新
+            </summary>
+            <param name="localPath">本地路径</param>
+            <param name="version">修正的Ban本</param>
+            <returns>返回的异常</returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.SvnHelper.Revert(System.String)">
+            <summary>
+            恢复
+            </summary>
+            <param name="localPath">本地路径</param>
+            <returns>返回的异常</returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.SvnHelper.CheckOut(System.String,System.String,System.Int64)">
+            <summary>
+            检出
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.SvnHelper.GetSvnInfo(System.String)">
+            <summary>
+            svn信息
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.SvnHelper.GetSvnInfos(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            svn信息
+            </summary>
+            <param name="paths"></param>
+            <param name="batName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.SvnHelper.GetSvnLogs(System.String,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="path"></param>
+            <param name="maxCount"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.SvnHelper.GetVersion(System.String)">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Utiles.SvnInfo">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.SvnInfo.Data">
+            <summary>
+            元数据
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.SvnInfo.Parse(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            字典解析
+            </summary>
+            <param name="dict"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.SvnInfo.Copy(Assets.Editor.YxEditor.Utiles.SvnInfo)">
+            <summary>
+            copy
+            </summary>
+            <param name="tempInfo"></param>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.SvnLog.Editor">
+            <summary>
+            编辑者
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.SvnLog.Time">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.SvnLog.Log">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Utiles.SystemCmdBatHelper">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.SystemCmdBatHelper.CreateCmd(System.String,System.String[],System.String@)">
+            <summary>
+            
+            </summary>
+            <param name="batPath"></param>
+            <param name="content"></param>
+            <param name="errMsg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.SystemTool.OpenFolderAndSelectedFile(System.String)">
+            <summary>
+            打开窗口 并 选择文件
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Utiles.TextureLib">
+            <summary>
+            图片库
+            </summary>
+        </member>
+        <member name="P:Assets.Editor.YxEditor.Utiles.TextureLib.BackdropTexture">
+            <summary>
+            背景图片
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Utiles.UguiFontMenuItem">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.UguiFontMenuItem.CreateFont">
+            <summary>
+            创建字体
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.UguiFontMenuItem.HasFnt">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Utiles.YxUtiles">
+            <summary>
+            工具类
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.YxUtiles.ConvertToTexCoords(UnityEngine.Rect,System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="rect"></param>
+            <param name="width"></param>
+            <param name="height"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Utiles.YxXmlHelper">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Utiles.Node">
+            <summary>
+            节点
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.RemoveAssetBundleName">
+            <summary>
+            移除所有bundleName
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.Build(System.String,Assets.Editor.YxEditor.Models.KeyTypeCfg,System.String)">
+            <summary>
+            打包
+            </summary>
+            <param name="skinGroupName"></param>
+            <param name="keyTypeCfg"></param>
+            <param name="curTarget"></param> 
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.GetBuildPath(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            打包路径
+            </summary>
+            <param name="rootPath"></param>
+            <param name="skinGroup"></param>
+            <param name="skinName"></param>
+            <param name="target"></param>
+            <param name="gameKey"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.GetExportPath(System.String,System.String,System.String,System.String)">
+            <summary>
+            压缩路径
+            格式：
+            大厅 => rootPath/skinGroup/hallres/skinGroup/platform/
+            游戏 => rootPath/skinGroup/gameres/platform/
+            </summary>
+            <param name="rootPath"></param>
+            <param name="skinGroup"></param>
+            <param name="platform"></param>
+            <param name="gameKey"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.GetFontExportPath(System.String,System.String)">
+            <summary>
+            获取大厅的导出路径
+            </summary>
+            <param name="rootPath"></param>
+            <param name="platform"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.GetRelativeExportPath(System.String,System.String)">
+            <summary>
+            压缩相对路径
+            格式：
+            大厅 => skinGroup/platform/ 
+            游戏 => platform/
+            </summary>
+            <param name="skinGroup"></param>
+            <param name="platform"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.GetShareRelativeExportPath(System.String)">
+            <summary>
+            共享压缩相对路径
+            </summary>
+            <param name="platform"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.GetCfgPath(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            配置文件路径
+            格式：
+            大厅 => rootPath/skinGroup/hallcfg/skinGroup/skinName/YxEditorTool.CoreVersion/timeStamp/platform/ 
+            游戏 => rootPath/skinGroup/gamecfg/skinGroup/YxEditorTool.CoreVersion/platform
+            </summary>
+            <param name="rootPath"></param>
+            <param name="skinGroup"></param>
+            <param name="custName"></param>
+            <param name="timeStamp"></param>
+            <param name="platform"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.GetCfgFullPath(System.String,System.String)">
+             <summary>
+            
+             </summary>
+             <param name="rootPath"></param>
+             <param name="endPart"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.GetHallPartPath(System.String,System.String,System.String,System.String)">
+            <summary>
+            大厅部分路径
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.GetRelativeCfgPath(System.String,System.String,System.String,System.String)">
+            <summary>
+            配置文件相对路径
+            格式：
+            大厅 => skinGroup/skinName/YxEditorTool.CoreVersion/timeStamp/platform/  
+            游戏 => skinGroup/YxEditorTool.CoreVersion/platform
+            </summary>
+            <returns></returns>
+            <param name="skinGroup">皮肤组</param>
+            <param name="skinName">皮肤名</param>
+            <param name="timeStamp">时间戳</param>
+            <param name="platform">平台</param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.GetCustomMadeRelativeCfgPath(System.String,System.String)">
+            <summary>
+            定制路径
+            </summary>
+            <param name="skinNameAndCustom"></param>
+            <param name="platform"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.MoveFontBundle(System.String,System.String,System.String)">
+            <summary>
+            移动字体资源
+            </summary>
+            <param name="cfgText"></param>
+            <param name="exportPath"></param>
+            <param name="targetPath"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.ExportFile(System.String,Assets.Editor.YxEditor.Models.KeyTypeCfg,System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            当前文件夹所有文件压缩到hash，
+            </summary>
+            <param name="exportPath">Bundle资源目录</param>
+            <param name="cfg"></param>
+            <param name="buildPath"></param>
+            <param name="paths"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.CompressFile(System.String,System.String,System.String@)">
+            <summary>
+            压缩文件并加密
+            </summary>
+            <param name="path"></param>
+            <param name="exportPath"></param>
+            <param name="cfgtext"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.CreateCfg(System.String,System.String,Assets.Editor.YxEditor.Models.KeyTypeCfg)">
+            <summary>
+            创建配置文件
+            </summary>
+            <param name="cfgText"></param>
+            <param name="cfgPath"></param>
+            <param name="cfg"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.UpdateVersion(Assets.Editor.YxEditor.Models.KeyTypeCfg)">
+            <summary>
+            更新版本信息（大厅暂时不需要）
+            </summary>
+            <param name="cfg"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.BuildScene(Assets.Editor.YxEditor.Models.KeyTypeCfg,UnityEditor.BuildTarget,System.String)">
+            <summary>
+            打包场景
+            </summary>
+            <param name="cfg"></param>
+            <param name="target"></param>
+            <param name="buildPath"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.BuildAssets(Assets.Editor.YxEditor.Models.KeyTypeCfg,UnityEditor.BuildTarget,System.String)">
+            <summary>
+            打包资源
+            </summary>
+            <param name="cfg"></param>
+            <param name="target"></param>
+            <param name="buildPath"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.MarFileBundleName(Assets.Editor.YxEditor.Models.AssetBundleInfo,System.Boolean)">
+            <summary>
+            打包文件
+            </summary>
+            <param name="info"></param>
+            <param name="needShare"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.MarkZipFolderBundleName(Assets.Editor.YxEditor.Models.AssetBundleInfo,System.String,System.Boolean)">
+            <summary>
+            文件夹压缩
+            </summary>
+            <param name="info"></param>
+            <param name="buildPath"></param>
+            <param name="needShare"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.AssetBuilder.MarFolderBundleName(Assets.Editor.YxEditor.Models.AssetBundleInfo,System.Boolean)">
+            <summary>
+            打包文件夹
+            </summary>
+            <param name="info"></param>
+            <param name="needShare"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.EditorUtile.OnClick(System.String,UnityEngine.Rect,UnityEngine.EventType)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+            <param name="rect"></param>
+            <param name="finishType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.EditorUtile.DrawTabelHead(System.Collections.Generic.IEnumerable{Assets.Editor.YxEditor.Utiles.HeadData})">
+            <summary>
+            绘制表头
+            </summary>
+            <param name="heads"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.EditorUtile.RunBatch(System.String,System.String@,System.Int32)">
+            <summary>
+            运行批处理
+            </summary>
+            <param name="batPath"></param>
+            <param name="errMsg"></param>
+            <param name="encode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.EditorUtile.GetKeyStoreInfo(System.String,System.String,System.String,Assets.Editor.YxEditor.Utiles.KeyStoreDate.FinishFun)">
+            <summary>
+            获取KeyStoreInfo
+            </summary>
+            <param name="readerPath"></param>
+            <param name="keyStorePath"></param>
+            <param name="pwd"></param>
+            <param name="finishAction"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.EditorUtile.DirectoryMerge(System.String,System.String)">
+            <summary>
+            Editor中拷贝目录
+            </summary>
+            <param name="sourceDirName"></param>
+            <param name="destDirName"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.EditorUtile.GetProjectAbsolutePath(System.String)">
+            <summary>
+            获取项目的绝对路径
+            </summary>
+            <param name="relativePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.EditorUtile.LoadTexture(System.String,System.Int32,System.Int32)">
+            <summary>
+            更改图片
+            </summary>
+            <param name="newPath"></param>
+            <param name="width"></param>
+            <param name="height"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.ExternalUtiles.Encryption(System.Byte[],System.Int32)">
+            <summary>
+            加密/解密
+            </summary>
+            <param name="content"></param>
+            <param name="length">0到指定的长度，未指定（-1）则整个数组长度</param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.ExternalUtiles.StringEncryption(System.String,System.Text.Encoding)">
+            <summary>
+            加密字符串
+            </summary>
+            <param name="content"></param>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.ExternalUtiles.StringDeciphering(System.String,System.Text.Encoding)">
+            <summary>
+            解密字符串
+            </summary>
+            <param name="content"></param>
+            <param name="code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.ExternalUtiles.SwitchTarget(UnityEditor.BuildTarget)">
+            <summary>
+            快速切换平台
+            </summary>
+            <param name="target"></param>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.StringSet.SettingConfigPath">
+            <summary>
+            本地文档
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.StringSet.BuildBatchAbCfg">
+            <summary>
+            批量打包配置
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Utiles.EditorUiUtil">
+            <summary>
+            编辑模式下的Ui工具
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.EditorUiUtil.SubIcon">
+            <summary>
+            删除 
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.EditorUiUtil.AddIcon">
+            <summary>
+            添加
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.EditorUiUtil.TrashIcon">
+            <summary>
+            删除
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.EditorUiUtil.DotFrameIcon">
+            <summary>
+            多选
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.EditorUiUtil.CopyIcon">
+            <summary>
+            复制
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.EditorUiUtil.SettingIcon">
+            <summary>
+            编辑
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.EditorUiUtil.DrawTitleBar(System.String,System.Boolean,System.Boolean,System.Action,System.Action,UnityEngine.GUIContent,UnityEngine.GUIContent)">
+            <summary>
+            绘制标题栏
+            </summary>
+            <param name="titleName"></param>
+            <param name="toggleSelected"></param>
+            <param name="addCallBack"></param>
+            <param name="deleteCallBack"></param>
+            <param name="deleteSign"></param>
+            <param name="addSign"></param>
+            <param name="needShowToggle"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.EditorUiUtil.DrawTableHead(System.Collections.Generic.IEnumerable{Assets.Editor.YxEditor.Utiles.HeadData})">
+            <summary>
+            
+            </summary>
+            <param name="heads"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.EditorUiUtil.ContainRect(UnityEngine.Rect,UnityEngine.Rect)">
+            <summary>
+            压缩一个区域到指定的区域内
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.EditorUiUtil.DrawTiledTexture(UnityEngine.Rect,UnityEngine.Texture)">
+            <summary>
+            绘制棋盘背景
+            </summary>
+            <param name="rect"></param>
+            <param name="tex"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.EditorUiUtil.DrawTextureWithTexCoords(UnityEngine.Rect,UnityEngine.Texture2D)">
+            <summary>
+            绘制透明图片
+            </summary>
+            <param name="textRect"></param>
+            <param name="image"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.EditorUiUtil.DrawHorizontal(System.Action{UnityEngine.Rect},UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.EditorUiUtil.DrawVertical(System.Action{UnityEngine.Rect},UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.EditorUiUtil.DrawVertical(System.Action,UnityEngine.Vector2@,UnityEngine.GUIStyle,UnityEngine.GUILayoutOption[])">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.EditorUiUtil.DrawHorizontal(System.Action{UnityEngine.Rect},UnityEngine.GUILayoutOption[])">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.EditorUiUtil.DrawVertical(System.Action{UnityEngine.Rect},UnityEngine.GUILayoutOption[])">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.EditorUiUtil.DrawVertical(System.Action,UnityEngine.Vector2@,UnityEngine.GUILayoutOption[])">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Utiles.YxEditorTool">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.YxEditorTool.CoreVersion">
+            <summary>
+            内核版本
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.YxEditorTool.AppVersion">
+            <summary>
+            应用版本
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.YxEditorTool.AssetBuildRootPath">
+            <summary>
+            资源路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.YxEditorTool.SceneAssetRootPath">
+            <summary>
+            场景根目录
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.YxEditorTool.IsCurrentDate(System.DateTime)">
+            <summary>
+            是不是当天
+            </summary>
+            <param name="date"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.YxEditorTool.BuildSetting">
+            <summary>
+            打包工具入口
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.YxEditorTool.FreshCommon">
+            <summary>
+            插件管理
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.YxEditorTool.OpenHallSkinsWindow">
+            <summary>
+            插件管理
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.YxEditorTool.BuildAssetBundle">
+            <summary>
+            资源管理
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.YxEditorTool.FindGameObject">
+            <summary>
+            打包工具入口
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.YxEditorTool.OpenScene">
+            <summary>
+            场景切换入口
+            </summary> 
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.YxEditorTool.ShowStyleWindow">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.YxEditorTool.ShowAboutHelpUrl">
+            <summary>
+            关于入口
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.YxEditorTool.ShowAboutWindow">
+            <summary>
+            关于入口
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.YxEditorTool.#cctor">
+            <summary>
+            Unity启动时执行
+            </summary>
+        </member>
+        <member name="P:Assets.Editor.YxEditor.Utiles.YxEditorTool.IsServerConfig">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.YxEditorTool.InitImage(System.String)">
+            <summary>
+            初始化图片
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.YxEditorTool.SkinTypeVersion">
+            <summary>
+            版本信息
+            </summary>
+        </member>
+        <member name="P:Assets.Editor.YxEditor.Utiles.YxEditorTool.SkinConfigPath">
+            <summary>
+            皮肤配置文件的路径
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.YxEditorTool.InitVersion">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Utiles.YxEditorTool._assetReaderWindow">
+            <summary>
+            资源配置文件查看器入口
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Utiles.YxEditorTool.AutoBuildPackaging">
+            <summary>
+            一键打包
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.AboutWindow.GetVersion">
+            <summary>
+            获取版本
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Windows.GameSettingWindow">
+            <summary>
+            游戏设置界面
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.GameSettingWindow.DrawInfo">
+            <summary>
+            绘制简单信息
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Windows.HallSkinsWindow">
+            <summary>
+            大厅皮肤管理
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.HallSkinsWindow.DefaultSkinPath">
+            <summary>
+            默认皮肤路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.HallSkinsWindow.SkinPath">
+            <summary>
+            皮肤资源路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.HallSkinsWindow.DefaultSkinEditorPath">
+            <summary>
+            编辑默认皮肤路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.HallSkinsWindow.SkinEditorPath">
+            <summary>
+            编辑皮肤资源路径
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.HallSkinsWindow.OnGUI">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.HallSkinsWindow.FreshImage">
+            <summary>
+            选择图片
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.HallSkinsWindow.OpenWindow(System.String)">
+            <summary>
+            打开窗口
+            </summary>
+            <param name="hallName"></param>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Windows.CommonWindow">
+            <summary>
+            common管理
+            确定common路径，没有将检出common
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.CommonWindow.OnFreshSvn(Assets.Editor.YxEditor.Windows.CommonInfo)">
+            <summary>
+            更新svn
+            </summary>
+            <param name="info"></param>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Windows.CommonInfo">
+            <summary>
+            插件信息
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.CommonInfo.Name">
+            <summary>
+            插件名称
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.CommonInfo.CheckPath">
+            <summary>
+            检出路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.CommonInfo.SvnPath">
+            <summary>
+            svn路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.CommonInfo.CheckCanChange">
+            <summary>
+            检出路径可以更改
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.CommonInfo.OnFresh">
+            <summary>
+            更新事件
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Windows.FindGameObjectWindow">
+            <summary>
+            查找游戏对象 窗口
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.FindGameObjectWindow.FindMissing">
+            <summary>
+            查找 missing
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.FindGameObjectWindow.DrawGameObjectList">
+            <summary>
+            绘制gameobject列表
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.FindGameObjectWindow.DrawGameObjectInfo">
+            <summary>
+            绘制信息
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Windows.FtpInfoWindow">
+            <summary>
+            ftp信息窗口
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Windows.FtpManagerWindows.GameInfoResUploadWindow">
+            <summary>
+            游戏列表资源上传
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.FtpManagerWindows.GameInfoResUploadWindow._customNameEditorTemp">
+            <summary>
+            客户路径修改内容
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.FtpManagerWindows.GameInfoResUploadWindow.OnInit">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.FtpManagerWindows.GameInfoResUploadWindow.DrawExtendInfo">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow">
+            <summary>
+            上传窗口
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.DefaultCustom">
+            <summary>
+            默认路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.FtpCfg">
+            <summary>
+            ftp配置
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.CurFtpInfo">
+            <summary>
+            ftp信息
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.CurSkinGroup">
+            <summary>
+            当前皮肤组
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.CurCfg">
+            <summary>
+            当前资源配置
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.CurTarget">
+            <summary>
+            当前平台
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.SkinCfg">
+            <summary>
+            当前种类
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.CurCustomName">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.ResCfg">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.CfgPath">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.ResPath">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.FtpCfgRootPath">
+            <summary>
+            配置路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.FtpResRootPath">
+            <summary>
+            资源路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.FtpFontRootPath">
+            <summary>
+            字体路径
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.CfgFileName">
+            <summary>
+            配置名称
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.LocalCfgPath">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.LocalResPath">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.LocalFontPath">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.Init(System.String,Assets.Editor.YxEditor.Models.KeyTypeCfg,System.String,Assets.Editor.YxEditor.Enums.DrawCustomType)">
+             <summary>
+            
+             </summary>
+             <param name="skinGroup"></param>
+             <param name="cfg"></param>
+             <param name="target"></param>
+             <param name="customType"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.OnInit">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.UpdateInfo">
+            <summary>
+            更新数据
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.UpdateLocalInfo">
+            <summary>
+            本地路径
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.DrawaOpenFolderButtom(System.String)">
+             <summary>
+            
+             </summary>
+             <param name="path"></param>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.DrawExtendInfo">
+            <summary>
+            绘制扩展
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.OnAddFtpSite">
+            <summary>
+            添加站点
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.OnLostFocus">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.FtpManagerWindows.ResUploadWindow.OnUpload">
+            <summary>
+            上传
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Windows.FtpManagerWindows.GameResUploadWindow">
+            <summary>
+            游戏上传界面
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.FtpManagerWindows.GameResUploadWindow.OnInit">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Windows.GainNameWindow">
+            <summary>
+            添加皮肤窗口
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Windows.AndroidSetting">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Windows.GamesManagerWindow">
+            <summary>
+            游戏管理配置窗口
+            </summary>
+        </member>
+        <member name="F:Assets.Editor.YxEditor.Windows.IosSetting._heads">
+            <summary>
+            表头 
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.IosSetting.OnGUI">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.IosSetting.DrawBuildGeneral">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Windows.SvnManagerWindow">
+            <summary>
+            svn管理界面
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.SvnManagerWindow.DrawBtns">
+            <summary>
+            绘制按钮
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.SvnManagerWindow.DrawSvnInfo">
+            <summary>
+            绘制svn信息
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.SvnManagerWindow.DrawSvnLog">
+            <summary>
+            绘制svn日志
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Windows.TexturePreview">
+            <summary>
+            图片预览
+            </summary>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.TexturePreview.OpenWindowByUrl(System.String,System.String)">
+            <summary>
+            通过url打开
+            </summary>
+            <param name="url"></param>
+            <param name="title"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Assets.Editor.YxEditor.Windows.TexturePreview.OnFinished">
+            <summary>
+            完成加载
+            </summary>
+        </member>
+        <member name="T:Assets.Editor.YxEditor.Windows.YxConsoleWindow">
+            <summary>
+            log控制台
+            </summary>
+        </member>
+    </members>
+</doc>

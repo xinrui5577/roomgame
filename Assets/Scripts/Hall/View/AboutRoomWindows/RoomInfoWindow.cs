@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Common.Utils;
 using Assets.Scripts.Common.Windows;
+using com.yxixia.utile.Utiles;
+using com.yxixia.utile.YxDebug;
 using UnityEngine;
 using YxFramwork.Controller;
 
@@ -83,6 +85,7 @@ namespace Assets.Scripts.Hall.View.AboutRoomWindows
         {
             if (_roomId < 1) return;
             if (Data == null) return;
+            YxDebug.LogError("加入房间：{0}|{1}","RoomInfoWin",null,_roomId,_gameKey);
             RoomListController.Instance.JoinFindRoom(_roomId, _gameKey);
         }
     }

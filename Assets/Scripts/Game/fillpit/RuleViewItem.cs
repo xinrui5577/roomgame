@@ -1,0 +1,31 @@
+﻿using Assets.Scripts.Common.Utils;
+using UnityEngine;
+
+namespace Assets.Scripts.Game.fillpit
+{
+    public class RuleViewItem : MonoBehaviour
+    {
+
+        public UILabel TitleLabel;
+
+        public UILabel ContentLabel;
+
+        public string TitleFormat;
+
+        public void SetRuleItem(string titel,string content)
+        {
+            SetTitleLael(titel);
+            SetContentLabel(content);
+        }
+
+        void SetTitleLael(string titel)
+        {
+            TitleLabel.TrySetComponentValue(string.Format(TitleFormat, titel));
+        }
+
+        void SetContentLabel(string content)
+        {
+            ContentLabel.TrySetComponentValue(content);
+        }
+    }
+}

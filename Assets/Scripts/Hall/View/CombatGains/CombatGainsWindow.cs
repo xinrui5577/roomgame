@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using Assets.Scripts.Common.Utils;
 using Assets.Scripts.Common.Windows.TabPages;
+using com.yxixia.utile.Utiles;
 using UnityEngine;
+using YxFramwork.Common.Adapters;
 using YxFramwork.Common.Model;
 using YxFramwork.Controller;
-using com.yxixia.utile.YxDebug;
 
 namespace Assets.Scripts.Hall.View.CombatGains
 {
@@ -16,17 +16,24 @@ namespace Assets.Scripts.Hall.View.CombatGains
         private readonly List<GameUnitModel> _replayKeys = new List<GameUnitModel>();
         private UIGrid _itemGrid;
         private UIGrid _itemDetailGrid;
-
+        [Tooltip("标签未选中状态")]
         public string PrefixUpStateName;
+        [Tooltip("标签选中状态")]
         public string PrefixDownStateName;
+        [Tooltip("没有数据样式")]
         public GameObject NoDataSign;
+        [Tooltip("战绩一条预制体")]
         public CombatGainsItemView ItemPrefab;
+        [Tooltip("item列表的grid")]
         public UIGrid ItemGridPrefab;
+        [Tooltip("滚动条")]
         public UIScrollView ScrollView;
+        [Tooltip("指定gamekey")]
         public string SpecifyGamekey = "";
+
         protected override void OnAwake()
         {
-            if (!CreateTabels())
+            if (!CreateTabels() && !string.IsNullOrEmpty(SpecifyGamekey))
             {
                 CombatGainsController.Instance.CurGameKey = SpecifyGamekey;
                 CombatGainsController.Instance.GetList(SpecifyGamekey, _curPageNum, UpdateViewData);
@@ -105,7 +112,7 @@ namespace Assets.Scripts.Hall.View.CombatGains
 
         private void UpdateViewData(object msg)
         {
-            YxWindowUtils.CreateItemGrid(ItemGridPrefab, ref _itemGrid);
+            YxWindowUtils.CreateMonoParent(ItemGridPrefab, ref _itemGrid);
             var list = msg as List<object>;
             if (list == null || list.Count < 1)
             {

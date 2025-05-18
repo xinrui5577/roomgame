@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Common.Adapters;
-using Assets.Scripts.Common.components;
 using Assets.Scripts.Common.Utils;
 using UnityEngine;
+using YxFramwork.Common.Adapters;
+using YxFramwork.Common.DataBundles;
+using YxFramwork.Common.Model;
 using YxFramwork.Framework;
+using YxFramwork.Manager;
 
 namespace Assets.Scripts.Hall.View
 {
@@ -28,15 +31,15 @@ namespace Assets.Scripts.Hall.View
         [Tooltip("名次背景")]
         public UISprite Medal;
         [Tooltip("头像")]
-        public UITexture Protrail;
+        public YxBaseTextureAdapter Protrail;
         [Tooltip("名次")]
         public UILabel RankNum;
         [Tooltip("昵称")]
         public UILabel Nick;
         [Tooltip("排行数据")]
-        public UILabel Value;
-        [Tooltip("排行榜数据（倍率版）")]
-        public NguiLabelAdapter ValueAdapter;
+        public NguiLabelAdapter Value;
+        [Tooltip("金币显示类型")]
+        public YxBaseLabelAdapter.YxELabelType CoinLabelType = YxBaseLabelAdapter.YxELabelType.NumberWithUnit;
         [Tooltip("ID")]
         public UILabel ID;
         [Tooltip("排行数据类型图标")]
@@ -45,12 +48,18 @@ namespace Assets.Scripts.Hall.View
         public UILabel ItemNoticeLabel;
         [Tooltip("推广人文本描述")]
         public UILabel AffiliateNoticeLabel;
+        [Tooltip("茶馆ID")]
+        public UILabel TeaIdLabel;
+        [Tooltip("茶馆名字")]
+        public UILabel TeaNameLabel;
+        [Tooltip("茶馆签名")]
+        public UILabel TeaSignLabel;
         [Tooltip("正常排行背景")]
         public string NormalRankBg = "";
         [Tooltip("特殊名次是否需要文本")]
         public bool SpecialRankNeedLabel;
         [Tooltip("特殊名次显示文本内容")]
-        public string SpecialRankNotice= "未入榜";
+        public string SpecialRankNotice = "未入榜";
         [Tooltip("未入排行背景名")]
         public string NoRankBg = "";
         [Tooltip("排行榜对应值显示格式")]
@@ -60,13 +69,28 @@ namespace Assets.Scripts.Hall.View
         [Tooltip("特殊排行背景")]
         public string SpecialRankBg = "";
         [Tooltip("绑定邀请码显示格式")]
-        public string AffiliateFormat= "已绑定邀请码:";
+        public string AffiliateFormat = "已绑定邀请码:";
         [Tooltip("未绑定邀请码显示内容")]
         public string NoAffiliateContent = "未绑定邀请码";
+        private RankItemData _data;
 
+        public void OnUserInfoClick()
+        {
+            var rankData = Data as RankItemData;
+            if(rankData==null)return;
+           var win =YxWindowManager.OpenWindow("RankUserInfoWindow");
+            var userInfo = new UserInfo
+                {
+                    NickM = rankData.Nick,
+                    CoinA =(int)rankData.Value,
+                    AvatarX = rankData.Avator,
+                    UserId = rankData.ID,
+                    Signature = rankData.Signature,
+                };
+            win.UpdateView(userInfo);
+        }
         protected override void OnFreshView()
         {
-            if (Data == null) return;
             var rankData = Data as RankItemData;
             if (rankData == null) return;
             if (Medal != null)
@@ -80,14 +104,17 @@ namespace Assets.Scripts.Hall.View
                     }
                     Medal.gameObject.SetActive(true);
                     Medal.MakePixelPerfect();
-                    if (SpecialRankNeedLabel)
+                    if (RankNum)
                     {
-                        RankNum.gameObject.SetActive(true);
-                        RankNum.text = rankData.RankNum <= TotalCount && rankData.RankNum != 0 ? string.Format(FormatRank, rankData.RankNum) : SpecialRankNotice;
-                    }
-                    else
-                    {
-                        RankNum.gameObject.SetActive(false);
+                        if (SpecialRankNeedLabel)
+                        {
+                            RankNum.gameObject.SetActive(true);
+                            RankNum.text = rankData.RankNum <= TotalCount && rankData.RankNum != 0 ? string.Format(FormatRank, rankData.RankNum) : SpecialRankNotice;
+                        }
+                        else
+                        {
+                            RankNum.gameObject.SetActive(false);
+                        }
                     }
                 }
                 else
@@ -95,18 +122,23 @@ namespace Assets.Scripts.Hall.View
                     if (!string.IsNullOrEmpty(NormalRankBg)) Medal.spriteName = NormalRankBg;
                     Medal.gameObject.SetActive(false);
                     Medal.MakePixelPerfect();
-                    RankNum.gameObject.SetActive(true);
-                    RankNum.text = rankData.RankNum <= TotalCount && rankData.RankNum != 0 ? string.Format(FormatRank, rankData.RankNum) : SpecialRankNotice;
+                    if (RankNum)
+                    {
+                        RankNum.gameObject.SetActive(true);
+                        RankNum.text = rankData.RankNum <= TotalCount && rankData.RankNum != 0 ? string.Format(FormatRank, rankData.RankNum) : SpecialRankNotice;
+                    }
                 }
             }
             else
             {
-                RankNum.gameObject.SetActive(true);
-                RankNum.text = rankData.RankNum <= TotalCount && rankData.RankNum != 0 ? string.Format(FormatRank, rankData.RankNum) : SpecialRankNotice;
+                if (RankNum)
+                {
+                    RankNum.gameObject.SetActive(true);
+                    RankNum.text = rankData.RankNum <= TotalCount && rankData.RankNum != 0 ? string.Format(FormatRank, rankData.RankNum) : SpecialRankNotice;
+                }
             }
-            Nick.text = rankData.Nick;
-            YxTools.TrySetComponentValue(Value, rankData.Value.ToString(FormatCoin));
-            YxTools.TrySetComponentValue(ValueAdapter, rankData.Value,RankType);
+            Nick.TrySetComponentValue(rankData.Nick);
+            Value.TrySetComponentValue(rankData.Value, RankType,"{0}", CoinLabelType);
             if (ID)
             {
                 ID.text = rankData.ID;
@@ -115,10 +147,10 @@ namespace Assets.Scripts.Hall.View
             {
                 RankIcon.spriteName = RankType;
             }
-            
+
             if (Protrail != null)
             {
-                PortraitRes.SetPortrait(rankData.Avator, Protrail, rankData.Sex);
+                PortraitDb.SetPortrait(rankData.Avator, Protrail, rankData.Sex);
             }
             if (ItemNoticeLabel)
             {
@@ -127,9 +159,10 @@ namespace Assets.Scripts.Hall.View
                     ItemNoticeLabel.text = ItemNotice;
                 }
             }
+
             if (AffiliateNoticeLabel)
             {
-                if(rankData.Affiliate==0)
+                if (rankData.Affiliate == 0)
                 {
                     AffiliateNoticeLabel.text = NoAffiliateContent;
                 }
@@ -137,6 +170,21 @@ namespace Assets.Scripts.Hall.View
                 {
                     AffiliateNoticeLabel.text = string.Format("{0}{1}", AffiliateFormat, rankData.Affiliate);
                 }
+            }
+
+            if (TeaIdLabel)
+            {
+                TeaIdLabel.text = rankData.TeaId.ToString();
+            }
+
+            if (TeaNameLabel)
+            {
+                TeaNameLabel.text = rankData.TeaName;
+            }
+
+            if (TeaSignLabel)
+            {
+                TeaSignLabel.text = rankData.TeaSign;
             }
         }
     }
@@ -149,163 +197,158 @@ namespace Assets.Scripts.Hall.View
         /// <summary>
         /// Key头像
         /// </summary>
-        private string _keyAvator = "avatar_x";
+        private const string KeyAvator = "avatar_x";
         /// <summary>
         /// Key昵称
         /// </summary>
-        private string _keyUserName = "nick_m";
+        private const string KeyUserName = "nick_m";
         /// <summary>
         /// Key玩家ID
         /// </summary>
-        private string _keyUserId = "user_id";
+        private const string KeyUserId = "user_id";
         /// <summary>
         /// Key排行数据
         /// </summary>
-        private string _keyValue = "value";
+        private const string KeyValue = "value";
         /// <summary>
         /// Key性别
         /// </summary>
-        private string _keySex = "sex_i";
+        private const string KeySex = "sex_i";
         /// <summary>
         /// Key推荐人ID
         /// </summary>
-        private string _keyAffiliate = "affiliate";
+        private const string KeyAffiliate = "affiliate";
         /// <summary>
         /// Key自己的排行名次（RankRequest）
         /// </summary>
-        private string _keyRankNum = "rankNum";
+        private const string KeyRankNum = "rankNum";
         /// <summary>
         /// Key 自己的排行名次（TopRank）
         /// </summary>
-        private string _keyTop = "top";
+        private const string KeyTop = "top";
+        /// <summary>
+        /// Key自己的个性签名（RankRequest）
+        /// </summary>
+        private string _keySignature = "signature_x";
+        /// <summary>
+        /// Key茶馆ID（RankRequest）
+        /// </summary>
+        private string _keyTeaId = "tea_id";
+        /// <summary>
+        /// Key茶馆名字（RankRequest）
+        /// </summary>
+        private string _keyTeaName = "tea_name";
+        /// <summary>
+        /// Key茶馆描述（RankRequest）
+        /// </summary>
+        private string _keyTeaSign = "group_sign";
         #endregion
 
-        /// <summary>
-        /// 玩家昵称
-        /// </summary>
-        private string _userName;
-
-        /// <summary>
-        /// 玩家ID
-        /// </summary>
-        private string _userId;
-
-        /// <summary>
-        /// 头像信息
-        /// </summary>
-        private string _avator;
-
-        /// <summary>
-        /// 排行值
-        /// </summary>
-        private long _value;
-
-        /// <summary>
-        /// 性别
-        /// </summary>
-        private int _sex;
-
-        /// <summary>
-        /// 绑定人ID
-        /// </summary>
-        private int _affiliateId;
-
-        /// <summary>
-        /// 排行名次
-        /// </summary>
-        private int _rankNum;
-        /// <summary>
-        /// 排行榜中显示记录数量
-        /// </summary>
-        private int _count;
         /// <summary>
         /// 特殊名次
         /// </summary>
         public bool IsSpecialRank;
+        /// <summary>
+        /// 排行名次
+        /// </summary>
+        public int RankNum { get; private set; }
+        /// <summary>
+        /// 性别
+        /// </summary>
+        public int Sex { get; private set; }
+        /// <summary>
+        /// 玩家昵称
+        /// </summary>
+        public string Nick { get; private set; }
+        /// <summary>
+        /// 玩家ID
+        /// </summary>
+        public string ID { get; private set; }
+        /// <summary>
+        /// 排行值
+        /// </summary>
+        public long Value { get; private set; }
+        /// <summary>
+        /// 绑定人ID
+        /// </summary>
+        public int Affiliate { get; private set; }
+        /// <summary>
+        /// 签名
+        /// </summary>
+        public string Signature { get; private set; }
 
-        public int RankNum
-        {
-            get { return _rankNum; }
-        }
+        /// <summary>
+        /// 头像信息
+        /// </summary>
+        public string Avator { get; private set; }
+        /// <summary>
+        /// 排行榜中显示记录数量
+        /// </summary>
+        public int Count { get; private set; }
+        /// <summary>
+        /// 茶馆id
+        /// </summary>
+        public int TeaId { get; private set; }
+        /// <summary>
+        /// 茶馆名字
+        /// </summary>
+        public string TeaName { get; private set; }
+        /// <summary>
+        /// 茶馆签名
+        /// </summary>
+        public string TeaSign { get; private set; }
 
-        public int Sex
+        public RankItemData(IDictionary<string, object> param, int index, int count = 0)
         {
-            get { return _sex; }
-        }
+            if (param.ContainsKey(KeyUserName))
+            {
+                Nick = param[KeyUserName].ToString();
+            }
+            if (param.ContainsKey(KeyUserId))
+            {
+                ID = param[KeyUserId].ToString();
+            }
+            if (param.ContainsKey(KeyValue))
+            {
+                Value = long.Parse(param[KeyValue].ToString());
+            }
+            if (param.ContainsKey(KeySex))
+            {
+                Sex = int.Parse(param[KeySex].ToString());
+            }
+            if (param.ContainsKey(KeyAffiliate))
+            {
+                Affiliate = int.Parse(param[KeyAffiliate].ToString());
+            }
+            if (param.ContainsKey(KeyAvator))
+            {
+                Avator = param[KeyAvator].ToString();
+            } 
+            RankNum = param.ContainsKey(KeyRankNum) ? int.Parse(param[KeyRankNum].ToString()) : index;
 
-        public string Nick
-        {
-            get { return _userName; }
-        }
+            if (param.ContainsKey(KeyTop))//topRank
+            {
+                RankNum = int.Parse(param[KeyTop].ToString());
+            }
+            if (param.ContainsKey(_keySignature))
+            {
+                if (param[_keySignature] != null) Signature = param[_keySignature].ToString();
+            }
 
-        public string ID
-        {
-            get { return _userId; }
-        }
+            if (param.ContainsKey(_keyTeaId))
+            {
+                if (param[_keyTeaId] != null) TeaId =int.Parse(param[_keyTeaId].ToString());
+            }
+            if (param.ContainsKey(_keyTeaName))
+            {
+                if (param[_keyTeaName] != null) TeaName = param[_keyTeaName].ToString();
+            }
+            if (param.ContainsKey(_keyTeaSign))
+            {
+                if (param[_keyTeaSign] != null&& param[_keyTeaSign]!=null) TeaSign = param[_keyTeaSign].ToString();
+            }
 
-        public long Value
-        {
-            get { return _value; }
-        }
-
-        public int Affiliate
-        {
-            get { return _affiliateId; }
-        }
-
-        public string Avator
-        {
-            get { return _avator; }
-        }
-
-        public int Count
-        {
-            get { return _count; }
-        }
-
-        public RankItemData(Dictionary<string, object> param, int index, int count = 0)
-        {
-            if (param.ContainsKey(_keyUserName))
-            {
-                _userName = param[_keyUserName].ToString();
-            }
-            if (param.ContainsKey(_keyUserId))
-            {
-                _userId = param[_keyUserId].ToString();
-            }
-            if (param.ContainsKey(_keyValue))
-            {
-                _value = long.Parse(param[_keyValue].ToString());
-            }
-            if (param.ContainsKey(_keySex))
-            {
-                _sex = int.Parse(param[_keySex].ToString());
-            }
-            if (param.ContainsKey(_keyAffiliate))
-            {
-                _affiliateId = int.Parse(param[_keyAffiliate].ToString());
-            }
-            if (param.ContainsKey(_keyAvator))
-            {
-                _avator = param[_keyAvator].ToString();
-            }
-            else
-            {
-                _avator = "HS_9";
-            }
-            if (param.ContainsKey(_keyRankNum))
-            {
-                _rankNum = int.Parse(param[_keyRankNum].ToString());
-            }
-            else
-            {
-                _rankNum = index;
-            }
-            if (param.ContainsKey(_keyTop))//topRank
-            {
-                _rankNum = int.Parse(param[_keyTop].ToString());
-            }
-            _count = count;
+            Count = count;
         }
 
     }

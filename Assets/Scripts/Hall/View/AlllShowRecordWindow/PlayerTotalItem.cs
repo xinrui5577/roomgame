@@ -1,5 +1,6 @@
-using Assets.Scripts.Common.components;
 using UnityEngine;
+using YxFramwork.Common.Adapters;
+using YxFramwork.Common.DataBundles;
 
 namespace Assets.Scripts.Hall.View.AlllShowRecordWindow
 {
@@ -8,7 +9,7 @@ namespace Assets.Scripts.Hall.View.AlllShowRecordWindow
     /// </summary>
     public class PlayerTotalItem : MonoBehaviour
     {
-        public UITexture HeadTexture;
+        public YxBaseTextureAdapter HeadTexture;
         public UILabel PlayerName;
         public UILabel PlayerGold;
 
@@ -16,7 +17,7 @@ namespace Assets.Scripts.Hall.View.AlllShowRecordWindow
         {
             PlayerName.text = playerName;
             PlayerGold.text = playerGold;
-            PortraitRes.SetPortrait(avatar, HeadTexture,1);
+            PortraitDb.SetPortrait(avatar, HeadTexture,1);
         }
     }
 }

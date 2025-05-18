@@ -59,7 +59,7 @@ namespace Assets.Scripts.Hall.View.MatchWindow
             }
         }
 
-        protected override void OnDestroy()
+        public override void OnDestroy()
         {
             Reset();
             base.OnDestroy();

@@ -7,26 +7,27 @@ using YxFramwork.Tool;
 namespace Assets.Scripts.Hall.View.SysNoticeWindows
 {
     /// <summary>
-    /// ¹«¸æitem
+    /// å…¬å‘Šitem
     /// </summary>
     public class AnnouncementItemView : YxView
     {
         /// <summary>
-        /// ÄÚÈÝÍ¼Æ¬
+        /// å†…å®¹å›¾ç‰‡
         /// </summary>
-        [Tooltip("Í¼Æ¬ÄÚÈÝ")]
+        [Tooltip("å›¾ç‰‡å†…å®¹")]
         public UITexture Poster;
-        [Tooltip("ÎÄ±¾ÄÚÈÝ")]
+        [Tooltip("æ–‡æœ¬å†…å®¹")]
         public GameObject TextContent;
-        [Tooltip("±êÌâ")]
+        [Tooltip("æ ‡é¢˜")]
         public UILabel TitleLabel;
-        [Tooltip("ÄÚÈÝ")]
+        [Tooltip("å†…å®¹")]
         public UILabel ContentLabel;
-        [Tooltip("ÈÕÆÚ")]
+        [Tooltip("æ—¥æœŸ")]
         public UILabel DataLabel;
-        [Tooltip("×÷Õß")]
+        [Tooltip("ä½œè€…")]
         public UILabel AuthorLabel;
 
+        private int _textureHashCode;
         protected override void OnFreshView()
         {
             var acData = GetData<AnnouncementData>();
@@ -36,13 +37,15 @@ namespace Assets.Scripts.Hall.View.SysNoticeWindows
                 if (!string.IsNullOrEmpty(acData.PosterUrl))
                 { 
                     Poster.gameObject.SetActive(true);
-                    if(TextContent!=null)TextContent.SetActive(false);
+                    if (TextContent != null) TextContent.SetActive(false);
                     YxWindowManager.ShowWaitFor();
-                    AsyncImage.Instance.GetAsyncImage(acData.PosterUrl, texture2d =>
-                        {
-                            YxWindowManager.HideWaitFor();
-                            Poster.mainTexture = texture2d;
-                        });
+                    _textureHashCode = acData.PosterUrl.GetHashCode();
+                    AsyncImage.Instance.GetAsyncImage(acData.PosterUrl, (texture2d, hashCode) =>
+                    {
+                        if (_textureHashCode != hashCode) { return; }
+                        YxWindowManager.HideWaitFor();
+                        Poster.mainTexture = texture2d;
+                    });
                     return;
                 }
                 Poster.gameObject.SetActive(false);
@@ -67,27 +70,27 @@ namespace Assets.Scripts.Hall.View.SysNoticeWindows
     public class AnnouncementData
     {
         /// <summary>
-        /// Í¼Æ¬url
+        /// å›¾ç‰‡url
         /// </summary>
         public string PosterUrl = "";
         /// <summary>
-        /// µã»÷url
+        /// ç‚¹å‡»url
         /// </summary>
         public string ClickUrl = "";
         /// <summary>
-        /// ±êÌâ
+        /// æ ‡é¢˜
         /// </summary>
         public string Title = ""; 
         /// <summary>
-        /// ÄÚÈÝ
+        /// å†…å®¹
         /// </summary>
         public string Content = "";
         /// <summary>
-        /// ÈÕÆÚ
+        /// æ—¥æœŸ
         /// </summary>
         public string Date;
         /// <summary>
-        /// ×÷Õß
+        /// ä½œè€…
         /// </summary>
         public string Author;
 

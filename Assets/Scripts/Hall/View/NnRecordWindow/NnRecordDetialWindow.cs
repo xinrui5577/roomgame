@@ -2,6 +2,7 @@
 using System.Globalization;
 using Assets.Scripts.Common.Utils;
 using Assets.Scripts.Common.Windows.TabPages;
+using com.yxixia.utile.Utiles;
 using UnityEngine;
 
 namespace Assets.Scripts.Hall.View.NnRecordWindow

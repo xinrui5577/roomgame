@@ -75,9 +75,8 @@ namespace Assets.Scripts.Hall.View.RecordWindows
             var tdata = tableView.GetData<TabData>();
             if (tdata == null) return;
             var gk = tdata.Data.ToString();
-            YxWindowManager.ShowWaitFor();
             var apiInfo = new Dictionary<string, object>() { { "game_key_c", gk }, { "p", 1 } };
-            Facade.Instance<TwManger>().SendAction("gameHistoryReplay", apiInfo, OnGetRecordInfo);
+            Facade.Instance<TwManager>().SendAction("gameHistoryReplay", apiInfo, OnGetRecordInfo);
         }
         /// <summary>
         /// 初始化回放数据
@@ -112,7 +111,6 @@ namespace Assets.Scripts.Hall.View.RecordWindows
                 return;
             }
             var dataDic = (List<object>)data;
-            YxWindowManager.HideWaitFor();
             List<RecordData> records = new List<RecordData>();
             int i = 0;
             foreach (var item in dataDic)
